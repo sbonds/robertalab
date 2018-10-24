@@ -21,7 +21,7 @@ public class HelperCalliopeForXmlTest extends de.fhg.iais.roberta.util.test.Abst
             new Calliope2016Factory(new PluginProperties("calliope2016", "", "", Util1.loadProperties("classpath:calliope2016.properties"))),
             new CalliopeConfiguration.Builder().build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 
     /**

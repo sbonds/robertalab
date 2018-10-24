@@ -34,7 +34,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
                 .addActor(new ActorPort("D", "MD"), new Actor(ActorType.MEDIUM, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 
     /**

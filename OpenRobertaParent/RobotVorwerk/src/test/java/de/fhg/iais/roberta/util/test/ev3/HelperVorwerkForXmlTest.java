@@ -22,7 +22,7 @@ public class HelperVorwerkForXmlTest extends AbstractHelperForXmlTest {
             new VorwerkFactory(new PluginProperties("vorwerk", "", "", Util1.loadProperties("classpath:vorwerk.properties"))),
             new VorwerkConfiguration.Builder().build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 
     /**

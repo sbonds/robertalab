@@ -33,7 +33,7 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
                 .addActor(new ActorPort("C", "MC"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 
     /**

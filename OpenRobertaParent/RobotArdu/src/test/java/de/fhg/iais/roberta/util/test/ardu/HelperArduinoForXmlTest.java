@@ -136,6 +136,6 @@ public class HelperArduinoForXmlTest extends AbstractHelperForXmlTest {
                 }))
                 .build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 }

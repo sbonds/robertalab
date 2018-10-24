@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;

@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.blockly.generated.Warning;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;

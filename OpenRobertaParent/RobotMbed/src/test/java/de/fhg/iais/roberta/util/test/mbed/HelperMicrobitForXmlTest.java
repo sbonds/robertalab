@@ -22,7 +22,7 @@ public class HelperMicrobitForXmlTest extends de.fhg.iais.roberta.util.test.Abst
             new MicrobitFactory(new PluginProperties("microbit", "", "", Util1.loadProperties("classpath:microbit.properties"))),
             new MicrobitConfiguration.Builder().build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 
     /**

@@ -1,8 +1,12 @@
 package de.fhg.iais.roberta.util;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -55,7 +59,7 @@ public class Util1 {
      * @return the properties. Never null, may be empty
      */
     public static Properties loadProperties(String propertyURI) {
-        return loadProperties(false, propertyURI);
+        return loadProperties(true, propertyURI);
     }
 
     /**
@@ -104,19 +108,23 @@ public class Util1 {
                 if ( doLogging ) {
                     Util1.LOG.info("default properties from classpath. Using the resource: " + Util1.PROPERTY_DEFAULT_PATH);
                 }
-                properties.load(Util1.class.getClassLoader().getResourceAsStream(Util1.PROPERTY_DEFAULT_PATH));
+                loadIncludes(properties, Util1.class.getClassLoader().getResourceAsStream(Util1.PROPERTY_DEFAULT_PATH));
+                loadOwn(properties, Util1.class.getClassLoader().getResourceAsStream(Util1.PROPERTY_DEFAULT_PATH));
             } else if ( propertyURI.startsWith("file:") ) {
                 String filesystemPathName = propertyURI.substring(5);
                 if ( doLogging ) {
                     Util1.LOG.info("properties from file system. Using the path: " + filesystemPathName);
                 }
+                loadIncludes(properties, new FileInputStream(filesystemPathName));
+                loadOwn(properties, new FileInputStream(filesystemPathName));
                 properties.load(new FileReader(filesystemPathName));
             } else if ( propertyURI.startsWith("classpath:") ) {
                 String classPathName = propertyURI.substring(10);
                 if ( doLogging ) {
                     Util1.LOG.info("properties from classpath. Using the resource: " + classPathName);
                 }
-                properties.load(Util1.class.getClassLoader().getResourceAsStream(classPathName));
+                loadIncludes(properties, Util1.class.getClassLoader().getResourceAsStream(classPathName));
+                loadOwn(properties, Util1.class.getClassLoader().getResourceAsStream(classPathName));
             } else {
                 Util1.LOG.error("Could not load properties. Invalid URI: " + propertyURI);
             }
@@ -124,6 +132,35 @@ public class Util1 {
             Util1.LOG.error("Could not load properties. Inspect the stacktrace", e);
         }
         return properties;
+    }
+
+    private static void loadIncludes(Properties properties, InputStream inputStream) throws IOException {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("iso-8859-1")));
+            String line = null;
+            while ( (line = reader.readLine()) != null ) {
+                if ( line.startsWith("#include ") ) {
+                    line = line.substring(9);
+                    Properties local = loadProperties(line);
+                    properties.putAll(local);
+                }
+            }
+        } finally {
+            if ( reader != null ) {
+                reader.close();
+            }
+        }
+    }
+
+    private static void loadOwn(Properties properties, InputStream inputStream) throws IOException {
+        try {
+            Properties local = new Properties();
+            local.load(inputStream);
+            properties.putAll(local);
+        } finally {
+            inputStream.close();
+        }
     }
 
     /**

@@ -16,6 +16,6 @@ public class HelperBob3ForXmlTest extends AbstractHelperForXmlTest {
             new Bob3Factory(new PluginProperties("bob3", "", "", Util1.loadProperties("classpath:bob3.properties"))),
             new Bob3Configuration.Builder().build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 }

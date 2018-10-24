@@ -16,6 +16,6 @@ public class HelperNaoForXmlTest extends de.fhg.iais.roberta.util.test.AbstractH
     public HelperNaoForXmlTest() {
         super(new NaoFactory(new PluginProperties("nao", "", "", Util1.loadProperties("classpath:nao.properties"))), new NAOConfiguration.Builder().build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 }

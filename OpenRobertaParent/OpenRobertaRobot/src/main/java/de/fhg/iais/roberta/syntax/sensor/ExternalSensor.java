@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISlot;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
-import de.fhg.iais.roberta.syntax.BlockTypeContainer.BlockType;
+import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;

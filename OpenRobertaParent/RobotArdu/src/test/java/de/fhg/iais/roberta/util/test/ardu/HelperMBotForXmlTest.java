@@ -23,6 +23,6 @@ public class HelperMBotForXmlTest extends de.fhg.iais.roberta.util.test.Abstract
                 .addActor(new ActorPort("M1", "motor1"), new Actor(ActorType.GEARED_MOTOR, false, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        AbstractRobotFactory.addBlockTypesFromProperties("Robot", robotProperties);
+        AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 }

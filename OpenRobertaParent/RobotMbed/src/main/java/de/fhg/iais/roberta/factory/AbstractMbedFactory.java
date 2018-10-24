@@ -17,7 +17,7 @@ public abstract class AbstractMbedFactory extends AbstractRobotFactory {
 
     public AbstractMbedFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
-        addBlockTypesFromProperties("mbed", Util1.loadProperties("classpath:mbed.properties"));
+        addBlockTypesFromProperties(Util1.loadProperties("classpath:mbed.properties"));
     }
 
     @Override

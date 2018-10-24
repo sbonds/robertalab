@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.visitor.validate.ArduinoBrickValidatorVisitor;
 public abstract class AbstractArduinoFactory extends AbstractRobotFactory {
     public AbstractArduinoFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
-        addBlockTypesFromProperties("arduino", Util1.loadProperties("classpath:arduino.properties"));
+        addBlockTypesFromProperties(Util1.loadProperties("classpath:arduino.properties"));
     }
 
     @Override

@@ -25,8 +25,8 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
         this.blocklyDropdown2EnumFactory = new BlocklyDropdownFactory(pluginProperties.getPluginProperties());
 
         Properties generalpluginProperties = Util1.loadProperties("classpath:Robot.properties");
-        addBlockTypesFromProperties("Robot", generalpluginProperties);
-        addBlockTypesFromProperties(pluginProperties.getRobotName(), pluginProperties.getPluginProperties());
+        addBlockTypesFromProperties(generalpluginProperties);
+        addBlockTypesFromProperties(pluginProperties.getPluginProperties());
     }
 
     @Override
@@ -118,15 +118,10 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
     /**
      * should be called only from subclasses. Made public and static for tests (see call hierarchy). Another example, that shows, that singletons are bad.<br>
      * TODO: refactor to avoid the singleton
-     *
-     * @param robotName
+     * 
      * @param properties
      */
-    public static void addBlockTypesFromProperties(String robotName, Properties properties) {
-        boolean alreadyLoaded = BlockTypeContainer.register(robotName);
-        if ( alreadyLoaded ) {
-            return;
-        }
+    public static void addBlockTypesFromProperties(Properties properties) {
         for ( Entry<Object, Object> property : properties.entrySet() ) {
             String propertyKey = (String) property.getKey();
             if ( propertyKey.startsWith("blockType.") ) {
