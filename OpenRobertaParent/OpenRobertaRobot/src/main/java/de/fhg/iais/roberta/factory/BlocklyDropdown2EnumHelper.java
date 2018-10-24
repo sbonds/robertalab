@@ -9,6 +9,7 @@ import java.util.Properties;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
+import de.fhg.iais.roberta.util.DropDowns;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class BlocklyDropdown2EnumHelper {
@@ -61,15 +62,17 @@ public class BlocklyDropdown2EnumHelper {
         return actorToPorts;
     }
 
-    public static Map<String, String> getDropdownFromProperties(Properties properties) {
-        Map<String, String> dropdownItems = new HashMap<>();
+    public static DropDowns getDropdownFromProperties(Properties properties) {
+        DropDowns dropdownItems = new DropDowns();
         String filter = "robot.dropdown.";
         for ( Entry<Object, Object> e : properties.entrySet() ) {
-            String key = (String) e.getKey();
+            String propertyKey = (String) e.getKey();
             String value = (String) e.getValue();
-            if ( key.startsWith(filter) ) {
-                key = key.substring(filter.length());
-                dropdownItems.put(value, key);
+            if ( propertyKey.startsWith(filter) ) {
+                String[] typeAndKey = propertyKey.substring(filter.length()).split("\\.");
+                String dropdownType = typeAndKey[0];
+                String key = typeAndKey[1];
+                dropdownItems.add(dropdownType, key, value);
             }
         }
         return dropdownItems;

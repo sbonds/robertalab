@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.mode.sensors.arduino.bob3.GetSampleType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -47,7 +47,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         boolean isPortInMutation,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
-        IRobotFactory factory) {
+        BlocklyDropdownFactory factory) {
         super(BlockTypeContainer.getByName("SENSOR_GET_SAMPLE"), properties, comment);
         Assert.isTrue(sensorType != null);
         this.port = port;
@@ -119,7 +119,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         boolean isPortInMutation,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
-        IRobotFactory factory) {
+        BlocklyDropdownFactory factory) {
         return new GetSampleSensor<>(sensorType, armSide, armPart, isPortInMutation, properties, comment, factory);
     }
 
@@ -176,14 +176,15 @@ public class GetSampleSensor<V> extends Sensor<V> {
             armPart = helper.extractField(fields, BlocklyConstants.ARMPART);
         }
         boolean isPortInMutation = block.getMutation().getPort() != null;
-        return GetSampleSensor.make(
-            GetSampleType.get(modeName),
-            armSide,
-            armPart,
-            isPortInMutation,
-            helper.extractBlockProperties(block),
-            helper.extractComment(block),
-            helper.getDropdownFactory());
+        return GetSampleSensor
+            .make(
+                GetSampleType.get(modeName),
+                armSide,
+                armPart,
+                isPortInMutation,
+                helper.extractBlockProperties(block),
+                helper.extractComment(block),
+                helper.getDropdownFactory());
     }
 
     @Override

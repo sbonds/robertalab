@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.ILightMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -115,7 +115,7 @@ public class LightAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        BlocklyDropdown2EnumFactory factory = helper.getDropdownFactory();
+        BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Value> values = helper.extractValues(block, (short) 1);
         Phrase<V> ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
         fields = helper.extractFields(block, (short) 3);

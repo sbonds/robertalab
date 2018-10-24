@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -114,7 +114,7 @@ public class CurveAction<V> extends Action<V> {
         MotionParam<V> mpRight;
         Phrase<V> left;
         Phrase<V> right;
-        BlocklyDropdown2EnumFactory factory = helper.getDropdownFactory();
+        BlocklyDropdownFactory factory = helper.getDropdownFactory();
         fields = helper.extractFields(block, (short) 1);
         mode = helper.extractField(fields, BlocklyConstants.DIRECTION);
 

@@ -12,15 +12,15 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.ConfigurationBlockType;
 import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 
 /**
  * JAXB to brick configuration. Client should provide a tree of jaxb objects. Generates a BrickConfiguration object.
  */
 public class Jaxb2ArduinoConfigurationTransformer {
-    IRobotFactory factory;
+    BlocklyDropdownFactory factory;
 
-    public Jaxb2ArduinoConfigurationTransformer(IRobotFactory factory) {
+    public Jaxb2ArduinoConfigurationTransformer(BlocklyDropdownFactory factory) {
         this.factory = factory;
     }
 

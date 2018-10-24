@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public interface IRobotFactory {
 
-    public BlocklyDropdown2EnumFactory getBlocklyDropdown2EnumFactory();
+    public BlocklyDropdownFactory getBlocklyDropdownFactory();
 
     /**
      * Get the compiler workflow object for this robot.

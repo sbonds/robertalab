@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.ev3.EV3Configuration;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -29,9 +29,9 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * JAXB to brick configuration. Client should provide a tree of jaxb objects. Generates a BrickConfiguration object.
  */
 public class Jaxb2Ev3ConfigurationTransformer {
-    IRobotFactory factory;
+    BlocklyDropdownFactory factory;
 
-    public Jaxb2Ev3ConfigurationTransformer(IRobotFactory factory) {
+    public Jaxb2Ev3ConfigurationTransformer(BlocklyDropdownFactory factory) {
         this.factory = factory;
     }
 
@@ -134,32 +134,38 @@ public class Jaxb2Ev3ConfigurationTransformer {
                 switch ( value.getBlock().getType() ) {
                     case "robBrick_motor_middle":
                         fields = extractFields(value.getBlock(), (short) 2);
-                        actors.add(
-                            Pair.of(
-                                this.factory.getActorPort(value.getName()),
-                                new Actor(
-                                    ActorType.get(value.getBlock().getType()),
-                                    extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
-                                    this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 1)),
-                                    MotorSide.NONE)));
+                        actors
+                            .add(
+                                Pair
+                                    .of(
+                                        this.factory.getActorPort(value.getName()),
+                                        new Actor(
+                                            ActorType.get(value.getBlock().getType()),
+                                            extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
+                                            this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 1)),
+                                            MotorSide.NONE)));
 
                         break;
                     case "robBrick_motor_big":
                         fields = extractFields(value.getBlock(), (short) 3);
-                        actors.add(
-                            Pair.of(
-                                this.factory.getActorPort(value.getName()),
-                                new Actor(
-                                    ActorType.get(value.getBlock().getType()),
-                                    extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
-                                    this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 1)),
-                                    this.factory.getMotorSide(extractField(fields, "MOTOR_DRIVE", 2)))));
+                        actors
+                            .add(
+                                Pair
+                                    .of(
+                                        this.factory.getActorPort(value.getName()),
+                                        new Actor(
+                                            ActorType.get(value.getBlock().getType()),
+                                            extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
+                                            this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 1)),
+                                            this.factory.getMotorSide(extractField(fields, "MOTOR_DRIVE", 2)))));
                         break;
                     case "robBrick_actor":
-                        actors.add(
-                            Pair.of(
-                                this.factory.getActorPort(value.getName()),
-                                new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, MotorSide.NONE)));
+                        actors
+                            .add(
+                                Pair
+                                    .of(
+                                        this.factory.getActorPort(value.getName()),
+                                        new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, MotorSide.NONE)));
                         break;
                     default:
                         throw new DbcException("Invalide motor type!");

@@ -67,7 +67,7 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append(colorConst.getValue());
+        this.sb.append(colorConst.getColor().getFirst());
         return null;
     }
 

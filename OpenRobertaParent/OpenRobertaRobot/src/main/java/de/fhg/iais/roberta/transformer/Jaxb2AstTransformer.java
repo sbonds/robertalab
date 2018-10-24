@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -55,16 +55,20 @@ abstract public class Jaxb2AstTransformer<V> {
         return this.data;
     }
 
-    private final IRobotFactory modeFactory;
+    private final IRobotFactory robotFactory;
     private int variableCounter = 0;
 
     protected Jaxb2AstTransformer(IRobotFactory factory) {
-        this.modeFactory = factory;
+        this.robotFactory = factory;
 
     }
 
-    public BlocklyDropdown2EnumFactory getDropdownFactory() {
-        return this.modeFactory.getBlocklyDropdown2EnumFactory();
+    public BlocklyDropdownFactory getDropdownFactory() {
+        return this.robotFactory.getBlocklyDropdownFactory();
+    }
+
+    public IRobotFactory getRobotFactory() {
+        return this.robotFactory;
     }
 
     /**

@@ -18,7 +18,6 @@ import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
 import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.inter.mode.general.IPickColor;
 import de.fhg.iais.roberta.inter.mode.general.IWorkingState;
 import de.fhg.iais.roberta.inter.mode.sensor.IBirckKeyPressMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IBrickKey;
@@ -119,14 +118,17 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.util.DropDowns;
+import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-public class BlocklyDropdown2EnumFactory {
+public class BlocklyDropdownFactory {
+
     private final Map<String, SensorPort> sensorToPorts;
     private final Map<String, ActorPort> actorToPorts;
-    private final Map<String, String> blocklyDropdownItems;
+    private final DropDowns blocklyDropdownItems;
 
-    public BlocklyDropdown2EnumFactory(Properties properties) {
+    public BlocklyDropdownFactory(Properties properties) {
         this.sensorToPorts = BlocklyDropdown2EnumHelper.getSensorPortsFromProperties(properties);
         this.actorToPorts = BlocklyDropdown2EnumHelper.getActorPortsFromProperties(properties);
         this.blocklyDropdownItems = BlocklyDropdown2EnumHelper.getDropdownFromProperties(properties);
@@ -228,14 +230,14 @@ public class BlocklyDropdown2EnumFactory {
     }
 
     /**
-     * Get a {@link IPickColor} enumeration given string parameter. It is possible for one color to have multiple string mappings. Throws exception if the color
-     * cannot be found.
+     * Get a {@link Pair<String, String>} given string parameter. Throws exception if
+     * the color cannot be found.
      *
      * @param name of the color
-     * @return enum {@link IPickColor}
+     * @return {@link Pair<String, String>}
      */
-    public String getPickColor(String color) {
-        return this.blocklyDropdownItems.get(color.toUpperCase()).split("\\.")[1];
+    public Pair<String, String> getPickColor(String color) {
+        return this.blocklyDropdownItems.get("color").getPairBySecond(color.toUpperCase());
     }
 
     /**
@@ -649,11 +651,7 @@ public class BlocklyDropdown2EnumFactory {
                 return BrickSensor.make(sensorMetaDataBean, properties, comment);
             case BlocklyConstants.GYRO:
                 sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getGyroSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
+                    new SensorMetaDataBean(getSensorPort(port), getGyroSensorMode(sensorType.getSensorMode()), getSlot(slot), isPortInMutation);
                 return GyroSensor.make(sensorMetaDataBean, properties, comment);
             case BlocklyConstants.TIME:
                 sensorMetaDataBean =

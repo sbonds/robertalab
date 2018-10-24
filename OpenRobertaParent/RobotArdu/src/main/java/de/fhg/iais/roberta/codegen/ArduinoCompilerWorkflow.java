@@ -36,28 +36,28 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
             return;
         }
         try {
             ArduinoConfiguration configuration = ((ArduinoConfiguration) data.getBrickConfiguration());
-            generatedSourceCode = ArduinoCppVisitor.generate(configuration, data.getProgramTransformer().getTree(), true);
+            this.generatedSourceCode = ArduinoCppVisitor.generate(configuration, data.getProgramTransformer().getTree(), true);
             LOG.info("arduino c++ code generated");
         } catch ( Exception e ) {
             LOG.error("arduino c++ code generation failed", e);
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 
     @Override
     public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
         storeGeneratedProgram(token, programName, ".ino");
-        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
-            workflowResult = runBuild(token, programName, "generated.main");
-            if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+        if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+            this.workflowResult = runBuild(token, programName, "generated.main");
+            if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
                 LOG.info("compile arduino program {} successful", programName);
             } else {
-                LOG.error("compile arduino program {} failed with {}", programName, workflowResult);
+                LOG.error("compile arduino program {} failed with {}", programName, this.workflowResult);
             }
         }
     }
@@ -65,7 +65,7 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2ArduinoConfigurationTransformer transformer = new Jaxb2ArduinoConfigurationTransformer(factory);
+        Jaxb2ArduinoConfigurationTransformer transformer = new Jaxb2ArduinoConfigurationTransformer(factory.getBlocklyDropdownFactory());
         return transformer.transform(project);
     }
 
@@ -85,10 +85,10 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
      * @param mainPackage
      */
     private Key runBuild(String token, String mainFile, String mainPackage) {
-        final String robotName = pluginProperties.getRobotName();
-        final String compilerBinDir = pluginProperties.getCompilerBinDir();
-        final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
-        final String tempDir = pluginProperties.getTempDir();
+        final String robotName = this.pluginProperties.getRobotName();
+        final String compilerBinDir = this.pluginProperties.getCompilerBinDir();
+        final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
+        final String tempDir = this.pluginProperties.getTempDir();
 
         final StringBuilder sb = new StringBuilder();
         String scriptName = "";

@@ -14,7 +14,6 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
@@ -97,11 +96,6 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
         final MbotCppVisitor astVisitor = new MbotCppVisitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);
         astVisitor.generateCode(withWrapping);
         return astVisitor.sb.toString();
-    }
-
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        return null;
     }
 
     @Override
@@ -500,12 +494,13 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                     this.sb.append("MeDCMotor " + usedActor.getPort().getCodeName() + "(" + usedActor.getPort().getOraName() + ");\n");
                     break;
                 case DIFFERENTIAL_DRIVE:
-                    this.sb.append(
-                        "MeDrive myDrive("
-                            + this.brickConfiguration.getLeftMotorPort().getOraName()
-                            + ", "
-                            + this.brickConfiguration.getRightMotorPort().getOraName()
-                            + ");\n");
+                    this.sb
+                        .append(
+                            "MeDrive myDrive("
+                                + this.brickConfiguration.getLeftMotorPort().getOraName()
+                                + ", "
+                                + this.brickConfiguration.getRightMotorPort().getOraName()
+                                + ");\n");
                     break;
                 case LED_MATRIX:
                     this.sb.append("MeLEDMatrix myLEDMatrix_" + usedActor.getPort().getOraName() + "(" + usedActor.getPort().getOraName() + ");\n");

@@ -5,7 +5,8 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
+import de.fhg.iais.roberta.factory.AbstractEV3Factory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -20,7 +21,7 @@ import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.hardware.actor.IDisplayVisitor;
+import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
 
 /**
  * This class represents the <b>robActions_display_picture</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate code
@@ -84,7 +85,7 @@ public class ShowPictureAction<V> extends Action<V> {
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((IDisplayVisitor<V>) visitor).visitShowPictureAction(this);
+        return ((IEv3Visitor<V>) visitor).visitShowPictureAction(this);
     }
 
     /**
@@ -95,7 +96,7 @@ public class ShowPictureAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        BlocklyDropdown2EnumFactory factory = helper.getDropdownFactory();
+        BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         List<Value> values = helper.extractValues(block, (short) 2);
         String pic = helper.extractField(fields, BlocklyConstants.PICTURE);
@@ -103,7 +104,7 @@ public class ShowPictureAction<V> extends Action<V> {
         Phrase<V> y = helper.extractValue(values, new ExprParam(BlocklyConstants.Y, BlocklyType.NUMBER_INT));
         return ShowPictureAction
             .make(
-                factory.getShowPicture(pic),
+                ((AbstractEV3Factory) helper.getRobotFactory()).getShowPicture(pic),
                 helper.convertPhraseToExpr(x),
                 helper.convertPhraseToExpr(y),
                 helper.extractBlockProperties(block),

@@ -112,7 +112,7 @@
               <field name="LIST_TYPE">Colour</field>
               <value name="ADD0">
                 <block type="robColour_picker" id="369">
-                  <field name="COLOUR">#b30006</field>
+                  <field name="COLOUR">#B30006</field>
                 </block>
               </value>
               <value name="ADD1">

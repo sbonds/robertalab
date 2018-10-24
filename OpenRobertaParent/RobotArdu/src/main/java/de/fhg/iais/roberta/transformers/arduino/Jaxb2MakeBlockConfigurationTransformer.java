@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -27,9 +27,9 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * JAXB to brick configuration. Client should provide a tree of jaxb objects. Generates a BrickConfiguration object.
  */
 public class Jaxb2MakeBlockConfigurationTransformer {
-    IRobotFactory factory;
+    BlocklyDropdownFactory factory;
 
-    public Jaxb2MakeBlockConfigurationTransformer(IRobotFactory factory) {
+    public Jaxb2MakeBlockConfigurationTransformer(BlocklyDropdownFactory factory) {
         this.factory = factory;
     }
 
@@ -126,16 +126,20 @@ public class Jaxb2MakeBlockConfigurationTransformer {
                     System.out.println(e);
                     switch ( value.getBlock().getType() ) {
                         case "robBrick_led":
-                            actors.add(
-                                Pair.of(
-                                    this.factory.getActorPort(value.getName()),
-                                    new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, null)));
+                            actors
+                                .add(
+                                    Pair
+                                        .of(
+                                            this.factory.getActorPort(value.getName()),
+                                            new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, null)));
                             break;
                         case "robBrick_led_matrix":
-                            actors.add(
-                                Pair.of(
-                                    this.factory.getActorPort(value.getName()),
-                                    new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, null)));
+                            actors
+                                .add(
+                                    Pair
+                                        .of(
+                                            this.factory.getActorPort(value.getName()),
+                                            new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, null)));
                             break;
                         default:
                             throw new DbcException("Invalide actor type!" + value.getBlock().getType());
@@ -146,14 +150,16 @@ public class Jaxb2MakeBlockConfigurationTransformer {
                 switch ( value.getBlock().getType() ) {
                     case "robBrick_motor_geared":
                         fields = extractFields(value.getBlock(), (short) 1);
-                        actors.add(
-                            Pair.of(
-                                this.factory.getActorPort(value.getName()),
-                                new Actor(
-                                    ActorType.get(value.getBlock().getType()),
-                                    false,
-                                    DriveDirection.FOREWARD,
-                                    this.factory.getMotorSide(extractField(fields, "MOTOR_DRIVE", 0)))));
+                        actors
+                            .add(
+                                Pair
+                                    .of(
+                                        this.factory.getActorPort(value.getName()),
+                                        new Actor(
+                                            ActorType.get(value.getBlock().getType()),
+                                            false,
+                                            DriveDirection.FOREWARD,
+                                            this.factory.getMotorSide(extractField(fields, "MOTOR_DRIVE", 0)))));
                         break;
                     default:
                         throw new DbcException("Invalide motor type!" + value.getBlock().getType());

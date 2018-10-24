@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -55,7 +55,7 @@ public final class FlameSensor<V> extends Sensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        final BlocklyDropdown2EnumFactory factory = helper.getDropdownFactory();
+        final BlocklyDropdownFactory factory = helper.getDropdownFactory();
         final List<Field> fields = helper.extractFields(block, (short) 3);
         final String port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
         return FlameSensor.make(factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));

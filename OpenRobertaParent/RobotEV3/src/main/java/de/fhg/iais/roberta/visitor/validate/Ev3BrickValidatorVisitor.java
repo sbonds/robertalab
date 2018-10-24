@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.visitor.validate;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
+import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -43,6 +44,13 @@ public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisito
         if ( this.brickConfiguration.getRobotName().equals("ev3lejos") ) {
             sayTextAction.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
         }
+        return null;
+    }
+
+    @Override
+    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
+        showPictureAction.getX().visit(this);
+        showPictureAction.getY().visit(this);
         return null;
     }
 

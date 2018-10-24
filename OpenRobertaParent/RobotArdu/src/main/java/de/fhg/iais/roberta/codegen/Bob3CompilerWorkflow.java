@@ -35,27 +35,27 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
         if ( data.getErrorMessage() != null ) {
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
             return;
         }
         try {
-            generatedSourceCode = Bob3CppVisitor.generate(data.getProgramTransformer().getTree(), true);
+            this.generatedSourceCode = Bob3CppVisitor.generate(data.getProgramTransformer().getTree(), true);
             LOG.info("bob3 c++ code generated");
         } catch ( Exception e ) {
             LOG.error("bob3 c++ code generation failed", e);
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 
     @Override
     public void compileSourceCode(String token, String programName, ILanguage language, Object flagProvider) {
         storeGeneratedProgram(token, programName, ".ino");
-        if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
-            workflowResult = runBuild(token, programName, "generated.main");
-            if ( workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+        if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
+            this.workflowResult = runBuild(token, programName, "generated.main");
+            if ( this.workflowResult == Key.COMPILERWORKFLOW_SUCCESS ) {
                 LOG.info("compile bob3 program {} successful", programName);
             } else {
-                LOG.error("compile bob3 program {} failed with {}", programName, workflowResult);
+                LOG.error("compile bob3 program {} failed with {}", programName, this.workflowResult);
             }
         }
     }
@@ -63,7 +63,7 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
-        Jaxb2Bob3ConfigurationTransformer transformer = new Jaxb2Bob3ConfigurationTransformer(factory);
+        Jaxb2Bob3ConfigurationTransformer transformer = new Jaxb2Bob3ConfigurationTransformer(factory.getBlocklyDropdownFactory());
         return transformer.transform(project);
     }
 
@@ -83,9 +83,9 @@ public class Bob3CompilerWorkflow extends AbstractCompilerWorkflow {
      * @param mainPackage
      */
     private Key runBuild(String token, String mainFile, String mainPackage) {
-        final String compilerBinDir = pluginProperties.getCompilerBinDir();
-        final String compilerResourcesDir = pluginProperties.getCompilerResourceDir();
-        final String tempDir = pluginProperties.getTempDir();
+        final String compilerBinDir = this.pluginProperties.getCompilerBinDir();
+        final String compilerResourcesDir = this.pluginProperties.getCompilerResourceDir();
+        final String tempDir = this.pluginProperties.getTempDir();
 
         final StringBuilder sb = new StringBuilder();
 

@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -53,7 +53,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         boolean isPortInMutation,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
-        BlocklyDropdown2EnumFactory factory) {
+        BlocklyDropdownFactory factory) {
         super(BlockTypeContainer.getByName("NAO_SENSOR_GET_SAMPLE"), properties, comment);
         LOG.setLevel(ch.qos.logback.classic.Level.TRACE);
         Assert.notNull(sensorType);
@@ -136,7 +136,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
         boolean isPortInMutaition,
         BlocklyBlockProperties properties,
         BlocklyComment comment,
-        BlocklyDropdown2EnumFactory factory) {
+        BlocklyDropdownFactory factory) {
         return new GetSampleSensor<>(sensorType, port, slot, isPortInMutaition, properties, comment, factory);
     }
 

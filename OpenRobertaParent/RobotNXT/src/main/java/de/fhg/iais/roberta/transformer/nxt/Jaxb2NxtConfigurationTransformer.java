@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
-import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -30,10 +30,10 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * JAXB to brick configuration. Client should provide a tree of jaxb objects. Generates a BrickConfiguration object.
  */
 public class Jaxb2NxtConfigurationTransformer {
-    BlocklyDropdown2EnumFactory factory;
+    BlocklyDropdownFactory factory;
 
     public Jaxb2NxtConfigurationTransformer(IRobotFactory factory) {
-        this.factory = factory.getBlocklyDropdown2EnumFactory();
+        this.factory = factory.getBlocklyDropdownFactory();
     }
 
     public Configuration transform(BlockSet blockSet) {

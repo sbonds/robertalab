@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
 import de.fhg.iais.roberta.mode.action.ActorPort;
@@ -69,7 +69,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
         List<Field> fields;
         List<Value> values;
         MotionParam<V> mp;
-        BlocklyDropdown2EnumFactory factory = helper.getDropdownFactory();
+        BlocklyDropdownFactory factory = helper.getDropdownFactory();
         if ( block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON)
             || block.getType().equals(BlocklyConstants.SIM_MOTOR_ON)
             || block.getType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_ON_FOR_ARDU)

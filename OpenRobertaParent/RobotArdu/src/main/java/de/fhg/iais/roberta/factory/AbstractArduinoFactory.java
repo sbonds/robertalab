@@ -6,11 +6,6 @@ import de.fhg.iais.roberta.codegen.ArduinoCompilerWorkflow;
 import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
@@ -25,32 +20,9 @@ public abstract class AbstractArduinoFactory extends AbstractRobotFactory {
         addBlockTypesFromProperties("arduino", Util1.loadProperties("classpath:arduino.properties"));
     }
 
-    public SensorPort getSensorName(String port) {
-        return new SensorPort(port, port);
-    }
-
-    public ActorPort getActorName(String port) {
-        return new ActorPort(port, port);
-    }
-
-    @Override
-    public ISensorPort getSensorPort(String port) {
-        return getSensorName(port);
-    }
-
-    @Override
-    public IActorPort getActorPort(String port) {
-        return getActorName(port);
-    }
-
-    @Override
-    public IShowPicture getShowPicture(String picture) {
-        return null;
-    }
-
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new ArduinoCompilerWorkflow(pluginProperties);
+        return new ArduinoCompilerWorkflow(this.pluginProperties);
     }
 
     @Override

@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.arduino.BotNrollConfiguration;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -29,9 +29,9 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  * JAXB to brick configuration. Client should provide a tree of jaxb objects. Generates a BrickConfiguration object.
  */
 public class Jaxb2BotNrollConfigurationTransformer {
-    IRobotFactory factory;
+    BlocklyDropdownFactory factory;
 
-    public Jaxb2BotNrollConfigurationTransformer(IRobotFactory factory) {
+    public Jaxb2BotNrollConfigurationTransformer(BlocklyDropdownFactory factory) {
         this.factory = factory;
     }
 
@@ -131,10 +131,12 @@ public class Jaxb2BotNrollConfigurationTransformer {
                 switch ( value.getBlock().getType() ) {
                     case "robBrick_motor_ardu":
                         motorSide = MotorSide.NONE;
-                        actors.add(
-                            Pair.of(
-                                this.factory.getActorPort(value.getName()),
-                                new Actor(ActorType.get(value.getBlock().getType()), true, DriveDirection.FOREWARD, motorSide)));
+                        actors
+                            .add(
+                                Pair
+                                    .of(
+                                        this.factory.getActorPort(value.getName()),
+                                        new Actor(ActorType.get(value.getBlock().getType()), true, DriveDirection.FOREWARD, motorSide)));
 
                         break;
                     case "robBrick_motor_middle":
@@ -147,14 +149,16 @@ public class Jaxb2BotNrollConfigurationTransformer {
                             motorSide = MotorSide.NONE;
                         }
                         List<Field> fields = extractFields(value.getBlock(), (short) 2);
-                        actors.add(
-                            Pair.of(
-                                this.factory.getActorPort(value.getName()),
-                                new Actor(
-                                    ActorType.get(value.getBlock().getType()),
-                                    extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
-                                    this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 1)),
-                                    motorSide)));
+                        actors
+                            .add(
+                                Pair
+                                    .of(
+                                        this.factory.getActorPort(value.getName()),
+                                        new Actor(
+                                            ActorType.get(value.getBlock().getType()),
+                                            extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
+                                            this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 1)),
+                                            motorSide)));
 
                         break;
                     default:
