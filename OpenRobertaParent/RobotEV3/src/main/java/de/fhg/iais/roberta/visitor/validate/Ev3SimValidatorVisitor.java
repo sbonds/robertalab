@@ -5,7 +5,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.visitor.hardware.IEv3Visitor;
-import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public final class Ev3SimValidatorVisitor extends AbstractSimValidatorVisitor implements IEv3Visitor<Void> {
 

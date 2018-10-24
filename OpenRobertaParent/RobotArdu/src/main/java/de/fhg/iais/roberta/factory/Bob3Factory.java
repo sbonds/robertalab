@@ -23,8 +23,8 @@ import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public class Bob3Factory extends AbstractRobotFactory {
-    Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:bob3ports.properties"));
-    Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:bob3ports.properties"));
+    Map<String, SensorPort> sensorToPorts = BlocklyDropdown2EnumHelper.getSensorPortsFromProperties(Util1.loadProperties("classpath:bob3ports.properties"));
+    Map<String, ActorPort> actorToPorts = BlocklyDropdown2EnumHelper.getActorPortsFromProperties(Util1.loadProperties("classpath:bob3ports.properties"));
 
     public Bob3Factory(PluginProperties pluginProperties) {
         super(pluginProperties);
@@ -36,12 +36,12 @@ public class Bob3Factory extends AbstractRobotFactory {
 
     @Override
     public IPickColor getPickColor(String color) {
-        return IRobotFactory.getModeValue(color, PickColor.class);
+        return BlocklyDropdown2EnumHelper.getModeValue(color, PickColor.class);
     }
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new Bob3CompilerWorkflow(pluginProperties);
+        return new Bob3CompilerWorkflow(this.pluginProperties);
     }
 
     @Override

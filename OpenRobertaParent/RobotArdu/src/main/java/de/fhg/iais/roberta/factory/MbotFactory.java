@@ -23,8 +23,8 @@ import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public class MbotFactory extends AbstractRobotFactory {
-    Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:mbotports.properties"));
-    Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:mbotports.properties"));
+    Map<String, SensorPort> sensorToPorts = BlocklyDropdown2EnumHelper.getSensorPortsFromProperties(Util1.loadProperties("classpath:mbotports.properties"));
+    Map<String, ActorPort> actorToPorts = BlocklyDropdown2EnumHelper.getActorPortsFromProperties(Util1.loadProperties("classpath:mbotports.properties"));
 
     public MbotFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
@@ -37,7 +37,7 @@ public class MbotFactory extends AbstractRobotFactory {
 
     @Override
     public IGyroSensorMode getGyroSensorMode(String gyroSensorMode) {
-        return IRobotFactory.getModeValue(gyroSensorMode, Axis.class);
+        return BlocklyDropdown2EnumHelper.getModeValue(gyroSensorMode, Axis.class);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class MbotFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new MbotCompilerWorkflow(pluginProperties);
+        return new MbotCompilerWorkflow(this.pluginProperties);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class MbotFactory extends AbstractRobotFactory {
 
     @Override
     public IJoystickMode getJoystickMode(String joystickMode) {
-        return IRobotFactory.getModeValue(joystickMode, Axis.class);
+        return BlocklyDropdown2EnumHelper.getModeValue(joystickMode, Axis.class);
     }
 
     @Override

@@ -183,7 +183,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
             isPortInMutation,
             helper.extractBlockProperties(block),
             helper.extractComment(block),
-            helper.getModeFactory());
+            helper.getDropdownFactory());
     }
 
     @Override

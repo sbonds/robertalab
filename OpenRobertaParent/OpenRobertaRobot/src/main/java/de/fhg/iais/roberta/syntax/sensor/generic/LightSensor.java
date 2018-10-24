@@ -54,7 +54,7 @@ public class LightSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getLightSensorMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getLightSensorMode);
         return LightSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

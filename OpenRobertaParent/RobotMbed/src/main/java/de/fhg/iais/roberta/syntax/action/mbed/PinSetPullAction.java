@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
 import de.fhg.iais.roberta.inter.mode.sensor.IPinPull;
 import de.fhg.iais.roberta.inter.mode.sensor.IPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
@@ -80,7 +80,7 @@ public class PinSetPullAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
+        BlocklyDropdown2EnumFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 2);
         String port = helper.extractField(fields, BlocklyConstants.PIN_PORT);
         String pinPull = helper.extractField(fields, BlocklyConstants.PIN_PULL);

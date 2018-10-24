@@ -19,7 +19,6 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectionAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
@@ -250,17 +249,6 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
     public Void visitPlayFileAction(PlayFileAction<Void> playFileAction) {
         String end = createClosingBracket();
         this.sb.append("createPlayFileAction(" + playFileAction.getFileName());
-        this.sb.append(end);
-        return null;
-    }
-
-    @Override
-    public Void visitShowPictureAction(ShowPictureAction<Void> showPictureAction) {
-        String end = createClosingBracket();
-        this.sb.append("createShowPictureAction('" + showPictureAction.getPicture() + "', ");
-        showPictureAction.getX().visit(this);
-        this.sb.append(", ");
-        showPictureAction.getY().visit(this);
         this.sb.append(end);
         return null;
     }

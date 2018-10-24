@@ -4,7 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -60,7 +60,7 @@ public class TimerSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
+        BlocklyDropdown2EnumFactory factory = helper.getDropdownFactory();
         SensorMetaDataBean sensorMetaDataBean;
         //TODO This if statement should be removed when we have new implementation of reset sensor blockly block
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET) || block.getType().equals(BlocklyConstants.ROB_SENSORS_TIMER_RESET_CALLIOPE) ) {
@@ -70,7 +70,7 @@ public class TimerSensor<V> extends ExternalSensor<V> {
                 new SensorMetaDataBean(factory.getSensorPort(portName), factory.getTimerSensorMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT), false);
             return TimerSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
         }
-        sensorMetaDataBean = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getTimerSensorMode);
+        sensorMetaDataBean = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getTimerSensorMode);
         return TimerSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

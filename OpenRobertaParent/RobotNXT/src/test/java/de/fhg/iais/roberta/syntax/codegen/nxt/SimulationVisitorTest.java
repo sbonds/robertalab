@@ -134,8 +134,7 @@ public class SimulationVisitorTest {
                 + "var stmt4 = createVarDeclaration(CONST.COLOR, \"variablenName5\", createConstant(CONST.COLOR_CONST, CONST.COLOR_ENUM.YELLOW));\n"
                 + "var stmt5 = createVarDeclaration(CONST.COLOR, \"variablenName6\", createConstant(CONST.COLOR_CONST, CONST.COLOR_ENUM.RED));\n"
                 + "var stmt6 = createVarDeclaration(CONST.COLOR, \"variablenName7\", createConstant(CONST.COLOR_CONST, CONST.COLOR_ENUM.WHITE));\n"
-                + "var stmt7 = createVarDeclaration(CONST.COLOR, \"variablenName8\", createConstant(CONST.COLOR_CONST, CONST.COLOR_ENUM.BROWN));\n"
-                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6,stmt7]};";
+                + "var blocklyProgram = {'programStmts': [stmt0,stmt1,stmt2,stmt3,stmt4,stmt5,stmt6]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator10.xml");
 
@@ -405,9 +404,10 @@ public class SimulationVisitorTest {
 
     @Test
     public void testLightSensor() throws Exception {
-        String a = "var stmt0 = createVarDeclaration(CONST.NUMBER, \"Element\", createGetSample(CONST.LIGHT, CONST.RED));\n"
+        String a =
+            "var stmt0 = createVarDeclaration(CONST.NUMBER, \"Element\", createGetSample(CONST.LIGHT, CONST.RED));\n"
 
-            + "var blocklyProgram = {'programStmts': [stmt0]};";
+                + "var blocklyProgram = {'programStmts': [stmt0]};";
 
         assertCodeIsOk(a, "/syntax/code_generator/java_script/java_script_code_generator29.xml");
 

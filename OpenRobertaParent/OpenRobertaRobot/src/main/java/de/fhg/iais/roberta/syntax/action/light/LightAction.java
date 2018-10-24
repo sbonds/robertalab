@@ -5,10 +5,10 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
+import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.ILightMode;
+import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -30,12 +30,12 @@ public class LightAction<V> extends Action<V> {
     private final IBrickLedColor color;
     private final ILightMode mode;
     private static List<Field> fields;
-    private final IActorPort port;
+    private final ISensorPort port;
     private static boolean isActor;
     private static boolean isBlink;
 
     private LightAction(
-        IActorPort port,
+        ISensorPort port,
         IBrickLedColor color,
         ILightMode mode,
         Expr<V> rgbLedColor,
@@ -60,7 +60,7 @@ public class LightAction<V> extends Action<V> {
      * @return read only object of class {@link LightAction}
      */
     private static <V> LightAction<V> make(
-        IActorPort port,
+        ISensorPort port,
         IBrickLedColor color,
         ILightMode mode,
         Expr<V> ledColor,
@@ -93,7 +93,7 @@ public class LightAction<V> extends Action<V> {
     /**
      * @return port.
      */
-    public IActorPort getPort() {
+    public ISensorPort getPort() {
         return this.port;
     }
 
@@ -115,7 +115,7 @@ public class LightAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
+        BlocklyDropdown2EnumFactory factory = helper.getDropdownFactory();
         List<Value> values = helper.extractValues(block, (short) 1);
         Phrase<V> ledColor = helper.extractValue(values, new ExprParam(BlocklyConstants.COLOR, BlocklyType.COLOR));
         fields = helper.extractFields(block, (short) 3);
@@ -133,7 +133,7 @@ public class LightAction<V> extends Action<V> {
         String color = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR, BlocklyConstants.DEFAULT);
         return LightAction
             .make(
-                factory.getActorPort(port),
+                factory.getSensorPort(port),
                 factory.getBrickLedColor(color),
                 factory.getBlinkMode(mode),
                 helper.convertPhraseToExpr(ledColor),

@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
 import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -96,7 +96,7 @@ public class DriveAction<V> extends Action<V> {
         List<Value> values;
         MotionParam<V> mp;
         Phrase<V> power;
-        IRobotFactory factory = helper.getModeFactory();
+        BlocklyDropdown2EnumFactory factory = helper.getDropdownFactory();
         fields = helper.extractFields(block, (short) 1);
         mode = helper.extractField(fields, BlocklyConstants.DIRECTION);
 

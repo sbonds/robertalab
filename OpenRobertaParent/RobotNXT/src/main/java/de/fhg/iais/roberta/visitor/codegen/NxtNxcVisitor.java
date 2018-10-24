@@ -15,7 +15,6 @@ import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.general.nxt.PickColor;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
@@ -133,46 +132,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        String value;
-        switch ( (PickColor) colorConst.getValue() ) {
-            case BLACK:
-                value = "INPUT_BLACKCOLOR";
-                break;
-            case BLUE:
-                value = "INPUT_BLUECOLOR";
-                break;
-            case GREEN:
-                value = "INPUT_GREENCOLOR";
-                break;
-            case YELLOW:
-                value = "INPUT_YELLOWCOLOR";
-                break;
-            case RED:
-                value = "INPUT_REDCOLOR";
-                break;
-            case WHITE:
-                value = "INPUT_WHITECOLOR";
-                break;
-            case MAGENTA:
-                value = "INPUT_MAGENTACOLOR";
-                break;
-            case ORANGE:
-                value = "INPUT_ORANGECOLOR";
-                break;
-            case LIME:
-                value = "INPUT_LIMECOLOR";
-                break;
-            case VIOLET:
-                value = "INPUT_VIOLETCOLOR";
-                break;
-            case CRIMSON:
-                value = "INPUT_CRIMSONCOLOR";
-                break;
-            case PURPLE:
-                value = "INPUT_PURPLECOLOR";
-                break;
-            default:
-                value = "NULL";
+        String value = colorConst.getColorValue();
+        if ( !value.equals("NONE") ) {
+            value = "INPUT_" + value + "COLOR";
+        } else {
+            value = "NULL";
         }
         this.sb.append(value);
         return null;

@@ -45,7 +45,6 @@ import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
-import de.fhg.iais.roberta.visitor.collect.AbstractUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
 
 /**

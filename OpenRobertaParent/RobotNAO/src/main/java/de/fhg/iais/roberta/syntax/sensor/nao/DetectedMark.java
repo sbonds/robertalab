@@ -50,7 +50,7 @@ public final class DetectedMark<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, ((NaoFactory) helper.getModeFactory())::getDetectMarkMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, ((NaoFactory) helper.getDropdownFactory())::getDetectMarkMode);
         return DetectedMark.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

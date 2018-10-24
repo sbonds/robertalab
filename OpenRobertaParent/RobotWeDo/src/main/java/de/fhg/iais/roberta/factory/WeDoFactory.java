@@ -87,7 +87,7 @@ public class WeDoFactory extends AbstractRobotFactory {
 
     @Override
     public Slot getSlot(String slot) {
-        return IRobotFactory.getModeValue(slot, Slot.class);
+        return BlocklyDropdown2EnumHelper.getModeValue(slot, Slot.class);
     }
 
     @Override

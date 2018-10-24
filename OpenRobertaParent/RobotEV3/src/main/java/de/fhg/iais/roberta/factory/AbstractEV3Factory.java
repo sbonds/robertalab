@@ -23,8 +23,8 @@ import de.fhg.iais.roberta.visitor.validate.Ev3SimValidatorVisitor;
 
 public abstract class AbstractEV3Factory extends AbstractRobotFactory {
     protected String name;
-    Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:EV3ports.properties"));
-    Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:EV3ports.properties"));
+    Map<String, SensorPort> sensorToPorts = BlocklyDropdown2EnumHelper.getSensorPortsFromProperties(Util1.loadProperties("classpath:EV3ports.properties"));
+    Map<String, ActorPort> actorToPorts = BlocklyDropdown2EnumHelper.getActorPortsFromProperties(Util1.loadProperties("classpath:EV3ports.properties"));
 
     public AbstractEV3Factory(PluginProperties pluginProperties) {
         super(pluginProperties);
@@ -42,17 +42,17 @@ public abstract class AbstractEV3Factory extends AbstractRobotFactory {
 
     @Override
     public IShowPicture getShowPicture(String picture) {
-        return IRobotFactory.getModeValue(picture, ShowPicture.class);
+        return BlocklyDropdown2EnumHelper.getModeValue(picture, ShowPicture.class);
     }
 
     @Override
     public ICompilerWorkflow getSimCompilerWorkflow() {
-        return new Ev3SimCompilerWorkflow(pluginProperties);
+        return new Ev3SimCompilerWorkflow(this.pluginProperties);
     }
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new Ev3LejosCompilerWorkflow(pluginProperties);
+        return new Ev3LejosCompilerWorkflow(this.pluginProperties);
     }
 
     @Override

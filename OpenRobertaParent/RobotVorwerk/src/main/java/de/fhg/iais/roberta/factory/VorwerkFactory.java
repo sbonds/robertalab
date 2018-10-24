@@ -30,8 +30,8 @@ import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.VorwerkBrickValidatorVisitor;
 
 public class VorwerkFactory extends AbstractRobotFactory {
-    Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Vorwerkports.properties"));
-    Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:Vorwerkports.properties"));
+    Map<String, SensorPort> sensorToPorts = BlocklyDropdown2EnumHelper.getSensorPortsFromProperties(Util1.loadProperties("classpath:Vorwerkports.properties"));
+    Map<String, ActorPort> actorToPorts = BlocklyDropdown2EnumHelper.getActorPortsFromProperties(Util1.loadProperties("classpath:Vorwerkports.properties"));
 
     public VorwerkFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
@@ -49,7 +49,7 @@ public class VorwerkFactory extends AbstractRobotFactory {
 
     @Override
     public ISlot getSlot(String slot) {
-        return IRobotFactory.getModeValue(slot, Slot.class);
+        return BlocklyDropdown2EnumHelper.getModeValue(slot, Slot.class);
     }
 
     @Override

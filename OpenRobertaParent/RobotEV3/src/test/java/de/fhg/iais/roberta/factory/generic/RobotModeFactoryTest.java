@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.factory.generic;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumHelper;
 import de.fhg.iais.roberta.factory.Ev3LejosV0Factory;
-import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
@@ -213,17 +213,17 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getGyroSensorModeFromString() {
-        Assert.assertEquals(IRobotFactory.getModeValue("ANGLE", GyroSensorMode.class), GyroSensorMode.ANGLE);
+        Assert.assertEquals(BlocklyDropdown2EnumHelper.getModeValue("ANGLE", GyroSensorMode.class), GyroSensorMode.ANGLE);
     }
 
     @Test
     public void getGyroSensorModeByAlternativeName() {
-        Assert.assertEquals(IRobotFactory.getModeValue("Rate", GyroSensorMode.class), GyroSensorMode.RATE);
+        Assert.assertEquals(BlocklyDropdown2EnumHelper.getModeValue("Rate", GyroSensorMode.class), GyroSensorMode.RATE);
     }
 
     @Test(expected = DbcException.class)
     public void invalidGyroSensorMode() {
-        IRobotFactory.getModeValue("Q", GyroSensorMode.class);
+        BlocklyDropdown2EnumHelper.getModeValue("Q", GyroSensorMode.class);
     }
 
     @Test

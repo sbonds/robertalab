@@ -157,7 +157,7 @@ public class ClientProgram {
                         programConfigurationCompatibilityCheck(response, transformer, programChecker);
 
                         compilerWorkflow.generateSourceCode(token, programName, transformer, language);
-                        String sourceCode = compilerWorkflow.getGeneratedProgramText();
+                        String sourceCode = compilerWorkflow.getGeneratedSourceCode();
                         if ( sourceCode == null ) {
                             forMessages.setError(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
                         } else {
@@ -442,7 +442,7 @@ public class ClientProgram {
                     final String programText = request.optString("programText");
                     final ILanguage language = Language.findByAbbr(request.optString("language"));
                     LOG.info("compilation of native source started for program {}", programName);
-                    compilerWorkflow.setProgramText(programText);
+                    compilerWorkflow.setSourceCode(programText);
                     compilerWorkflow.compileSourceCode(token, programName, language, null);
                     final Key messageKey = compilerWorkflow.getWorkflowResult();
                     LOG.info("compile user supplied native program. Result: " + messageKey);
@@ -571,7 +571,7 @@ public class ClientProgram {
                             ClientProgram.LOG.info("JavaScript code generation started for program {}", programName);
                             ICompilerWorkflow simCompilerWorkflow = robotFactory.getSimCompilerWorkflow();
                             simCompilerWorkflow.generateSourceCode(token, programName, transformer, language);
-                            final String javaScriptCode = simCompilerWorkflow.getGeneratedProgramText();
+                            final String javaScriptCode = simCompilerWorkflow.getGeneratedSourceCode();
                             // extreme debugging: ClientProgram.LOG.debug("JavaScriptCode \n{}", javaScriptCode);
                             response.put("javaScriptProgram", javaScriptCode);
                             wasRobotWaiting = true;

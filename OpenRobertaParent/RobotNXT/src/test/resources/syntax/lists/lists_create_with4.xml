@@ -13,11 +13,6 @@
           <field name="COLOUR">#b30006</field>
         </block>
       </value>
-      <value name="ADD2">
-        <block type="robColour_picker" id="132" >
-          <field name="COLOUR">#532115</field>
-        </block>
-      </value>
     </block>
   </instance>
 </block_set>

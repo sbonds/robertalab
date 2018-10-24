@@ -42,7 +42,7 @@ public class MotionSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getMotionSensorMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getMotionSensorMode);
         return MotionSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

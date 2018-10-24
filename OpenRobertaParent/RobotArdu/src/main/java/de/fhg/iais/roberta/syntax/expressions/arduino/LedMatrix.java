@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.expressions.arduino;
 
+import java.awt.Image;
 import java.util.Arrays;
 import java.util.List;
 

@@ -20,8 +20,8 @@ import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public class BotnrollFactory extends AbstractRobotFactory {
-    Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:botnrollports.properties"));
-    Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:botnrollports.properties"));
+    Map<String, SensorPort> sensorToPorts = BlocklyDropdown2EnumHelper.getSensorPortsFromProperties(Util1.loadProperties("classpath:botnrollports.properties"));
+    Map<String, ActorPort> actorToPorts = BlocklyDropdown2EnumHelper.getActorPortsFromProperties(Util1.loadProperties("classpath:botnrollports.properties"));
 
     public BotnrollFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
@@ -39,7 +39,7 @@ public class BotnrollFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new BotnrollCompilerWorkflow(pluginProperties);
+        return new BotnrollCompilerWorkflow(this.pluginProperties);
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.util.function.Function;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISlot;
@@ -78,7 +78,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         Jaxb2AstTransformer<V> helper,
         Function<String, IPort> getPort,
         Function<String, IMode> getMode) {
-        return extractPortAndModeAndSlot(block, helper, getPort, getMode, helper.getModeFactory()::getSlot);
+        return extractPortAndModeAndSlot(block, helper, getPort, getMode, helper.getDropdownFactory()::getSlot);
     }
 
     /**
@@ -95,7 +95,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         Function<String, IMode> getMode,
         Function<String, ISlot> getSlot) {
         List<Field> fields = helper.extractFields(block, (short) 3);
-        IRobotFactory factory = helper.getModeFactory();
+        BlocklyDropdown2EnumFactory factory = helper.getDropdownFactory();
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
         String modeName = helper.extractField(fields, BlocklyConstants.MODE, BlocklyConstants.DEFAULT);
         String slotName = helper.extractField(fields, BlocklyConstants.SLOT, BlocklyConstants.NO_SLOT);
@@ -105,11 +105,11 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
     }
 
     public static <V> SensorMetaDataBean extractSensorPortAndMode(Block block, Jaxb2AstTransformer<V> helper, Function<String, IMode> getMode) {
-        return extractPortAndMode(block, helper, helper.getModeFactory()::getSensorPort, getMode);
+        return extractPortAndMode(block, helper, helper.getDropdownFactory()::getSensorPort, getMode);
     }
 
     public static <V> SensorMetaDataBean extractActorPortAndMode(Block block, Jaxb2AstTransformer<V> helper, Function<String, IMode> getMode) {
-        return extractPortAndMode(block, helper, helper.getModeFactory()::getActorPort, getMode);
+        return extractPortAndMode(block, helper, helper.getDropdownFactory()::getActorPort, getMode);
     }
 
     @Override

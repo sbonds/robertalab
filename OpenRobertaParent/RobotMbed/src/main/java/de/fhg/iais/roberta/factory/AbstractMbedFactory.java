@@ -20,8 +20,8 @@ import de.fhg.iais.roberta.visitor.validate.CalliopeSimValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.MbedBoardValidatorVisitor;
 
 public abstract class AbstractMbedFactory extends AbstractRobotFactory {
-    Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Calliopeports.properties"));
-    Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:Calliopeports.properties"));
+    Map<String, SensorPort> sensorToPorts = BlocklyDropdown2EnumHelper.getSensorPortsFromProperties(Util1.loadProperties("classpath:Calliopeports.properties"));
+    Map<String, ActorPort> actorToPorts = BlocklyDropdown2EnumHelper.getActorPortsFromProperties(Util1.loadProperties("classpath:Calliopeports.properties"));
 
     public AbstractMbedFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
@@ -29,12 +29,12 @@ public abstract class AbstractMbedFactory extends AbstractRobotFactory {
     }
 
     @Override
-    public ISensorPort getSensorPort(String port) {
+    public final ISensorPort getSensorPort(String port) {
         return getSensorPortValue(port, this.sensorToPorts);
     }
 
     @Override
-    public IActorPort getActorPort(String port) {
+    public final IActorPort getActorPort(String port) {
         return getActorPortValue(port, this.actorToPorts);
     }
 
@@ -55,7 +55,7 @@ public abstract class AbstractMbedFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getSimCompilerWorkflow() {
-        return new MbedSimCompilerWorkflow(pluginProperties);
+        return new MbedSimCompilerWorkflow(this.pluginProperties);
     }
 
     @Override

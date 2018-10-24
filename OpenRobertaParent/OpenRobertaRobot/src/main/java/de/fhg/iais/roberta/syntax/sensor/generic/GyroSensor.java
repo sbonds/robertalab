@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -61,7 +61,7 @@ public class GyroSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
+        BlocklyDropdown2EnumFactory factory = helper.getDropdownFactory();
         SensorMetaDataBean sensorMetaDataBean;
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_GYRO_RESET) ) {
             List<Field> fields = helper.extractFields(block, (short) 1);
@@ -70,7 +70,7 @@ public class GyroSensor<V> extends ExternalSensor<V> {
                 new SensorMetaDataBean(factory.getSensorPort(portName), factory.getGyroSensorMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT), false);
             return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
         }
-        sensorMetaDataBean = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getGyroSensorMode);
+        sensorMetaDataBean = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getGyroSensorMode);
         return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

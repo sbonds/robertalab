@@ -51,7 +51,7 @@ public class PinGetValueSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getPinGetValueSensorMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getPinGetValueSensorMode);
         return PinGetValueSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

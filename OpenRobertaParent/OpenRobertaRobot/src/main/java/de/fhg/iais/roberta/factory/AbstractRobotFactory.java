@@ -16,11 +16,13 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public abstract class AbstractRobotFactory implements IRobotFactory {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractRobotFactory.class);
-
     protected final PluginProperties pluginProperties;
+    protected final BlocklyDropdown2EnumFactory blocklyDropdown2EnumFactory;
 
     public AbstractRobotFactory(PluginProperties pluginProperties) {
+
         this.pluginProperties = pluginProperties;
+        this.blocklyDropdown2EnumFactory = new BlocklyDropdown2EnumFactory(pluginProperties.getPluginProperties());
 
         Properties generalpluginProperties = Util1.loadProperties("classpath:Robot.properties");
         addBlockTypesFromProperties("Robot", generalpluginProperties);
@@ -28,9 +30,14 @@ public abstract class AbstractRobotFactory implements IRobotFactory {
     }
 
     @Override
+    public BlocklyDropdown2EnumFactory getBlocklyDropdown2EnumFactory() {
+        return this.blocklyDropdown2EnumFactory;
+    }
+
+    @Override
     public final String getGroup() {
         String group = this.pluginProperties.getStringProperty("robot.plugin.group");
-        return group != null ? group : pluginProperties.getRobotName();
+        return group != null ? group : this.pluginProperties.getRobotName();
     }
 
     @Override

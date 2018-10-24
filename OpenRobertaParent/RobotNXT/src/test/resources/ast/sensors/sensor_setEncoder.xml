@@ -11,7 +11,7 @@
 		<block type="robSensors_encoder_getSample" id="117">
 			<mutation mode="DEGREE" />
 			<field name="MODE">DEGREE</field>
-			<field name="SENSORPORT">D</field>
+			<field name="SENSORPORT">C</field>
 		</block>
 	</instance>
 </block_set>

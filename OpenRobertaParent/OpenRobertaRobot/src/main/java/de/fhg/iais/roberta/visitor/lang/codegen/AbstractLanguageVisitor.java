@@ -135,7 +135,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
 
     @Override
     public Void visitColorConst(ColorConst<Void> colorConst) {
-        this.sb.append(getEnumCode(colorConst.getValue()));
+        this.sb.append(colorConst.getColorKey());
         return null;
     }
 

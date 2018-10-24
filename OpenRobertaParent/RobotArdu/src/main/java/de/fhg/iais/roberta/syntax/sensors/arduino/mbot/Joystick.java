@@ -4,7 +4,8 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumHelper;
 import de.fhg.iais.roberta.mode.sensor.Axis;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -60,7 +61,7 @@ public class Joystick<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
+        BlocklyDropdown2EnumFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 3);
 
         String port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
@@ -69,7 +70,7 @@ public class Joystick<V> extends ExternalSensor<V> {
         SensorMetaDataBean sensorData =
             new SensorMetaDataBean(
                 factory.getSensorPort(port),
-                IRobotFactory.getModeValue(mode, Axis.class),
+                BlocklyDropdown2EnumHelper.getModeValue(mode, Axis.class),
                 factory.getSlot(BlocklyConstants.EMPTY_SLOT),
                 isPortInMutation);
         return Joystick.make(mode, sensorData, helper.extractBlockProperties(block), helper.extractComment(block));

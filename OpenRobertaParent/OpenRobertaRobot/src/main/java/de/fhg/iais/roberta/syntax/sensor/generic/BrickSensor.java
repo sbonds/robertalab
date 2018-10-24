@@ -1,7 +1,7 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.factory.IRobotFactory;
+import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -53,7 +53,7 @@ public class BrickSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory modeFactory = helper.getModeFactory();
+        BlocklyDropdown2EnumFactory modeFactory = helper.getDropdownFactory();
         SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, modeFactory::getBrickKeyPressMode);
 
         return BrickSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));

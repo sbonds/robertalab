@@ -16,7 +16,7 @@ public class EncoderSensorTest {
     public void sensorSetEncoder() throws Exception {
         String a =
             "BlockAST [project=[[Location [x=-20, y=94], EncoderSensor [A, ROTATION, NO_SLOT]], "
-                + "[Location [x=-15, y=129], EncoderSensor [D, DEGREE, NO_SLOT]]]]";
+                + "[Location [x=-15, y=129], EncoderSensor [C, DEGREE, NO_SLOT]]]]";
 
         Assert.assertEquals(a, this.h.generateTransformerString("/ast/sensors/sensor_setEncoder.xml"));
     }
@@ -40,7 +40,7 @@ public class EncoderSensorTest {
         EncoderSensor<Void> cs1 = (EncoderSensor<Void>) transformer.getTree().get(1).get(1);
 
         Assert.assertEquals(new ActorPort("A", "MA"), cs.getPort());
-        Assert.assertEquals(new ActorPort("D", "MD"), cs1.getPort());
+        Assert.assertEquals(new ActorPort("C", "MC"), cs1.getPort());
     }
 
     @Test

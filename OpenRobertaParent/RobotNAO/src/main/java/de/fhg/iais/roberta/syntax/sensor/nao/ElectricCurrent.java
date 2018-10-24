@@ -49,7 +49,7 @@ public final class ElectricCurrent<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getPlaceholderSensorMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getPlaceholderSensorMode);
         return ElectricCurrent.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

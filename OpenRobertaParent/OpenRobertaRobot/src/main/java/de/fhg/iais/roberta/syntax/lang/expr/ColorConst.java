@@ -4,8 +4,7 @@ import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
-import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.inter.mode.general.IPickColor;
+import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -27,12 +26,14 @@ import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
  * To create an instance from this class use the method {@link #make(String, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
 public class ColorConst<V> extends Expr<V> {
-    private final IPickColor value;
+    private final String colorKey;
+    private final String colorValue;
 
-    private ColorConst(IPickColor color, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ColorConst(String colorKey, String colorValue, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("COLOR_CONST"), properties, comment);
-        Assert.isTrue(color != null);
-        this.value = color;
+        Assert.isTrue(colorValue != null && colorKey != null);
+        this.colorKey = colorKey;
+        this.colorValue = colorValue;
         setReadOnly();
     }
 
@@ -44,15 +45,16 @@ public class ColorConst<V> extends Expr<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ColorConst}.
      */
-    public static <V> ColorConst<V> make(IPickColor value, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ColorConst<V>(value, properties, comment);
+    public static <V> ColorConst<V> make(String colorKey, String colorValue, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new ColorConst<V>(colorKey, colorValue, properties, comment);
     }
 
-    /**
-     * @return the value of the string constant.
-     */
-    public IPickColor getValue() {
-        return this.value;
+    public String getColorKey() {
+        return this.colorKey;
+    }
+
+    public String getColorValue() {
+        return this.colorValue;
     }
 
     @Override
@@ -72,7 +74,7 @@ public class ColorConst<V> extends Expr<V> {
 
     @Override
     public String toString() {
-        return "ColorConst [" + this.value + "]";
+        return "ColorConst [" + this.colorKey + ", " + this.colorValue + "]";
     }
 
     @Override
@@ -88,17 +90,17 @@ public class ColorConst<V> extends Expr<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        IRobotFactory factory = helper.getModeFactory();
+        BlocklyDropdown2EnumFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         String field = helper.extractField(fields, BlocklyConstants.COLOUR);
-        return ColorConst.make(factory.getPickColor(field), helper.extractBlockProperties(block), helper.extractComment(block));
+        return ColorConst.make(field, factory.getPickColor(field), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.COLOUR, getValue().getHex().toLowerCase());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.COLOUR, getColorKey());
         return jaxbDestination;
     }
 }

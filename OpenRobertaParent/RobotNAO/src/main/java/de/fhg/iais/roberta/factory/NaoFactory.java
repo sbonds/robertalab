@@ -34,8 +34,8 @@ import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 
 public class NaoFactory extends AbstractRobotFactory {
-    Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:NAOports.properties"));
-    Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:NAOports.properties"));
+    Map<String, SensorPort> sensorToPorts = BlocklyDropdown2EnumHelper.getSensorPortsFromProperties(Util1.loadProperties("classpath:NAOports.properties"));
+    Map<String, ActorPort> actorToPorts = BlocklyDropdown2EnumHelper.getActorPortsFromProperties(Util1.loadProperties("classpath:NAOports.properties"));
 
     public NaoFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
@@ -52,11 +52,11 @@ public class NaoFactory extends AbstractRobotFactory {
     }
 
     public IMode getDetectMarkMode(String mode) {
-        return IRobotFactory.getModeValue(mode, DetectedMarkMode.class);
+        return BlocklyDropdown2EnumHelper.getModeValue(mode, DetectedMarkMode.class);
     }
 
     public IMode getDetectFaceMode(String mode) {
-        return IRobotFactory.getModeValue(mode, DetectedFaceMode.class);
+        return BlocklyDropdown2EnumHelper.getModeValue(mode, DetectedFaceMode.class);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class NaoFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new NaoCompilerWorkflow(pluginProperties);
+        return new NaoCompilerWorkflow(this.pluginProperties);
     }
 
     @Override

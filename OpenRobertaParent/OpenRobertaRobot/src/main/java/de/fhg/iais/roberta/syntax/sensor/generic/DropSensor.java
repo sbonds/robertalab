@@ -42,7 +42,7 @@ public class DropSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getDropSensorMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getDropSensorMode);
         return DropSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

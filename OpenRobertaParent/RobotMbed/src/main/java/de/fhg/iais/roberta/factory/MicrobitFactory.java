@@ -7,9 +7,7 @@ import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.codegen.MbedSimCompilerWorkflow;
 import de.fhg.iais.roberta.codegen.MicrobitCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IShowPicture;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -20,22 +18,12 @@ import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.MbedBoardValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.MicrobitSimValidatorVisitor;
 
-public class MicrobitFactory extends AbstractRobotFactory {
-    Map<String, SensorPort> sensorToPorts = IRobotFactory.getSensorPortsFromProperties(Util1.loadProperties("classpath:Microbitports.properties"));
-    Map<String, ActorPort> actorToPorts = IRobotFactory.getActorPortsFromProperties(Util1.loadProperties("classpath:Microbitports.properties"));
+public class MicrobitFactory extends AbstractMbedFactory {
+    Map<String, SensorPort> sensorToPorts = BlocklyDropdown2EnumHelper.getSensorPortsFromProperties(Util1.loadProperties("classpath:Microbitports.properties"));
+    Map<String, ActorPort> actorToPorts = BlocklyDropdown2EnumHelper.getActorPortsFromProperties(Util1.loadProperties("classpath:Microbitports.properties"));
 
     public MicrobitFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
-    }
-
-    @Override
-    public ISensorPort getSensorPort(String port) {
-        return getSensorPortValue(port, this.sensorToPorts);
-    }
-
-    @Override
-    public IActorPort getActorPort(String port) {
-        return getActorPortValue(port, this.actorToPorts);
     }
 
     @Override
@@ -50,12 +38,12 @@ public class MicrobitFactory extends AbstractRobotFactory {
 
     @Override
     public ICompilerWorkflow getRobotCompilerWorkflow() {
-        return new MicrobitCompilerWorkflow(pluginProperties);
+        return new MicrobitCompilerWorkflow(this.pluginProperties);
     }
 
     @Override
     public ICompilerWorkflow getSimCompilerWorkflow() {
-        return new MbedSimCompilerWorkflow(pluginProperties);
+        return new MbedSimCompilerWorkflow(this.pluginProperties);
     }
 
     @Override

@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Category;
+import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumFactory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -62,8 +63,8 @@ abstract public class Jaxb2AstTransformer<V> {
 
     }
 
-    public IRobotFactory getModeFactory() {
-        return this.modeFactory;
+    public BlocklyDropdown2EnumFactory getDropdownFactory() {
+        return this.modeFactory.getBlocklyDropdown2EnumFactory();
     }
 
     /**
@@ -136,13 +137,14 @@ abstract public class Jaxb2AstTransformer<V> {
         if ( (block.getMutation() != null) && (block.getMutation().getOperatorRange() != null) ) {
             operationRange = block.getMutation().getOperatorRange();
         }
-        return Binary.make(
-            Binary.Op.get(op),
-            convertPhraseToExpr(left),
-            convertPhraseToExpr(right),
-            operationRange,
-            extractBlockProperties(block),
-            extractComment(block));
+        return Binary
+            .make(
+                Binary.Op.get(op),
+                convertPhraseToExpr(left),
+                convertPhraseToExpr(right),
+                operationRange,
+                extractBlockProperties(block),
+                extractComment(block));
     }
 
     /**
@@ -272,11 +274,12 @@ abstract public class Jaxb2AstTransformer<V> {
         ExprList<V> parameters = ExprList.make();
         for ( Arg arg : arguments ) {
             Var<V> parametar =
-                Var.make(
-                    BlocklyType.get(arg.getType()),
-                    arg.getName(),
-                    BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
-                    null);
+                Var
+                    .make(
+                        BlocklyType.get(arg.getType()),
+                        arg.getName(),
+                        BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
+                        null);
             parameters.addExpr(parametar);
         }
         parameters.setReadOnly();
@@ -575,16 +578,17 @@ abstract public class Jaxb2AstTransformer<V> {
      * @return
      */
     public BlocklyBlockProperties extractBlockProperties(Block block) {
-        return BlocklyBlockProperties.make(
-            block.getType(),
-            block.getId(),
-            isDisabled(block),
-            isCollapsed(block),
-            isInline(block),
-            isDeletable(block),
-            isMovable(block),
-            isInTask(block),
-            isShadow(block));
+        return BlocklyBlockProperties
+            .make(
+                block.getType(),
+                block.getId(),
+                isDisabled(block),
+                isCollapsed(block),
+                isInline(block),
+                isDeletable(block),
+                isMovable(block),
+                isInTask(block),
+                isShadow(block));
     }
 
     public int getElseIf(Mutation mutation) {

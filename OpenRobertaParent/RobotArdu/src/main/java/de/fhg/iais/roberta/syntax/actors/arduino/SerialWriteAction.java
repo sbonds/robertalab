@@ -51,7 +51,7 @@ public class SerialWriteAction<V> extends Action<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        helper.getModeFactory();
+        helper.getDropdownFactory();
         List<Value> values = helper.extractValues(block, (short) 1);
         Phrase<V> value = helper.extractValue(values, new ExprParam(BlocklyConstants.OUT, BlocklyType.ANY));
         return SerialWriteAction.make(helper.convertPhraseToExpr(value), helper.extractBlockProperties(block), helper.extractComment(block));

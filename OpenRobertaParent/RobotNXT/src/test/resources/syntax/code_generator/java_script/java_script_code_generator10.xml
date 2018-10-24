@@ -74,16 +74,6 @@
             </block>
           </value>
         </block>
-        <block type="robGlobalvariables_declare" id="201" inline="true" intask="true" deletable="false" movable="false">
-          <mutation next="false" declaration_type="Colour"></mutation>
-          <field name="VAR">variablenName8</field>
-          <field name="TYPE">Colour</field>
-          <value name="VALUE">
-            <block type="robColour_picker" id="203" intask="true">
-              <field name="COLOUR">#532115</field>
-            </block>
-          </value>
-        </block>
       </statement>
     </block>
   </instance>

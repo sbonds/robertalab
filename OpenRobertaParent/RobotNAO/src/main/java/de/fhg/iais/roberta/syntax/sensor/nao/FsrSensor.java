@@ -50,7 +50,7 @@ public final class FsrSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getModeFactory()::getPlaceholderSensorMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getPlaceholderSensorMode);
         return FsrSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

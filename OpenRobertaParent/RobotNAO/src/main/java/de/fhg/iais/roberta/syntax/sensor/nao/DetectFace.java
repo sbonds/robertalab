@@ -47,7 +47,7 @@ public final class DetectFace<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, ((NaoFactory) helper.getModeFactory())::getDetectFaceMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, ((NaoFactory) helper.getDropdownFactory())::getDetectFaceMode);
         return DetectFace.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }
