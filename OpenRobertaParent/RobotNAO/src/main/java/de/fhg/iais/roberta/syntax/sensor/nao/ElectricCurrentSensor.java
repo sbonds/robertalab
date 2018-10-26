@@ -17,23 +17,23 @@ import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
  * <br/>
  * The client must provide the {@link joint} and {@link degrees} (direction and distance to walk).
  */
-public final class ElectricCurrent<V> extends ExternalSensor<V> {
+public final class ElectricCurrentSensor<V> extends ExternalSensor<V> {
 
-    private ElectricCurrent(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ElectricCurrentSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(sensorMetaDataBean, BlockTypeContainer.getByName("ELECTRIC_CURRENT"), properties, comment);
         setReadOnly();
     }
 
     /**
-     * Creates instance of {@link ElectricCurrent}. This instance is read only and can not be modified.
+     * Creates instance of {@link ElectricCurrentSensor}. This instance is read only and can not be modified.
      *
      * @param joint {@link joint} the sensors data will be read from,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link ElectricCurrent}
+     * @return read only object of class {@link ElectricCurrentSensor}
      */
-    public static <V> ElectricCurrent<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new ElectricCurrent<V>(sensorMetaDataBean, properties, comment);
+    public static <V> ElectricCurrentSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new ElectricCurrentSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -50,7 +50,7 @@ public final class ElectricCurrent<V> extends ExternalSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getPlaceholderSensorMode);
-        return ElectricCurrent.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        return ElectricCurrentSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
 }

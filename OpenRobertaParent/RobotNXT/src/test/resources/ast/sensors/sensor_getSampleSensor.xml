@@ -73,8 +73,8 @@
   </instance>
   <instance x="196" y="359">
     <block type="robSensors_getSample" id="55" >
-      <mutation input="KEYS_PRESSED"></mutation>
-      <field name="SENSORTYPE">KEYS_PRESSED</field>
+      <mutation input="KEY_PRESSED"></mutation>
+      <field name="SENSORTYPE">KEY_PRESSED</field>
       <field name="SENSORPORT">ENTER</field>
       <field name="SLOT" />
     </block>

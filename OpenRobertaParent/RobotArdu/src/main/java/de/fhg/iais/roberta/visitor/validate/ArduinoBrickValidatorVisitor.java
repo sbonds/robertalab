@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.syntax.actors.arduino.PinWriteValueAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.RelayAction;
 import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
@@ -45,8 +45,8 @@ public final class ArduinoBrickValidatorVisitor extends AbstractBrickValidatorVi
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        checkSensorPort(brickSensor);
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        checkSensorPort(keysSensor);
         return null;
     }
 

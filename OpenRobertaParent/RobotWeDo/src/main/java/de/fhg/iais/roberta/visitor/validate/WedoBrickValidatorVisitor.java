@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
 public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVisitor {
@@ -22,8 +22,8 @@ public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVi
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        checkSensorPort(brickSensor);
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        checkSensorPort(keysSensor);
         return null;
     }
 

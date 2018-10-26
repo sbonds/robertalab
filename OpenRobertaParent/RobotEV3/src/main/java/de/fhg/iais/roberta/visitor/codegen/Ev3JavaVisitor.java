@@ -19,12 +19,12 @@ import de.fhg.iais.roberta.inter.mode.sensor.IRSeekerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.BrickKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
+import de.fhg.iais.roberta.mode.sensor.EncoderSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.KeysSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
@@ -75,13 +75,13 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
@@ -171,25 +171,25 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         generateImports();
 
         this.sb.append("public class " + this.programName + " {\n");
-        this.sb.append(INDENT).append("private static Configuration brickConfiguration;").append("\n\n");
-        this.sb.append(INDENT).append(generateRegenerateUsedSensors()).append("\n");
+        this.sb.append(this.INDENT).append("private static Configuration brickConfiguration;").append("\n\n");
+        this.sb.append(this.INDENT).append(generateRegenerateUsedSensors()).append("\n");
         if ( this.usedImages.size() != 0 ) {
-            this.sb.append(INDENT).append("private static Map<String, String> predefinedImages = new HashMap<String, String>();\n\n");
+            this.sb.append(this.INDENT).append("private static Map<String, String> predefinedImages = new HashMap<String, String>();\n\n");
         }
 
-        this.sb.append(INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n");
+        this.sb.append(this.INDENT).append("private Hal hal = new Hal(brickConfiguration, usedSensors);\n");
         generateUserDefinedMethods();
         this.sb.append("\n");
-        this.sb.append(INDENT).append("public static void main(String[] args) {\n");
-        this.sb.append(INDENT).append(INDENT).append("try {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append(generateRegenerateConfiguration()).append("\n");
+        this.sb.append(this.INDENT).append("public static void main(String[] args) {\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("try {\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append(this.INDENT).append(generateRegenerateConfiguration()).append("\n");
 
         this.sb.append(generateUsedImages()).append("\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("new ").append(this.programName).append("().run();\n");
-        this.sb.append(INDENT).append(INDENT).append("} catch ( Exception e ) {\n");
-        this.sb.append(INDENT).append(INDENT).append(INDENT).append("Hal.displayExceptionWaitForKeyPress(e);\n");
-        this.sb.append(INDENT).append(INDENT).append("}\n");
-        this.sb.append(INDENT).append("}");
+        this.sb.append(this.INDENT).append(this.INDENT).append(this.INDENT).append("new ").append(this.programName).append("().run();\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("} catch ( Exception e ) {\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append(this.INDENT).append("Hal.displayExceptionWaitForKeyPress(e);\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("}\n");
+        this.sb.append(this.INDENT).append("}");
     }
 
     @Override
@@ -197,10 +197,10 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         if ( withWrapping ) {
             if ( this.isInDebugMode ) {
                 this.sb.append("\n");
-                this.sb.append(INDENT).append(INDENT).append("hal.closeResources();\n");
+                this.sb.append(this.INDENT).append(this.INDENT).append("hal.closeResources();\n");
             }
 
-            this.sb.append(INDENT).append("}");
+            this.sb.append(this.INDENT).append("}");
         }
         this.sb.append("\n").append("}");
     }
@@ -513,9 +513,9 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        String brickSensorPort = "BrickKey." + brickSensor.getPort().getOraName();
-        switch ( (BrickKeyPressMode) brickSensor.getMode() ) {
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        String brickSensorPort = "BrickKey." + keysSensor.getPort().getOraName();
+        switch ( (KeysSensorMode) keysSensor.getMode() ) {
             case PRESSED:
                 this.sb.append("hal.isPressed(" + brickSensorPort + ")");
                 break;
@@ -523,7 +523,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 this.sb.append("hal.isPressedAndReleased(" + brickSensorPort + ")");
                 break;
             default:
-                throw new DbcException("Invalide mode for BrickSensor!");
+                throw new DbcException("Invalide mode for KeysSensor!");
         }
         return null;
     }
@@ -554,7 +554,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         IActorPort encoderMotorPort = (IActorPort) encoderSensor.getPort();
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(encoderMotorPort);
-        if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
+        if ( encoderSensor.getMode() == EncoderSensorMode.RESET ) {
             String methodName = isRegulated ? "hal.resetRegulatedMotorTacho(" : "hal.resetUnregulatedMotorTacho(";
             this.sb.append(methodName + "ActorPort." + encoderMotorPort.getOraName() + ");");
         } else {
@@ -681,17 +681,17 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     @Override
     public Void visitMainTask(MainTask<Void> mainTask) {
         mainTask.getVariables().visit(this);
-        this.sb.append("\n\n").append(INDENT).append("public void run() throws Exception {\n");
+        this.sb.append("\n\n").append(this.INDENT).append("public void run() throws Exception {\n");
         incrIndentation();
         // this is needed for testing
         if ( mainTask.getDebug().equals("TRUE") ) {
-            this.sb.append(INDENT).append(INDENT).append("hal.startLogging();");
+            this.sb.append(this.INDENT).append(this.INDENT).append("hal.startLogging();");
             //this.sb.append(INDENT).append(INDENT).append(INDENT).append("\nhal.startScreenLoggingThread();");
             this.isInDebugMode = true;
         }
         if ( this.isSayTextUsed && !this.brickConfiguration.getRobotName().equals("ev3lejos") ) {
             this.sb.append("\n");
-            this.sb.append(INDENT).append(INDENT).append("hal.setLanguage(\"");
+            this.sb.append(this.INDENT).append(this.INDENT).append("hal.setLanguage(\"");
             this.sb.append(this.getLanguageString(this.language));
             this.sb.append("\");");
         }
@@ -1012,18 +1012,22 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     public String generateRegenerateConfiguration() {
         StringBuilder sb = new StringBuilder();
         sb.append(" brickConfiguration = new EV3Configuration.Builder()\n");
-        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setWheelDiameter(" + this.brickConfiguration.getWheelDiameterCM() + ")\n");
-        sb.append(INDENT).append(INDENT).append(INDENT).append("    .setTrackWidth(" + this.brickConfiguration.getTrackWidthCM() + ")\n");
+        sb.append(this.INDENT).append(this.INDENT).append(this.INDENT).append("    .setWheelDiameter(" + this.brickConfiguration.getWheelDiameterCM() + ")\n");
+        sb.append(this.INDENT).append(this.INDENT).append(this.INDENT).append("    .setTrackWidth(" + this.brickConfiguration.getTrackWidthCM() + ")\n");
         appendActors(sb);
         appendSensors(sb);
-        sb.append(INDENT).append(INDENT).append(INDENT).append("    .build();");
+        sb.append(this.INDENT).append(this.INDENT).append(this.INDENT).append("    .build();");
         return sb.toString();
     }
 
     private String generateUsedImages() {
         StringBuilder sb = new StringBuilder();
         for ( String image : this.usedImages ) {
-            sb.append(INDENT).append(INDENT).append(INDENT).append("predefinedImages.put(\"" + image + "\", \"" + this.predefinedImage.get(image) + "\");\n");
+            sb
+                .append(this.INDENT)
+                .append(this.INDENT)
+                .append(this.INDENT)
+                .append("predefinedImages.put(\"" + image + "\", \"" + this.predefinedImage.get(image) + "\");\n");
         }
         return sb.toString();
     }
@@ -1054,7 +1058,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     private void appendSensors(StringBuilder sb) {
         for ( Map.Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
-            sb.append(INDENT).append(INDENT).append(INDENT);
+            sb.append(this.INDENT).append(this.INDENT).append(this.INDENT);
             sb.append("    .addSensor(");
             sb.append("SensorPort." + entry.getKey().getCodeName()).append(", ");
             sb.append(generateRegenerateSensor(entry.getValue()));
@@ -1064,7 +1068,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     private void appendActors(StringBuilder sb) {
         for ( Map.Entry<IActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
-            sb.append(INDENT).append(INDENT).append(INDENT);
+            sb.append(this.INDENT).append(this.INDENT).append(this.INDENT);
             sb.append("    .addActor(");
             sb.append("ActorPort." + entry.getKey().getOraName()).append(", ");
             sb.append(generateRegenerateActor(entry.getValue()));

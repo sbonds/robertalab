@@ -52,8 +52,8 @@ public class BlocklyDropdown2EnumHelper {
         String filter = "robot.port.actor.";
         for ( Entry<Object, Object> e : properties.entrySet() ) {
             String key = (String) e.getKey();
-            String value = (String) e.getValue();
             if ( key.startsWith(filter) ) {
+                String value = (String) e.getValue();
                 key = key.substring(filter.length());
                 ActorPort actorPort = new ActorPort(key, value);
                 actorToPorts.put(key, actorPort);
@@ -67,8 +67,8 @@ public class BlocklyDropdown2EnumHelper {
         String filter = "robot.dropdown.";
         for ( Entry<Object, Object> e : properties.entrySet() ) {
             String propertyKey = (String) e.getKey();
-            String value = (String) e.getValue();
             if ( propertyKey.startsWith(filter) ) {
+                String value = (String) e.getValue();
                 String[] typeAndKey = propertyKey.substring(filter.length()).split("\\.");
                 String dropdownType = typeAndKey[0];
                 String key = typeAndKey[1];
@@ -76,6 +76,21 @@ public class BlocklyDropdown2EnumHelper {
             }
         }
         return dropdownItems;
+    }
+
+    public static Map<String, WaitUntilSensorBean> getWaitUntilFromProperties(Properties properties) {
+        Map<String, WaitUntilSensorBean> map = new HashMap<>();
+        String filter = "robot.wait_until.";
+        for ( Entry<Object, Object> e : properties.entrySet() ) {
+            String key = (String) e.getKey();
+            if ( key.startsWith(filter) ) {
+                key = key.substring(filter.length());
+                String value = (String) e.getValue();
+                String[] vs = value.split("\\s*,\\s*");
+                map.put(key, new WaitUntilSensorBean(vs[0], vs[1], vs[2]));
+            }
+        }
+        return map;
     }
 
 }

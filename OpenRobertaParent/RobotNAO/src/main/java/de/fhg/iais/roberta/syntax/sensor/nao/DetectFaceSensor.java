@@ -17,9 +17,9 @@ import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
  * detecting a face previously saved in NAOs database.<br/>
  * <br/>
  */
-public final class DetectFace<V> extends ExternalSensor<V> {
+public final class DetectFaceSensor<V> extends ExternalSensor<V> {
 
-    private DetectFace(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private DetectFaceSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(sensorMetaDataBean, BlockTypeContainer.getByName("DETECT_FACE"), properties, comment);
         setReadOnly();
     }
@@ -30,8 +30,8 @@ public final class DetectFace<V> extends ExternalSensor<V> {
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
      */
-    public static <V> DetectFace<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DetectFace<V>(sensorMetaDataBean, properties, comment);
+    public static <V> DetectFaceSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new DetectFaceSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -48,6 +48,6 @@ public final class DetectFace<V> extends ExternalSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, ((NaoFactory) helper.getRobotFactory())::getDetectFaceMode);
-        return DetectFace.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        return DetectFaceSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

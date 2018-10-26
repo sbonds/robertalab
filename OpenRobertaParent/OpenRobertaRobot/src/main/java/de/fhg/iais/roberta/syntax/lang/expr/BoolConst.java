@@ -47,7 +47,7 @@ public class BoolConst<V> extends Expr<V> {
     /**
      * @return the value of the boolean constant.
      */
-    public boolean isValue() {
+    public boolean getValue() {
         return this.value;
     }
 
@@ -93,7 +93,7 @@ public class BoolConst<V> extends Expr<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        String fieldValue = String.valueOf(((BoolConst<?>) this).isValue()).toUpperCase();
+        String fieldValue = String.valueOf(((BoolConst<?>) this).getValue()).toUpperCase();
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.BOOL, fieldValue);
         return jaxbDestination;
     }

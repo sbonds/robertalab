@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.mode.sensor.nao;
+package de.fhg.iais.roberta.mode.sensor;
 
 import java.util.Locale;
 

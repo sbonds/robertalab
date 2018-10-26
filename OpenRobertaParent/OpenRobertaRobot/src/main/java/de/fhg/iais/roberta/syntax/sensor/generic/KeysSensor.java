@@ -20,29 +20,29 @@ import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
  * <br>
  * To create an instance from this class use the method {@link #make(Mode, BrickKey, BlocklyBlockProperties, BlocklyComment)}.<br>
  */
-public class BrickSensor<V> extends ExternalSensor<V> {
+public class KeysSensor<V> extends ExternalSensor<V> {
 
-    private BrickSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        super(sensorMetaDataBean, BlockTypeContainer.getByName("BRICK_SENSING"), properties, comment);
+    private KeysSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        super(sensorMetaDataBean, BlockTypeContainer.getByName("KEYS_SENSING"), properties, comment);
         setReadOnly();
     }
 
     /**
-     * Creates instance of {@link BrickSensor}. This instance is read only and can not be modified.
+     * Creates instance of {@link KeysSensor}. This instance is read only and can not be modified.
      *
      * @param mode in which the sensor is operating; must be <b>not</b> null; see enum {@link Mode} for all possible modes that the sensor have
      * @param key on the brick; must be <b>not</b> null; see enum {@link BrickKey} for all possible keys,
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link BrickSensor}
+     * @return read only object of class {@link KeysSensor}
      */
-    public static <V> BrickSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new BrickSensor<>(sensorMetaDataBean, properties, comment);
+    public static <V> KeysSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new KeysSensor<>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
     protected V accept(IVisitor<V> visitor) {
-        return ((ISensorVisitor<V>) visitor).visitBrickSensor(this);
+        return ((ISensorVisitor<V>) visitor).visitKeysSensor(this);
     }
 
     /**
@@ -56,6 +56,6 @@ public class BrickSensor<V> extends ExternalSensor<V> {
         BlocklyDropdownFactory modeFactory = helper.getDropdownFactory();
         SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, modeFactory::getBrickKeyPressMode);
 
-        return BrickSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        return KeysSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

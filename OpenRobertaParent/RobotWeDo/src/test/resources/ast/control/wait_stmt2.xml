@@ -10,8 +10,8 @@
 					<field name="OP">EQ</field>
 					<value name="A">
 						<block type="robSensors_getSample" id="161">
-							<mutation input="KEYS_PRESSED"/>
-							<field name="SENSORTYPE">KEYS_PRESSED</field>
+							<mutation input="KEY_PRESSED"/>
+							<field name="SENSORTYPE">KEY_PRESSED</field>
 							<field name="SENSORPORT">LEFT</field><field name="SLOT" />
 						</block>
 					</value>

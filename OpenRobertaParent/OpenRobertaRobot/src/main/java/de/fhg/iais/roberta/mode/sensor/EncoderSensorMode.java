@@ -1,13 +1,13 @@
 package de.fhg.iais.roberta.mode.sensor;
 
-import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IEncoderSensorMode;
 
-public enum MotorTachoMode implements IMotorTachoMode {
+public enum EncoderSensorMode implements IEncoderSensorMode {
     DEFAULT, ROTATION(), DEGREE(), RESET(), DISTANCE();
 
     private final String[] values;
 
-    private MotorTachoMode(String... values) {
+    private EncoderSensorMode(String... values) {
         this.values = values;
     }
 

@@ -7,6 +7,6 @@ import de.fhg.iais.roberta.inter.mode.general.IMode;
  *
  * @author kcvejoski
  */
-public interface IMotorTachoMode extends IMode {
+public interface IEncoderSensorMode extends IMode {
 
 }

@@ -123,7 +123,7 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
 
     @Override
     public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append(boolConst.isValue());
+        this.sb.append(boolConst.getValue());
         return null;
     }
 

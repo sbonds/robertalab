@@ -10,7 +10,7 @@
       </value>
       <value name="ADD1">
         <block type="robColour_picker" id="132" >
-          <field name="COLOUR">#b30006</field>
+          <field name="COLOUR">#B30006</field>
         </block>
       </value>
       <value name="ADD2">

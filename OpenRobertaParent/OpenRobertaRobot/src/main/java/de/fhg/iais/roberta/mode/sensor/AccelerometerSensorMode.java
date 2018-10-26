@@ -1,13 +1,13 @@
-package de.fhg.iais.roberta.mode.sensor.nao;
+package de.fhg.iais.roberta.mode.sensor;
 
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 
-public enum Camera implements IMode {
-    TOP( "0" ), BOTTOM( "1" );
+public enum AccelerometerSensorMode implements IMode {
+    DEFAULT(), VALUE();
 
     private final String[] values;
 
-    private Camera(String... values) {
+    private AccelerometerSensorMode(String... values) {
         this.values = values;
     }
 
@@ -15,5 +15,4 @@ public enum Camera implements IMode {
     public String[] getValues() {
         return this.values;
     }
-
 }

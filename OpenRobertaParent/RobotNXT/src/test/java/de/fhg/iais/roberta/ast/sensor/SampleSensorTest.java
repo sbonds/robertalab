@@ -20,7 +20,7 @@ public class SampleSensorTest {
                 + "[Location [x=136, y=239], GetSampleSensor [InfraredSensor [4, DISTANCE, EMPTY_SLOT]]], "
                 + "[Location [x=156, y=279], GetSampleSensor [EncoderSensor [A, ROTATION, EMPTY_SLOT]]], "
                 + "[Location [x=176, y=319], GetSampleSensor [EncoderSensor [A, DEGREE, EMPTY_SLOT]]], "
-                + "[Location [x=196, y=359], GetSampleSensor [BrickSensor [ENTER, PRESSED, EMPTY_SLOT]]], "
+                + "[Location [x=196, y=359], GetSampleSensor [KeysSensor [ENTER, PRESSED, EMPTY_SLOT]]], "
                 + "[Location [x=216, y=399], GetSampleSensor [GyroSensor [2, ANGLE, EMPTY_SLOT]]], "
                 + "[Location [x=236, y=439], GetSampleSensor [GyroSensor [2, RATE, EMPTY_SLOT]]], "
                 + "[Location [x=256, y=479], GetSampleSensor [TimerSensor [1, VALUE, EMPTY_SLOT]]]]]";

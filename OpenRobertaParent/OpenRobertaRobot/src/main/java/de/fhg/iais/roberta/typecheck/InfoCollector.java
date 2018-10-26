@@ -85,7 +85,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -365,8 +365,8 @@ public class InfoCollector<T> implements ILanguageVisitor<T>, ISensorVisitor<T>,
     }
 
     @Override
-    public T visitBrickSensor(BrickSensor<T> brickSensor) {
-        extractInfos(brickSensor);
+    public T visitKeysSensor(KeysSensor<T> keysSensor) {
+        extractInfos(keysSensor);
         return null;
     }
 

@@ -20,8 +20,8 @@
 								<value name="A">
 									<block type="mbedSensors_getSample" id="*SVsQ#UM4Y1qz2/CEV-G"
 										intask="true" deletable="false" movable="false">
-										<mutation input="KEYS_PRESSED"></mutation>
-										<field name="SENSORTYPE">KEYS_PRESSED</field>
+										<mutation input="KEY_PRESSED"></mutation>
+										<field name="SENSORTYPE">KEY_PRESSED</field>
 										<field name="SENSORPORT">A</field><field name="SLOT" />
 										<data>microbit</data>
 									</block>
@@ -99,8 +99,8 @@
 								<value name="A">
 									<block type="mbedSensors_getSample" id=":OrLeM|U^N?DyS#C4Lv#"
 										intask="true" deletable="false" movable="false">
-										<mutation input="KEYS_PRESSED"></mutation>
-										<field name="SENSORTYPE">KEYS_PRESSED</field>
+										<mutation input="KEY_PRESSED"></mutation>
+										<field name="SENSORTYPE">KEY_PRESSED</field>
 										<field name="SENSORPORT">A</field><field name="SLOT" />
 										<data>microbit</data>
 									</block>
@@ -147,8 +147,8 @@
 													<value name="A">
 														<block type="mbedSensors_getSample" id="e4;}wc8app1+tW4Y)E]1"
 															intask="true" deletable="false" movable="false">
-															<mutation input="KEYS_PRESSED"></mutation>
-															<field name="SENSORTYPE">KEYS_PRESSED</field>
+															<mutation input="KEY_PRESSED"></mutation>
+															<field name="SENSORTYPE">KEY_PRESSED</field>
 															<field name="SENSORPORT">A</field><field name="SLOT" />
 															<data>microbit</data>
 														</block>
@@ -174,8 +174,8 @@
 													<value name="A">
 														<block type="mbedSensors_getSample" id="|cGvYh^i,vj}o]p#zqVb"
 															intask="true" deletable="false" movable="false">
-															<mutation input="KEYS_PRESSED"></mutation>
-															<field name="SENSORTYPE">KEYS_PRESSED</field>
+															<mutation input="KEY_PRESSED"></mutation>
+															<field name="SENSORTYPE">KEY_PRESSED</field>
 															<field name="SENSORPORT">A</field><field name="SLOT" />
 															<data>microbit</data>
 														</block>
@@ -252,8 +252,8 @@
 								<value name="A">
 									<block type="mbedSensors_getSample" id="x+d:u;s}g+|:*[5qE4GR"
 										intask="true" deletable="false" movable="false">
-										<mutation input="KEYS_PRESSED"></mutation>
-										<field name="SENSORTYPE">KEYS_PRESSED</field>
+										<mutation input="KEY_PRESSED"></mutation>
+										<field name="SENSORTYPE">KEY_PRESSED</field>
 										<field name="SENSORPORT">A</field><field name="SLOT" />
 										<data>microbit</data>
 									</block>
@@ -279,8 +279,8 @@
 								<value name="A">
 									<block type="mbedSensors_getSample" id="Z2@RE?`AMZJejWoKWtYC"
 										intask="true" deletable="false" movable="false">
-										<mutation input="KEYS_PRESSED"></mutation>
-										<field name="SENSORTYPE">KEYS_PRESSED</field>
+										<mutation input="KEY_PRESSED"></mutation>
+										<field name="SENSORTYPE">KEY_PRESSED</field>
 										<field name="SENSORPORT">A</field><field name="SLOT" />
 										<data>microbit</data>
 									</block>

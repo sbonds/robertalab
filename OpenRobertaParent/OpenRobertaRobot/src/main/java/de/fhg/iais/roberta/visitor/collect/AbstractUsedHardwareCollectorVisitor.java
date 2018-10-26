@@ -39,7 +39,7 @@ import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
@@ -98,7 +98,7 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
         return null;
     }
 

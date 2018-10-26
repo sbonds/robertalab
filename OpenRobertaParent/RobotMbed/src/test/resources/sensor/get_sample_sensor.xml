@@ -10,8 +10,8 @@
           <field name="OP">EQ</field>
           <value name="A">
             <block type="mbedSensors_getSample" id="f2:7=_#{oXzjNG57DO7N" intask="true" deletable="false" movable="false">
-              <mutation input="KEYS_PRESSED"></mutation>
-              <field name="SENSORTYPE">KEYS_PRESSED</field>
+              <mutation input="KEY_PRESSED"></mutation>
+              <field name="SENSORTYPE">KEY_PRESSED</field>
               <field name="SENSORPORT">A</field>
               <data>calliope</data>
             </block>
@@ -30,8 +30,8 @@
           <field name="OP">EQ</field>
           <value name="A">
             <block type="mbedSensors_getSample" id="~j!#Xmii)x,*FNu5YDrP" intask="true" deletable="false" movable="false">
-              <mutation input="KEYS_PRESSED"></mutation>
-              <field name="SENSORTYPE">KEYS_PRESSED</field>
+              <mutation input="KEY_PRESSED"></mutation>
+              <field name="SENSORTYPE">KEY_PRESSED</field>
               <field name="SENSORPORT">B</field>
               <data>calliope</data>
             </block>

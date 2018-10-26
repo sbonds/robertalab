@@ -1,13 +1,13 @@
-package de.fhg.iais.roberta.mode.sensor.nao;
+package de.fhg.iais.roberta.mode.sensor;
 
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 
-public enum Resolution implements IMode {
-    LOW( "0" ), MED( "1" ), HIGH( "2" );
+public enum DetectFaceSensorMode implements IMode {
+    NAMEONE( "NAMEONE" ), NAMEALL( "NAMEALL" );
 
     private final String[] values;
 
-    private Resolution(String... values) {
+    private DetectFaceSensorMode(String... values) {
         this.values = values;
     }
 

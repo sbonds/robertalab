@@ -52,7 +52,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -271,7 +271,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
         return null;
     }
 

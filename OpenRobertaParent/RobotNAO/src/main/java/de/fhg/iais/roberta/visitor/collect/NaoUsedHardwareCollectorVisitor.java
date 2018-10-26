@@ -37,10 +37,10 @@ import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
 import de.fhg.iais.roberta.syntax.lang.expr.nao.ColorHexString;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectFace;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectFaceSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectedMark;
-import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrent;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectMarkSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrentSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
@@ -193,7 +193,7 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
     }
 
     @Override
-    public Void visitNaoMark(DetectedMark<Void> naoMark) {
+    public Void visitNaoMark(DetectMarkSensor<Void> naoMark) {
         this.usedSensors.add(new UsedSensor(null, SensorType.DETECT_MARK, null));
         return null;
     }
@@ -226,7 +226,7 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
     }
 
     @Override
-    public Void visitDetectFace(DetectFace<Void> detectFace) {
+    public Void visitDetectFace(DetectFaceSensor<Void> detectFace) {
         this.usedSensors.add(new UsedSensor(null, SensorType.NAOFACE, null));
         return null;
     }
@@ -238,7 +238,7 @@ public final class NaoUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
     }
 
     @Override
-    public Void visitElectricCurrent(ElectricCurrent<Void> electricCurrent) {
+    public Void visitElectricCurrent(ElectricCurrentSensor<Void> electricCurrent) {
         return null;
     }
 

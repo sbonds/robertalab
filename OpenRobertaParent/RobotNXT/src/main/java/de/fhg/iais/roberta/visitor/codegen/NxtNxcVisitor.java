@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.EncoderSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
@@ -61,7 +61,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
@@ -717,8 +717,8 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("ButtonPressed(" + brickSensor.getPort().getCodeName() + ", false)");
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        this.sb.append("ButtonPressed(" + keysSensor.getPort().getCodeName() + ", false)");
         return null;
     }
 
@@ -760,7 +760,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         ActorPort encoderMotorPort = (ActorPort) encoderSensor.getPort();
-        MotorTachoMode mode = (MotorTachoMode) encoderSensor.getMode();
+        EncoderSensorMode mode = (EncoderSensorMode) encoderSensor.getMode();
         switch ( mode ) {
             case RESET:
                 this.sb.append("ResetTachoCount(OUT_" + encoderMotorPort + ");");

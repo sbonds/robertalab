@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.EncoderSensorMode;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
@@ -28,8 +28,8 @@ public class EncoderSensorTest {
         EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0).get(1);
         EncoderSensor<Void> cs1 = (EncoderSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals(MotorTachoMode.ROTATION, cs.getMode());
-        Assert.assertEquals(MotorTachoMode.DEGREE, cs1.getMode());
+        Assert.assertEquals(EncoderSensorMode.ROTATION, cs.getMode());
+        Assert.assertEquals(EncoderSensorMode.DEGREE, cs1.getMode());
     }
 
     @Test

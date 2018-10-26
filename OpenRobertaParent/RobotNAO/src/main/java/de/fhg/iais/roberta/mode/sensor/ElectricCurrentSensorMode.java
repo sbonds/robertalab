@@ -1,13 +1,13 @@
-package de.fhg.iais.roberta.mode.sensor.nao;
+package de.fhg.iais.roberta.mode.sensor;
 
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 
-public enum Position implements IMode {
-    FRONT(), MIDDLE(), REAR();
+public enum ElectricCurrentSensorMode implements IMode {
+    VALUE();
 
     private final String[] values;
 
-    private Position(String... values) {
+    private ElectricCurrentSensorMode(String... values) {
         this.values = values;
     }
 

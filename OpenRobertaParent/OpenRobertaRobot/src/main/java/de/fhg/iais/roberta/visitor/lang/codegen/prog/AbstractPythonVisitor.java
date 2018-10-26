@@ -82,7 +82,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitBoolConst(BoolConst<Void> boolConst) {
-        this.sb.append(boolConst.isValue() ? "True" : "False");
+        this.sb.append(boolConst.getValue() ? "True" : "False");
         return null;
     }
 

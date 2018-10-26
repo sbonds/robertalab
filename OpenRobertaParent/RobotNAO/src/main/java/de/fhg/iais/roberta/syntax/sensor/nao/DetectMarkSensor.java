@@ -18,23 +18,23 @@ import de.fhg.iais.roberta.visitor.hardware.INaoVisitor;
  * detecting a NaoMark.<br/>
  * <br/>
  */
-public final class DetectedMark<V> extends ExternalSensor<V> {
+public final class DetectMarkSensor<V> extends ExternalSensor<V> {
 
-    private DetectedMark(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private DetectMarkSensor(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(sensorMetaDataBean, BlockTypeContainer.getByName("DETECT_MARK"), properties, comment);
         setReadOnly();
     }
 
     /**
-     * Creates instance of {@link DetectedMark}. This instance is read only and can not be modified.
+     * Creates instance of {@link DetectMarkSensor}. This instance is read only and can not be modified.
      *
      * @param param {@link MotionParam} that set up the parameters for the movement of the robot (number of rotations or degrees and speed),
      * @param properties of the block (see {@link BlocklyBlockProperties}),
      * @param comment added from the user,
-     * @return read only object of class {@link DetectedMark}
+     * @return read only object of class {@link DetectMarkSensor}
      */
-    public static <V> DetectedMark<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DetectedMark<V>(sensorMetaDataBean, properties, comment);
+    public static <V> DetectMarkSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
+        return new DetectMarkSensor<V>(sensorMetaDataBean, properties, comment);
     }
 
     @Override
@@ -51,6 +51,6 @@ public final class DetectedMark<V> extends ExternalSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, ((NaoFactory) helper.getRobotFactory())::getDetectMarkMode);
-        return DetectedMark.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
+        return DetectMarkSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

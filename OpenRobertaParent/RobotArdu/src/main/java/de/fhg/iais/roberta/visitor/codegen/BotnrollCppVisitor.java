@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -341,8 +341,8 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("bnr.buttonIsPressed(" + brickSensor.getPort().getCodeName() + ")");
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        this.sb.append("bnr.buttonIsPressed(" + keysSensor.getPort().getCodeName() + ")");
         return null;
     }
 

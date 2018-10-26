@@ -7,7 +7,6 @@ import de.fhg.iais.roberta.codegen.MbedSimCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.validate.AbstractProgramValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.CalliopeSimValidatorVisitor;
@@ -17,7 +16,6 @@ public abstract class AbstractMbedFactory extends AbstractRobotFactory {
 
     public AbstractMbedFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
-        addBlockTypesFromProperties(Util1.loadProperties("classpath:mbed.properties"));
     }
 
     @Override

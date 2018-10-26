@@ -10,7 +10,7 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.EncoderSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -34,7 +34,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -275,8 +275,8 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + brickSensor.getPort() + ")");
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + keysSensor.getPort() + ")");
         return null;
     }
 
@@ -295,7 +295,7 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         String encoderMotor = (encoderSensor.getPort().toString().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString();
-        if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
+        if ( encoderSensor.getMode() == EncoderSensorMode.RESET ) {
             String end = createClosingBracket();
             this.sb.append("createResetEncoderSensor(" + encoderMotor);
             this.sb.append(end);

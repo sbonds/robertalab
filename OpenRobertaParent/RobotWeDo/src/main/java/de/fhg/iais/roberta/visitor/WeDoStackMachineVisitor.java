@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -142,8 +142,8 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
     }
 
     @Override
-    public V visitBrickSensor(BrickSensor<V> brickSensor) {
-        String sensorName = brickSensor.getPort().getOraName();
+    public V visitKeysSensor(KeysSensor<V> keysSensor) {
+        String sensorName = keysSensor.getPort().getOraName();
         ConfigurationBlock brickConfBlock = this.usedConfigurationBlocks.get(sensorName);
         if ( brickConfBlock == null ) {
             throw new DbcException("no button sensor declared in the configuration");

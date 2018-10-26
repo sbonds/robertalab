@@ -1,13 +1,13 @@
-package de.fhg.iais.roberta.mode.sensor.nao;
+package de.fhg.iais.roberta.mode.sensor;
 
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 
-public enum DetectedMarkMode implements IMode {
+public enum DetectMarkSensorMode implements IMode {
     IDONE( "IDONE" ), IDALL( "IDALL" );
 
     private final String[] values;
 
-    private DetectedMarkMode(String... values) {
+    private DetectMarkSensorMode(String... values) {
         this.values = values;
     }
 

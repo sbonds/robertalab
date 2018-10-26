@@ -1,8 +1,12 @@
 package de.fhg.iais.roberta.factory;
 
+import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
@@ -25,6 +29,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ICompassSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ICoordinatesMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IDropSensorMode;
+import de.fhg.iais.roberta.inter.mode.sensor.IEncoderSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGestureSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IGyroSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IHumiditySensorMode;
@@ -34,7 +39,6 @@ import de.fhg.iais.roberta.inter.mode.sensor.IJoystickMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ILightSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMoistureSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IMotionSensorMode;
-import de.fhg.iais.roberta.inter.mode.sensor.IMotorTachoMode;
 import de.fhg.iais.roberta.inter.mode.sensor.IPinPull;
 import de.fhg.iais.roberta.inter.mode.sensor.IPinValue;
 import de.fhg.iais.roberta.inter.mode.sensor.IPulseSensorMode;
@@ -65,18 +69,18 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.general.PlaceholderSensorMode;
 import de.fhg.iais.roberta.mode.general.WorkingState;
 import de.fhg.iais.roberta.mode.sensor.Axis;
-import de.fhg.iais.roberta.mode.sensor.BrickKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
 import de.fhg.iais.roberta.mode.sensor.DropSensorMode;
+import de.fhg.iais.roberta.mode.sensor.EncoderSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GestureSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.HumiditySensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
+import de.fhg.iais.roberta.mode.sensor.KeysSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MoistureSensorMode;
 import de.fhg.iais.roberta.mode.sensor.MotionSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.PinPull;
 import de.fhg.iais.roberta.mode.sensor.PinValue;
 import de.fhg.iais.roberta.mode.sensor.PulseSensorMode;
@@ -91,47 +95,24 @@ import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.mode.sensor.VoltageSensorMode;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
 import de.fhg.iais.roberta.util.DropDowns;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class BlocklyDropdownFactory {
-
+    private static final Logger LOG = LoggerFactory.getLogger(BlocklyDropdownFactory.class);
     private final Map<String, SensorPort> sensorToPorts;
     private final Map<String, ActorPort> actorToPorts;
+    private final Map<String, WaitUntilSensorBean> waMap;
     private final DropDowns blocklyDropdownItems;
 
     public BlocklyDropdownFactory(Properties properties) {
         this.sensorToPorts = BlocklyDropdown2EnumHelper.getSensorPortsFromProperties(properties);
         this.actorToPorts = BlocklyDropdown2EnumHelper.getActorPortsFromProperties(properties);
         this.blocklyDropdownItems = BlocklyDropdown2EnumHelper.getDropdownFromProperties(properties);
+        this.waMap = BlocklyDropdown2EnumHelper.getWaitUntilFromProperties(properties);
     }
 
     /**
@@ -358,7 +339,7 @@ public class BlocklyDropdownFactory {
      * @return the robot keys from the enum {@link IBrickKey}
      */
     public IBirckKeyPressMode getBrickKeyPressMode(String brickKey) {
-        return BlocklyDropdown2EnumHelper.getModeValue(brickKey, BrickKeyPressMode.class);
+        return BlocklyDropdown2EnumHelper.getModeValue(brickKey, KeysSensorMode.class);
     }
 
     /**
@@ -453,14 +434,15 @@ public class BlocklyDropdownFactory {
     }
 
     /**
-     * Get a motor tacho sensor mode from {@link IMotorTachoMode} given string parameter. It is possible for one motor tacho sensor mode to have multiple string
+     * Get a motor tacho sensor mode from {@link IEncoderSensorMode} given string parameter. It is possible for one motor tacho sensor mode to have multiple
+     * string
      * mappings. Throws exception if the motor tacho sensor mode does not exists.
      *
      * @param name of the motor tacho sensor mode
-     * @return the motor tacho sensor mode from the enum {@link IMotorTachoMode}
+     * @return the motor tacho sensor mode from the enum {@link IEncoderSensorMode}
      */
-    public IMotorTachoMode getMotorTachoMode(String mode) {
-        return BlocklyDropdown2EnumHelper.getModeValue(mode, MotorTachoMode.class);
+    public IEncoderSensorMode getMotorTachoMode(String mode) {
+        return BlocklyDropdown2EnumHelper.getModeValue(mode, EncoderSensorMode.class);
     }
 
     /**
@@ -590,192 +572,40 @@ public class BlocklyDropdownFactory {
 
     /**
      * Creates an AST object representing sensor of specific type. If the type of the sensor does not exists it trows an exception.
-     *
-     * @param sensorType see {@link GetSampleType}
+     * @param sensorKey see {@link GetSampleType}
      * @param port on which the sensor is connected
      * @param slot on which the sensor is connected
      * @param properties of the block
      * @param comment of the block
      * @return returns instance of the specific sensor {@link Sensor}
+     * @throws
      */
+    @SuppressWarnings("unchecked")
     public Sensor<?> createSensor(
-        GetSampleType sensorType,
+        String sensorKey,
         String port,
         String slot,
         boolean isPortInMutation,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
-        SensorMetaDataBean sensorMetaDataBean;
-        switch ( sensorType.getSensorType() ) {
-            case BlocklyConstants.TOUCH:
-                sensorMetaDataBean = new SensorMetaDataBean(getSensorPort(port), getTouchSensorMode("TOUCH"), getSlot(slot), isPortInMutation);
-                return TouchSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.PINTOUCH:
-                sensorMetaDataBean = new SensorMetaDataBean(getSensorPort(port), getTouchSensorMode("PINTOUCH"), getSlot(slot), isPortInMutation);
-                return PinTouchSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.ULTRASONIC:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(getSensorPort(port), getUltrasonicSensorMode(sensorType.getSensorMode()), getSlot(slot), isPortInMutation);
-                return UltrasonicSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.COLOUR:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getColorSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return ColorSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.INFRARED:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getInfraredSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return InfraredSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.ENCODER:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getActorPort(port),
-                        getMotorTachoMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return EncoderSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.KEY_PRESSED:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getBrickKeyPressMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return BrickSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.GYRO:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(getSensorPort(port), getGyroSensorMode(sensorType.getSensorMode()), getSlot(slot), isPortInMutation);
-                return GyroSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.TIME:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getTimerSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return TimerSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.SOUND:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getSoundSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return SoundSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.LIGHT_VALUE:
-            case BlocklyConstants.LIGHT:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getLightSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return LightSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.COMPASS:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getCompassSensorMode(BlocklyConstants.DEFAULT),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return CompassSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.TEMPERATURE:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getTemperatureSensorMode(BlocklyConstants.DEFAULT),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return TemperatureSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.PIN_ANALOG:
-            case BlocklyConstants.PIN_DIGITAL:
-            case BlocklyConstants.PIN_PULSE_HIGH:
-            case BlocklyConstants.PIN_PULSE_LOW:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getPinGetValueSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return PinGetValueSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.ACCELERATION:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(getSensorPort(port), getAxis(sensorType.getSensorMode()), getSlot(BlocklyConstants.EMPTY_SLOT), isPortInMutation);
-                return AccelerometerSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.GESTURE:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getGestureSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return GestureSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.MOISTURE:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getMoistureSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return MoistureSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.POTENTIOMETER:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getVoltageSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return VoltageSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.HUMIDITY:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getHumiditySensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return HumiditySensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.MOTION:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getMotionSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return MotionSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.PULSE:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getPulseSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return PulseSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.DROP:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getDropSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return DropSensor.make(sensorMetaDataBean, properties, comment);
-            case BlocklyConstants.RFID:
-                sensorMetaDataBean =
-                    new SensorMetaDataBean(
-                        getSensorPort(port),
-                        getRfidSensorMode(sensorType.getSensorMode()),
-                        getSlot(BlocklyConstants.EMPTY_SLOT),
-                        isPortInMutation);
-                return RfidSensor.make(sensorMetaDataBean, properties, comment);
-            default:
-                throw new DbcException("Invalid sensor " + sensorType.getSensorType() + "!");
+
+        WaitUntilSensorBean waBean = this.waMap.get(sensorKey);
+        String implementingClass = waBean.getImplementingClass();
+        String modeClassName = implementingClass.substring(implementingClass.lastIndexOf(".") + 1);
+
+        try {
+            Class<IMode> modeEnumClass =
+                (Class<IMode>) BlocklyDropdownFactory.class.getClassLoader().loadClass("de.fhg.iais.roberta.mode.sensor." + modeClassName + "Mode");
+            Class<Sensor<?>> sensorClass = (Class<Sensor<?>>) BlocklyDropdownFactory.class.getClassLoader().loadClass(implementingClass);
+            IMode mode = BlocklyDropdown2EnumHelper.getModeValue(waBean.getMode(), modeEnumClass);
+            SensorMetaDataBean sensorMetaDataBean = new SensorMetaDataBean(getSensorPort(port), mode, getSlot(slot), isPortInMutation);
+            Method makeMethod = sensorClass.getDeclaredMethod("make", SensorMetaDataBean.class, BlocklyBlockProperties.class, BlocklyComment.class);
+            return (Sensor<?>) makeMethod.invoke(null, sensorMetaDataBean, properties, comment);
+        } catch ( Exception e ) {
+            LOG.error("Sensor " + sensorKey + " could not be created", e);
+            throw new DbcException("Sensor " + sensorKey + " could not be created", e);
         }
+
     }
 
 }

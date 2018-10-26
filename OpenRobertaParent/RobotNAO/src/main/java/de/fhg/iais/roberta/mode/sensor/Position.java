@@ -1,13 +1,13 @@
-package de.fhg.iais.roberta.mode.sensor.nao;
+package de.fhg.iais.roberta.mode.sensor;
 
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 
-public enum DetectedFaceMode implements IMode {
-    NAMEONE( "NAMEONE" ), NAMEALL( "NAMEALL" );
+public enum Position implements IMode {
+    FRONT(), MIDDLE(), REAR();
 
     private final String[] values;
 
-    private DetectedFaceMode(String... values) {
+    private Position(String... values) {
         this.values = values;
     }
 

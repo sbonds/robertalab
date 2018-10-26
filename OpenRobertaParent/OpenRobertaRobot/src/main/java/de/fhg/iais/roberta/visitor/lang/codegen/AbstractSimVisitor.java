@@ -104,7 +104,7 @@ public abstract class AbstractSimVisitor<V> implements ILanguageVisitor<V> {
 
     @Override
     public V visitBoolConst(BoolConst<V> boolConst) {
-        this.sb.append("createConstant(CONST." + boolConst.getKind().getName() + ", " + boolConst.isValue() + ")");
+        this.sb.append("createConstant(CONST." + boolConst.getKind().getName() + ", " + boolConst.getValue() + ")");
         return null;
     }
 

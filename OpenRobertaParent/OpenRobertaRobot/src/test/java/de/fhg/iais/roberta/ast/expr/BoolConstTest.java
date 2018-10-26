@@ -23,7 +23,7 @@ public class BoolConstTest {
     public void isValue() throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/logic/logic_boolConst.xml");
         BoolConst<Void> boolConst = (BoolConst<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals(true, boolConst.isValue());
+        Assert.assertEquals(true, boolConst.getValue());
     }
 
     @Test

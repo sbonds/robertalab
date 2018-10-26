@@ -116,7 +116,7 @@ public abstract class AbstractWeDoVisitor<V> implements ILanguageVisitor<V>, IWe
 
     @Override
     public V visitBoolConst(BoolConst<V> boolConst) {
-        JSONObject o = mk(C.EXPR).put(C.EXPR, boolConst.getKind().getName()).put(C.VALUE, boolConst.isValue());
+        JSONObject o = mk(C.EXPR).put(C.EXPR, boolConst.getKind().getName()).put(C.VALUE, boolConst.getValue());
         return app(o);
     }
 

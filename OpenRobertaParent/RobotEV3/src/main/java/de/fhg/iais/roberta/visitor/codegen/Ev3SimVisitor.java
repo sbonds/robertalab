@@ -11,9 +11,9 @@ import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
+import de.fhg.iais.roberta.mode.sensor.EncoderSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -43,7 +43,6 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
 import de.fhg.iais.roberta.syntax.action.speech.SetLanguageAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -51,6 +50,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -365,8 +365,8 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + brickSensor.getPort() + ")");
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        this.sb.append("createGetSample(CONST.BUTTONS, CONST." + keysSensor.getPort() + ")");
         return null;
     }
 
@@ -385,7 +385,7 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         String encoderMotor = (encoderSensor.getPort().getOraName().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString();
-        if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
+        if ( encoderSensor.getMode() == EncoderSensorMode.RESET ) {
             String end = createClosingBracket();
             this.sb.append("createResetEncoderSensor(" + encoderMotor);
             this.sb.append(end);

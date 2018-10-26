@@ -16,12 +16,12 @@ import de.fhg.iais.roberta.inter.mode.sensor.IRSeekerSensorMode;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.BrickKeyPressMode;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
+import de.fhg.iais.roberta.mode.sensor.EncoderSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.KeysSensorMode;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
@@ -71,13 +71,13 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
@@ -467,16 +467,16 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitBrickSensor(BrickSensor<Void> brickSensor) {
-        switch ( (BrickKeyPressMode) brickSensor.getMode() ) {
+    public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
+        switch ( (KeysSensorMode) keysSensor.getMode() ) {
             case PRESSED:
-                this.sb.append("hal.isKeyPressed(" + getEnumCode(brickSensor.getPort()) + ")");
+                this.sb.append("hal.isKeyPressed(" + getEnumCode(keysSensor.getPort()) + ")");
                 break;
             case WAIT_FOR_PRESS_AND_RELEASE:
-                this.sb.append("hal.isKeyPressedAndReleased(" + getEnumCode(brickSensor.getPort()) + ")");
+                this.sb.append("hal.isKeyPressedAndReleased(" + getEnumCode(keysSensor.getPort()) + ")");
                 break;
             default:
-                throw new DbcException("Invalide mode for BrickSensor!");
+                throw new DbcException("Invalide mode for KeysSensor!");
         }
         return null;
     }
@@ -506,7 +506,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         String encoderSensorPort = encoderSensor.getPort().toString();
-        if ( encoderSensor.getMode() == MotorTachoMode.RESET ) {
+        if ( encoderSensor.getMode() == EncoderSensorMode.RESET ) {
             this.sb.append("hal.resetMotorTacho('" + encoderSensorPort + "')");
         } else {
             this.sb.append("hal.getMotorTachoValue('" + encoderSensorPort + "', " + getEnumCode(encoderSensor.getMode()) + ")");
@@ -974,20 +974,20 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         }
         this.sb.append("\n\n");
         this.sb.append("def main():\n");
-        this.sb.append(INDENT).append("try:\n");
-        this.sb.append(INDENT).append(INDENT).append("run()\n");
-        this.sb.append(INDENT).append("except Exception as e:\n");
-        this.sb.append(INDENT).append(INDENT).append("hal.drawText('Fehler im EV3', 0, 0)\n");
-        this.sb.append(INDENT).append(INDENT).append("hal.drawText(e.__class__.__name__, 0, 1)\n");
+        this.sb.append(this.INDENT).append("try:\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("run()\n");
+        this.sb.append(this.INDENT).append("except Exception as e:\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("hal.drawText('Fehler im EV3', 0, 0)\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("hal.drawText(e.__class__.__name__, 0, 1)\n");
         // FIXME: we can only print about 30 chars
-        this.sb.append(INDENT).append(INDENT).append("hal.drawText(str(e), 0, 2)\n");
-        this.sb.append(INDENT).append(INDENT).append("hal.drawText('Press any key', 0, 4)\n");
-        this.sb.append(INDENT).append(INDENT).append("while not hal.isKeyPressed('any'): hal.waitFor(500)\n");
-        this.sb.append(INDENT).append(INDENT).append("raise\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("hal.drawText(str(e), 0, 2)\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("hal.drawText('Press any key', 0, 4)\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("while not hal.isKeyPressed('any'): hal.waitFor(500)\n");
+        this.sb.append(this.INDENT).append(this.INDENT).append("raise\n");
 
         this.sb.append("\n");
         this.sb.append("if __name__ == \"__main__\":\n");
-        this.sb.append(INDENT).append("main()");
+        this.sb.append(this.INDENT).append("main()");
     }
 
     private String generateUsedImages() {

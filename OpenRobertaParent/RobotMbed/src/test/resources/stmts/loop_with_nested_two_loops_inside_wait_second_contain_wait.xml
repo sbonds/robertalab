@@ -20,8 +20,8 @@
 								<value name="A">
 									<block type="mbedSensors_getSample" id="f%vt5]?8Tg0U376VO7DE"
 										intask="true" deletable="false" movable="false">
-										<mutation input="KEYS_PRESSED"></mutation>
-										<field name="SENSORTYPE">KEYS_PRESSED</field>
+										<mutation input="KEY_PRESSED"></mutation>
+										<field name="SENSORTYPE">KEY_PRESSED</field>
 										<field name="SENSORPORT">A</field><field name="SLOT" />
 										<data>microbit</data>
 									</block>
@@ -99,8 +99,8 @@
 								<value name="A">
 									<block type="mbedSensors_getSample" id="4Vcdp{e,gXda,@E8T@k;"
 										intask="true" deletable="false" movable="false">
-										<mutation input="KEYS_PRESSED"></mutation>
-										<field name="SENSORTYPE">KEYS_PRESSED</field>
+										<mutation input="KEY_PRESSED"></mutation>
+										<field name="SENSORTYPE">KEY_PRESSED</field>
 										<field name="SENSORPORT">A</field><field name="SLOT" />
 										<data>microbit</data>
 									</block>
@@ -147,8 +147,8 @@
 													<value name="A">
 														<block type="mbedSensors_getSample" id="[0*r9b,Mjl#(JoAj,+?f"
 															intask="true" deletable="false" movable="false">
-															<mutation input="KEYS_PRESSED"></mutation>
-															<field name="SENSORTYPE">KEYS_PRESSED</field>
+															<mutation input="KEY_PRESSED"></mutation>
+															<field name="SENSORTYPE">KEY_PRESSED</field>
 															<field name="SENSORPORT">A</field><field name="SLOT" />
 															<data>microbit</data>
 														</block>
@@ -174,8 +174,8 @@
 													<value name="A">
 														<block type="mbedSensors_getSample" id="5A26%5^z`xtuEo|/B]#5"
 															intask="true" deletable="false" movable="false">
-															<mutation input="KEYS_PRESSED"></mutation>
-															<field name="SENSORTYPE">KEYS_PRESSED</field>
+															<mutation input="KEY_PRESSED"></mutation>
+															<field name="SENSORTYPE">KEY_PRESSED</field>
 															<field name="SENSORPORT">A</field><field name="SLOT" />
 															<data>microbit</data>
 														</block>

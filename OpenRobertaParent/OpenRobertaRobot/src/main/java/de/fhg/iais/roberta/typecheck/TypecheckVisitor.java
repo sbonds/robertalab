@@ -87,7 +87,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.BrickSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -402,7 +402,7 @@ public class TypecheckVisitor implements ILanguageVisitor<BlocklyType>, ISensorV
     }
 
     @Override
-    public BlocklyType visitBrickSensor(BrickSensor<BlocklyType> brickSensor) {
+    public BlocklyType visitKeysSensor(KeysSensor<BlocklyType> keysSensor) {
         return null;
     }
 

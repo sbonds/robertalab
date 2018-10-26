@@ -8,7 +8,6 @@ import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.visitor.codegen.ArduinoCppVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractBrickValidatorVisitor;
 import de.fhg.iais.roberta.visitor.validate.AbstractSimValidatorVisitor;
@@ -17,7 +16,6 @@ import de.fhg.iais.roberta.visitor.validate.ArduinoBrickValidatorVisitor;
 public abstract class AbstractArduinoFactory extends AbstractRobotFactory {
     public AbstractArduinoFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
-        addBlockTypesFromProperties(Util1.loadProperties("classpath:arduino.properties"));
     }
 
     @Override

@@ -20,7 +20,7 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
 import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
 import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.MotorTachoMode;
+import de.fhg.iais.roberta.mode.sensor.EncoderSensorMode;
 import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
@@ -244,7 +244,7 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getMotorTachoModeFromString() {
-        Assert.assertEquals(this.dropdownFactory.getMotorTachoMode("DISTANCE"), MotorTachoMode.DISTANCE);
+        Assert.assertEquals(this.dropdownFactory.getMotorTachoMode("DISTANCE"), EncoderSensorMode.DISTANCE);
     }
 
     @Test(expected = DbcException.class)
