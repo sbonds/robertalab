@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.visitor.collect;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
+import de.fhg.iais.roberta.components.NxtConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;

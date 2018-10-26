@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import de.fhg.iais.roberta.components.NxtConfiguration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;

@@ -5,11 +5,11 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.NxtMotorActor;
 import de.fhg.iais.roberta.components.ActorType;
+import de.fhg.iais.roberta.components.NxtConfiguration;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
@@ -39,9 +39,9 @@ public class NxcVisitorTest {
     public static void setupConfigurationForAllTests() {
         final NxtConfiguration.Builder builder = new NxtConfiguration.Builder();
         builder.setTrackWidth(11).setWheelDiameter(5.6);
-        builder.addActor(new ActorPort("A", "A"), new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
+        builder.addActor(new ActorPort("A", "A"), new NxtMotorActor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT)).addActor(
             new ActorPort("B", "B"),
-            new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
+            new NxtMotorActor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
         builder.addSensor(new SensorPort("1", "S1"), new Sensor(SensorType.TOUCH)).addSensor(new SensorPort("2", "S2"), new Sensor(SensorType.ULTRASONIC));
         brickConfiguration = (NxtConfiguration) builder.build();
     }

@@ -2,19 +2,20 @@ package de.fhg.iais.roberta.transformer.nxt;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Value;
-import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.AbstractActor;
+import de.fhg.iais.roberta.components.AbstractSensor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.NxtConfiguration;
+import de.fhg.iais.roberta.components.NxtMotorActor;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
@@ -42,7 +43,7 @@ public class Jaxb2NxtConfigurationTransformer {
         return blockToBrickConfiguration(blocks.get(0));
     }
 
-    public BlockSet transformInverse(Configuration conf) {
+    public BlockSet transformInverse(NxtConfiguration conf) {
         int idCount = 1;
         BlockSet blockSet = new BlockSet();
         Instance instance = new Instance();
@@ -53,11 +54,11 @@ public class Jaxb2NxtConfigurationTransformer {
         block.setType("robBrick_EV3-Brick");
         instance.getBlock().add(block);
         List<Field> fields = block.getField();
-        fields.add(mkField("WHEEL_DIAMETER", Util1.formatDouble1digit(conf.getWheelDiameterCM())));
-        fields.add(mkField("TRACK_WIDTH", Util1.formatDouble1digit(conf.getTrackWidthCM())));
+        fields.add(mkField("WHEEL_DIAMETER", Util1.formatDouble1digit(conf.getNxtWheelDiameterCM())));
+        fields.add(mkField("TRACK_WIDTH", Util1.formatDouble1digit(conf.getNxtTrackWidthCM())));
         List<Value> values = block.getValue();
         {
-            Map<ISensorPort, Sensor> sensors = conf.getSensors();
+            List<AbstractSensor> sensors = conf.getNxtSensors();
             for ( ISensorPort port : sensors.keySet() ) {
                 Sensor sensor = sensors.get(port);
                 Value hardwareComponent = new Value();
@@ -69,9 +70,9 @@ public class Jaxb2NxtConfigurationTransformer {
             }
         }
         {
-            Map<IActorPort, Actor> actors = conf.getActors();
+            List<AbstractActor> actors = conf.getNxtActors();
             for ( IActorPort port : actors.keySet() ) {
-                Actor actor = actors.get(port);
+                NxtMotorActor actor = actors.get(port);
                 Value hardwareComponent = new Value();
                 hardwareComponent.setName(port.getOraName());
                 Block actorBlock = mkBlock(idCount++);
@@ -110,7 +111,7 @@ public class Jaxb2NxtConfigurationTransformer {
         switch ( block.getType() ) {
             case "robBrick_EV3-Brick":
                 List<Pair<ISensorPort, Sensor>> sensors = new ArrayList<>();
-                List<Pair<IActorPort, Actor>> actors = new ArrayList<>();
+                List<Pair<IActorPort, NxtMotorActor>> actors = new ArrayList<>();
                 List<Field> fields = extractFields(block, (short) 2);
                 double wheelDiameter = Double.valueOf(extractField(fields, "WHEEL_DIAMETER", (short) 0)).doubleValue();
                 double trackWidth = Double.valueOf(extractField(fields, "TRACK_WIDTH", (short) 1)).doubleValue();
@@ -124,7 +125,7 @@ public class Jaxb2NxtConfigurationTransformer {
         }
     }
 
-    private void extractHardwareComponent(List<Value> values, List<Pair<ISensorPort, Sensor>> sensors, List<Pair<IActorPort, Actor>> actors) {
+    private void extractHardwareComponent(List<Value> values, List<Pair<ISensorPort, Sensor>> sensors, List<Pair<IActorPort, NxtMotorActor>> actors) {
         for ( Value value : values ) {
             if ( value.getName().startsWith("S") ) {
                 // Extract sensor
@@ -140,7 +141,7 @@ public class Jaxb2NxtConfigurationTransformer {
                                 Pair
                                     .of(
                                         this.factory.getActorPort(value.getName()),
-                                        new Actor(
+                                        new NxtMotorActor(
                                             ActorType.get(value.getBlock().getType()),
                                             extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
                                             this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 1)),
@@ -155,7 +156,7 @@ public class Jaxb2NxtConfigurationTransformer {
                                 Pair
                                     .of(
                                         this.factory.getActorPort(value.getName()),
-                                        new Actor(
+                                        new NxtMotorActor(
                                             ActorType.get(value.getBlock().getType()),
                                             extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),
                                             this.factory.getDriveDirection(extractField(fields, "MOTOR_REVERSE", 1)),
@@ -167,7 +168,7 @@ public class Jaxb2NxtConfigurationTransformer {
                                 Pair
                                     .of(
                                         this.factory.getActorPort(value.getName()),
-                                        new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, MotorSide.NONE)));
+                                        new NxtMotorActor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, MotorSide.NONE)));
                         break;
                     default:
                         throw new DbcException("Invalid motor type!");

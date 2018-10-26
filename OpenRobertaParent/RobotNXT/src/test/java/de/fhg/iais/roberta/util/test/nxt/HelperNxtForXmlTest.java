@@ -4,9 +4,9 @@ import java.util.Properties;
 
 import org.junit.Assert;
 
-import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.NxtMotorActor;
 import de.fhg.iais.roberta.components.ActorType;
-import de.fhg.iais.roberta.components.nxt.NxtConfiguration;
+import de.fhg.iais.roberta.components.NxtConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.NxtFactory;
 import de.fhg.iais.roberta.mode.action.ActorPort;
@@ -28,9 +28,9 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
         super(
             new NxtFactory(new PluginProperties("nxt", "", "", Util1.loadProperties("classpath:nxt.properties"))),
             new NxtConfiguration.Builder()
-                .addActor(new ActorPort("A", "MA"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
-                .addActor(new ActorPort("B", "MB"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(new ActorPort("C", "MC"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(new ActorPort("A", "MA"), new NxtMotorActor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
+                .addActor(new ActorPort("B", "MB"), new NxtMotorActor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(new ActorPort("C", "MC"), new NxtMotorActor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
         AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
@@ -90,9 +90,9 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
     public void assertWrappedCodeIsOk(String correctJavaCode, String fileName) throws Exception {
         NxtConfiguration brickConfiguration =
             (NxtConfiguration) new NxtConfiguration.Builder()
-                .addActor(new ActorPort("A", "MA"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
-                .addActor(new ActorPort("B", "MB"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(new ActorPort("C", "MC"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
+                .addActor(new ActorPort("A", "MA"), new NxtMotorActor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
+                .addActor(new ActorPort("B", "MB"), new NxtMotorActor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
+                .addActor(new ActorPort("C", "MC"), new NxtMotorActor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
                 .build();
         Assert.assertEquals(correctJavaCode.replaceAll("\\s+", ""), generateNXC(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }
