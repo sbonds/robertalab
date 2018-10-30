@@ -1,42 +1,31 @@
 package de.fhg.iais.roberta.components;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
-import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class NxtConfiguration extends Configuration {
-
-    private final List<AbstractActor> actors;
-    private final List<AbstractSensor> sensors;
+    private final Map<String, ConfigurationComponent> configurationComponents;
 
     private final float wheelDiameterCM;
     private final float trackWidthCM;
 
-    public NxtConfiguration(List<AbstractActor> actors, List<AbstractSensor> sensors, float wheelDiameterCM, float trackWidthCM) {
+    public NxtConfiguration(List<ConfigurationComponent> configurationComponents, float wheelDiameterCM, float trackWidthCM) {
         //super(actors, sensors, wheelDiameterCM, trackWidthCM);
         super(null, null, -1, -1);
-        this.actors = actors;
-        this.sensors = sensors;
+        this.configurationComponents = buildConfigurationComponentMap(configurationComponents);
         this.wheelDiameterCM = wheelDiameterCM;
         this.trackWidthCM = trackWidthCM;
     }
 
-    public List<AbstractActor> getNxtActors() {
-        return this.actors;
-    }
-
-    public List<AbstractSensor> getNxtSensors() {
-        return this.sensors;
+    private Map<String, ConfigurationComponent> buildConfigurationComponentMap(List<ConfigurationComponent> configurationComponents) {
+        Map<String, ConfigurationComponent> map = new HashMap<>();
+        for ( ConfigurationComponent configurationComponent : configurationComponents ) {
+            map.put(configurationComponent.getUserDefinedName(), configurationComponent);
+        }
+        return map;
     }
 
     public float getNxtWheelDiameterCM() {
@@ -47,94 +36,43 @@ public class NxtConfiguration extends Configuration {
         return this.trackWidthCM;
     }
 
-    public NxtMotorActor getNxtLeftMotor() {
-        return getNxtMotor(MotorSide.LEFT);
+    public ConfigurationComponent getNxtLeftMotor() {
+        return getNxtMotor("LEFT");
     }
 
-    public NxtMotorActor getNxtRightMotor() {
-        return getNxtMotor(MotorSide.RIGHT);
+    public ConfigurationComponent getNxtRightMotor() {
+        return getNxtMotor("RIGHT");
     }
 
-    private NxtMotorActor getNxtMotor(IMotorSide side) {
-        Assert.isTrue(this.actors != null, "There is no actors set to the configuration!");
-        for ( AbstractActor actor : this.actors ) {
-            if ( actor instanceof NxtMotorActor ) {
-                NxtMotorActor motorActor = (NxtMotorActor) actor;
-                if ( motorActor.getMotorSide() == side ) {
-                    return motorActor;
-                }
+    private ConfigurationComponent getNxtMotor(String side) {
+        ConfigurationComponent foundCc = null;
+        for ( ConfigurationComponent component : this.configurationComponents.values() ) {
+            if ( component.getProperty("MOTOR_DRIVE").equals(side) ) {
+                Assert.isNull(foundCc, "More than one component found for %s motor", side);
+                foundCc = component;
             }
         }
-        throw new DbcException("Motor on side " + side + " not found!");
+        Assert.notNull(foundCc, "No motor for side %s", side);
+        return foundCc;
     }
 
     /**
      * This class is a builder of {@link Configuration}
      */
-    public static class Builder extends Configuration.Builder<Builder> {
-        private final List<AbstractActor> actors = new ArrayList<>();
-        private final List<AbstractSensor> sensors = new ArrayList<>();
+    public static class Builder {
+        private List<ConfigurationComponent> configurationComponents;
 
-        private double wheelDiameter;
-        private double trackWidth;
-
-        /**
-         * Add actor to the {@link Configuration}
-         *
-         * @param port on which the component is connected
-         * @param actor we want to connect
-         * @return
-         */
-        @Override
-        public Builder addActor(IActorPort port, Actor actor) {
-            this.actors.add(new NxtMotorActor(port.getOraName(), port.getCodeName(), actor.isRegulated(), actor.getRotationDirection(), actor.getMotorSide()));
-            return this;
-        }
+        private float wheelDiameter;
+        private float trackWidth;
 
         /**
-         * Client must provide list of {@link Pair} ({@link ActorPort} and {@link NxtMotorActor})
-         *
-         * @param actors we want to connect to the brick configuration
-         * @return
-         */
-        @Override
-        public Builder addActors(List<Pair<IActorPort, Actor>> actors) {
-
-            for ( Pair<IActorPort, Actor> pair : actors ) {
-                IActorPort port = pair.getFirst();
-                Actor actor = pair.getSecond();
-                addActor(port, actor);
-            }
-            return this;
-        }
-
-        /**
-         * Add sensor to the {@link Configuration}
-         *
-         * @param port on which the component is connected
-         * @param component we want to connect
-         * @return
-         */
-
-        @Override
-        public Builder addSensor(ISensorPort port, Sensor sensor) {
-            this.sensors.add(new NxtSensor(port.getOraName(), port.getCodeName(), BlocklyConstants.NO_SLOT));
-            return this;
-        }
-
-        /**
-         * Client must provide list of {@link Pair} ({@link SensorPort} and {@link Sensor})
+         * Client must provide list of hardware components ({@link ConfigurationComponent})
          *
          * @param sensors we want to connect to the brick configuration
          * @return
          */
-        @Override
-        public Builder addSensors(List<Pair<ISensorPort, Sensor>> sensors) {
-            for ( Pair<ISensorPort, Sensor> pair : sensors ) {
-                ISensorPort port = pair.getFirst();
-                Sensor sensor = pair.getSecond();
-                addSensor(port, sensor);
-            }
+        public Builder addComponents(List<ConfigurationComponent> components) {
+            this.configurationComponents = components;
             return this;
         }
 
@@ -144,8 +82,7 @@ public class NxtConfiguration extends Configuration {
          * @param wheelDiameter in cm
          * @return
          */
-        @Override
-        public Builder setWheelDiameter(double wheelDiameter) {
+        public Builder setWheelDiameter(float wheelDiameter) {
             this.wheelDiameter = wheelDiameter;
             return this;
         }
@@ -156,28 +93,14 @@ public class NxtConfiguration extends Configuration {
          * @param trackWidth in cm
          * @return
          */
-        @Override
-        public Builder setTrackWidth(double trackWidth) {
+
+        public Builder setTrackWidth(float trackWidth) {
             this.trackWidth = trackWidth;
             return this;
         }
 
-        @Override
         public Configuration build() {
-            return new NxtConfiguration(this.actors, this.sensors, (float) this.wheelDiameter, (float) this.trackWidth);
-        }
-
-        @Override
-        public String toString() {
-            return "Builder [actors="
-                + this.actors
-                + ", sensors="
-                + this.sensors
-                + ", wheelDiameter="
-                + this.wheelDiameter
-                + ", trackWidth="
-                + this.trackWidth
-                + "]";
+            return new NxtConfiguration(this.configurationComponents, this.wheelDiameter, this.trackWidth);
         }
 
     }

@@ -1,17 +1,17 @@
 package de.fhg.iais.roberta.util.test.nxt;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.junit.Assert;
 
-import de.fhg.iais.roberta.components.NxtMotorActor;
-import de.fhg.iais.roberta.components.ActorType;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.NxtConfiguration;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.NxtFactory;
-import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.mode.action.MotorSide;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
@@ -25,15 +25,32 @@ import de.fhg.iais.roberta.visitor.codegen.NxtSimVisitor;
 public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
 
     public HelperNxtForXmlTest() {
-        super(
-            new NxtFactory(new PluginProperties("nxt", "", "", Util1.loadProperties("classpath:nxt.properties"))),
-            new NxtConfiguration.Builder()
-                .addActor(new ActorPort("A", "MA"), new NxtMotorActor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
-                .addActor(new ActorPort("B", "MB"), new NxtMotorActor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(new ActorPort("C", "MC"), new NxtMotorActor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .build());
+        super(new NxtFactory(new PluginProperties("nxt", "", "", Util1.loadProperties("classpath:nxt.properties"))), makeConfiguration());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
         AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
+    }
+
+    private static NxtConfiguration makeConfiguration() {
+        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "NONE");
+        ConfigurationComponent motorA = new ConfigurationComponent("robBrick_motor_big", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
+
+        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        ConfigurationComponent motorB = new ConfigurationComponent("robBrick_motor_big", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
+
+        Map<String, String> motorCproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        ConfigurationComponent motorC = new ConfigurationComponent("robBrick_motor_big", true, "C", BlocklyConstants.NO_SLOT, "C", motorCproperties);
+
+        final NxtConfiguration.Builder builder = new NxtConfiguration.Builder();
+        builder.setTrackWidth(11f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, motorC));
+        return (NxtConfiguration) builder.build();
+    }
+
+    private static Map<String, String> createMap(String... args) {
+        Map<String, String> m = new HashMap<>();
+        for ( int i = 0; i < args.length; i += 2 ) {
+            m.put(args[i], args[i + 1]);
+        }
+        return m;
     }
 
     /**
@@ -88,12 +105,7 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
     }
 
     public void assertWrappedCodeIsOk(String correctJavaCode, String fileName) throws Exception {
-        NxtConfiguration brickConfiguration =
-            (NxtConfiguration) new NxtConfiguration.Builder()
-                .addActor(new ActorPort("A", "MA"), new NxtMotorActor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.NONE))
-                .addActor(new ActorPort("B", "MB"), new NxtMotorActor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-                .addActor(new ActorPort("C", "MC"), new NxtMotorActor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
-                .build();
+        NxtConfiguration brickConfiguration = makeConfiguration();
         Assert.assertEquals(correctJavaCode.replaceAll("\\s+", ""), generateNXC(fileName, brickConfiguration).replaceAll("\\s+", ""));
     }
 
