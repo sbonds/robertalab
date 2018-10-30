@@ -59,10 +59,9 @@ public class Jaxb2NxtConfigurationTransformer {
         List<Value> values = block.getValue();
         {
             List<AbstractSensor> sensors = conf.getNxtSensors();
-            for ( ISensorPort port : sensors.keySet() ) {
-                Sensor sensor = sensors.get(port);
+            for ( AbstractSensor sensor : sensors ) {
                 Value hardwareComponent = new Value();
-                hardwareComponent.setName(port.getCodeName());
+                hardwareComponent.setName(sensor.getPortName());
                 Block sensorBlock = mkBlock(idCount++);
                 hardwareComponent.setBlock(sensorBlock);
                 sensorBlock.setType(sensor.getType().blocklyName());
