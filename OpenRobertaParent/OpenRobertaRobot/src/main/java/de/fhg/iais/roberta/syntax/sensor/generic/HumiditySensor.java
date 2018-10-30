@@ -42,7 +42,7 @@ public class HumiditySensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getHumiditySensorMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper);
         return HumiditySensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

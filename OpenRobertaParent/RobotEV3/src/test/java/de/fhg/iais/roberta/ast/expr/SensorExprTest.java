@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.expr;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
+
 import de.fhg.iais.roberta.mode.sensor.Slot;
 import de.fhg.iais.roberta.mode.sensor.TouchSensorMode;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;

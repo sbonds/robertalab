@@ -4,20 +4,13 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import de.fhg.iais.roberta.components.NxtConfiguration;
-import de.fhg.iais.roberta.components.Sensor;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.EncoderSensorMode;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
@@ -61,9 +54,10 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -84,7 +78,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractCppVisitor;
  * @param <V>
  */
 public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisitor<Void> {
-    private final NxtConfiguration brickConfiguration;
+    private final Configuration brickConfiguration;
 
     private final boolean timeSensorUsed;
     private final boolean isVolumeVariableNeeded;
@@ -101,7 +95,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    private NxtNxcVisitor(NxtConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+    private NxtNxcVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
         this.brickConfiguration = brickConfiguration;
         NxtUsedHardwareCollectorVisitor codePreprocessVisitor = new NxtUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
@@ -121,7 +115,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
      * @param programPhrases to generate the code from
      * @param withWrapping if false the generated code will be without the surrounding configuration code
      */
-    public static String generate(NxtConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) //
+    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) //
     {
         Assert.notNull(brickConfiguration);
 
@@ -470,7 +464,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         return null;
     }
 
-    private boolean isActorOnPort(IActorPort port) {
+    private boolean isActorOnPort(String port) {
         boolean isActorOnPort = false;
         if ( port != null ) {
             for ( UsedActor actor : this.usedActors ) {

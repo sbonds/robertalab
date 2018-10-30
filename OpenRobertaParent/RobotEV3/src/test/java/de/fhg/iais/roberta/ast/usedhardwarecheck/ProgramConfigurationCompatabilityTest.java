@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
+
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 import de.fhg.iais.roberta.visitor.validate.AbstractBrickValidatorVisitor;

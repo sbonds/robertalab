@@ -12,7 +12,7 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
+
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class VorwerkConfiguration extends Configuration {
@@ -74,7 +74,7 @@ public class VorwerkConfiguration extends Configuration {
      * @return port on which the left motor is connected
      */
     @Override
-    public IActorPort getLeftMotorPort() {
+    public String  getLeftMotorPort() {
         return null;
     }
 
@@ -89,7 +89,7 @@ public class VorwerkConfiguration extends Configuration {
      * @return port on which the left motor is connected
      */
     @Override
-    public IActorPort getRightMotorPort() {
+    public String  getRightMotorPort() {
         return null;
     }
 

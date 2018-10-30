@@ -1,8 +1,5 @@
 package de.fhg.iais.roberta.components;
 
-import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-
 /**
  * Stores information for port, type and the mode of used sensor in a blockly program. This information is shared between the server and the brick for sensor
  * debugging on the brick. If sensor is used then the brick is sending debug information to the server for this particular sensor.
@@ -11,40 +8,31 @@ import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
  */
 
 public class UsedSensor {
-    private final ISensorPort port;
-    private final ISensorType type;
-    private final IMode mode;
+    private final String port;
+    private final String mode;
 
-    public UsedSensor(ISensorPort port, ISensorType type, IMode mode) {
+    public UsedSensor(String port, String mode) {
         this.port = port;
-        this.type = type;
         this.mode = mode;
     }
 
     /**
      * @return the port
      */
-    public ISensorPort getPort() {
+    public String getPort() {
         return this.port;
-    }
-
-    /**
-     * @return the sensorType
-     */
-    public ISensorType getType() {
-        return this.type;
     }
 
     /**
      * @return the mode
      */
-    public IMode getMode() {
+    public String getMode() {
         return this.mode;
     }
 
     @Override
     public String toString() {
-        return "UsedSensor [" + this.port + ", " + this.type + ", " + this.mode + "]";
+        return "UsedSensor [" + this.port + ", " + this.mode + "]";
     }
 
     @Override
@@ -53,7 +41,6 @@ public class UsedSensor {
         int result = 1;
         result = prime * result + (this.port == null ? 0 : this.port.hashCode());
         result = prime * result + (this.mode == null ? 0 : this.mode.hashCode());
-        result = prime * result + this.type.hashCode();
         return result;
     }
 
@@ -69,9 +56,6 @@ public class UsedSensor {
             return false;
         }
         UsedSensor other = (UsedSensor) obj;
-        if ( this.type != other.type ) {
-            return false;
-        }
         if ( this.port == null ) {
             if ( other.port != null ) {
                 return false;

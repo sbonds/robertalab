@@ -6,8 +6,9 @@
 			<mutation declare="true"></mutation>
 			<field name="DEBUG">TRUE</field>
 			<statement name="ST">
-				<block type="robGlobalVariables_declare" id="|4G0fElm./#IYNanzjy|"
-					intask="true" deletable="false" movable="false">
+				<block type="robGlobalVariables_declare"
+					id="|4G0fElm./#IYNanzjy|" intask="true" deletable="false"
+					movable="false">
 					<mutation next="false" declaration_type="Array_Number"></mutation>
 					<field name="VAR">item2</field>
 					<field name="TYPE">Array_Number</field>
@@ -42,16 +43,18 @@
 		<block type="robControls_loopForever" id="k1tN/jf%=#km;HT8/EfB"
 			intask="true">
 			<statement name="DO">
-				<block type="robActions_motorDiff_on_for" id="7S}u;{i.8^!:%MbEo^Su"
-					intask="true">
+				<block type="robActions_motorDiff_on_for"
+					id="7S}u;{i.8^!:%MbEo^Su" intask="true">
 					<field name="DIRECTION">FOREWARD</field>
 					<value name="POWER">
-						<block type="math_number" id="9Q?(`jYC#-K0rv,ysc%Z" intask="true">
+						<block type="math_number" id="9Q?(`jYC#-K0rv,ysc%Z"
+							intask="true">
 							<field name="NUM">30</field>
 						</block>
 					</value>
 					<value name="DISTANCE">
-						<block type="math_number" id="Gzr|hIx5mdXs*Vh@z7j%" intask="true">
+						<block type="math_number" id="Gzr|hIx5mdXs*Vh@z7j%"
+							intask="true">
 							<field name="NUM">20</field>
 						</block>
 					</value>
@@ -65,8 +68,9 @@
 								intask="true">
 								<field name="OP">EQ</field>
 								<value name="A">
-									<block type="robSensors_getSample" id="Xa5;TByo120N0)B+@S=J"
-										intask="true" deletable="false" movable="false">
+									<block type="robSensors_getSample"
+										id="Xa5;TByo120N0)B+@S=J" intask="true" deletable="false"
+										movable="false">
 										<mutation input="TOUCH"></mutation>
 										<field name="SENSORTYPE">TOUCH</field>
 										<field name="SENSORPORT">1</field>
@@ -127,14 +131,14 @@
 											</block>
 										</value>
 										<statement name="DO0">
-											<block type="controls_flow_statements" id="ZVeMN0#S]NH#v3!_n#b!"
-												intask="true">
+											<block type="controls_flow_statements"
+												id="ZVeMN0#S]NH#v3!_n#b!" intask="true">
 												<field name="FLOW">CONTINUE</field>
 											</block>
 										</statement>
 									</block>
-									<block type="robActions_motorDiff_on_for" id="ehbF*p*i}R97OAm9b;5@"
-										intask="true">
+									<block type="robActions_motorDiff_on_for"
+										id="ehbF*p*i}R97OAm9b;5@" intask="true">
 										<field name="DIRECTION">FOREWARD</field>
 										<value name="POWER">
 											<block type="math_number" id="A!!a91)dx?TsLW:z_=9;"
@@ -151,8 +155,8 @@
 									</block>
 								</statement>
 							</block>
-							<block type="controls_flow_statements" id="OF{-NBf4c)})k!8,MU3k"
-								intask="true">
+							<block type="controls_flow_statements"
+								id="OF{-NBf4c)})k!8,MU3k" intask="true">
 								<field name="FLOW">BREAK</field>
 							</block>
 						</statement>
@@ -161,8 +165,9 @@
 								intask="true">
 								<field name="OP">EQ</field>
 								<value name="A">
-									<block type="robSensors_getSample" id="uY*,.HfP0x.?;J)n,`OC"
-										intask="true" deletable="false" movable="false">
+									<block type="robSensors_getSample"
+										id="uY*,.HfP0x.?;J)n,`OC" intask="true" deletable="false"
+										movable="false">
 										<mutation input="TOUCH"></mutation>
 										<field name="SENSORTYPE">TOUCH</field>
 										<field name="SENSORPORT">1</field>
@@ -223,14 +228,14 @@
 											</block>
 										</value>
 										<statement name="DO0">
-											<block type="controls_flow_statements" id="5b_Do@kr#A}n/x^Fs0rB"
-												intask="true">
+											<block type="controls_flow_statements"
+												id="5b_Do@kr#A}n/x^Fs0rB" intask="true">
 												<field name="FLOW">CONTINUE</field>
 											</block>
 										</statement>
 									</block>
-									<block type="robActions_motorDiff_on_for" id="42=_fFrjG+9p6D@Z%/?u"
-										intask="true">
+									<block type="robActions_motorDiff_on_for"
+										id="42=_fFrjG+9p6D@Z%/?u" intask="true">
 										<field name="DIRECTION">FOREWARD</field>
 										<value name="POWER">
 											<block type="math_number" id="Z:d8,oMI3lBO5o_^HH/F"
@@ -247,8 +252,8 @@
 									</block>
 								</statement>
 							</block>
-							<block type="controls_flow_statements" id="l/HF4BCa/GJ~0!SCQ?cO"
-								intask="true">
+							<block type="controls_flow_statements"
+								id="l/HF4BCa/GJ~0!SCQ?cO" intask="true">
 								<field name="FLOW">CONTINUE</field>
 							</block>
 						</statement>

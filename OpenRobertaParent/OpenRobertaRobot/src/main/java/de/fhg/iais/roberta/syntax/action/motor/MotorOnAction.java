@@ -6,9 +6,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IMotorMoveMode;
-import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -36,7 +34,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
 
     private final MotionParam<V> param;
 
-    private MotorOnAction(IActorPort port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private MotorOnAction(String port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(port, BlockTypeContainer.getByName("MOTOR_ON_ACTION"), properties, comment);
         Assert.isTrue((param != null) && (port != null));
         this.param = param;
@@ -53,7 +51,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MotorOnAction}
      */
-    private static <V> MotorOnAction<V> make(IActorPort port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> MotorOnAction<V> make(String port, MotionParam<V> param, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MotorOnAction<>(port, param, properties, comment);
     }
 

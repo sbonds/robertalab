@@ -7,8 +7,6 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.util.DropDowns;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -32,34 +30,46 @@ public class BlocklyDropdown2EnumHelper {
         throw new DbcException("Invalid " + modes.getName() + ": " + modeName);
     }
 
-    public static Map<String, SensorPort> getSensorPortsFromProperties(Properties properties) {
-        Map<String, SensorPort> sensorToPorts = new HashMap<>();
+    public static Map<String, String> getSensorPortsFromProperties(Properties properties) {
+        Map<String, String> sensorToPorts = new HashMap<>();
         String filter = "robot.port.sensor.";
         for ( Entry<Object, Object> e : properties.entrySet() ) {
             String key = (String) e.getKey();
             String value = (String) e.getValue();
             if ( key.startsWith(filter) ) {
                 key = key.substring(filter.length());
-                SensorPort sensorPort = new SensorPort(key, value);
-                sensorToPorts.put(key, sensorPort);
+                sensorToPorts.put(key, value);
             }
         }
         return sensorToPorts;
     }
 
-    public static Map<String, ActorPort> getActorPortsFromProperties(Properties properties) {
-        Map<String, ActorPort> actorToPorts = new HashMap<>();
+    public static Map<String, String> getActorPortsFromProperties(Properties properties) {
+        Map<String, String> actorToPorts = new HashMap<>();
         String filter = "robot.port.actor.";
         for ( Entry<Object, Object> e : properties.entrySet() ) {
             String key = (String) e.getKey();
             if ( key.startsWith(filter) ) {
                 String value = (String) e.getValue();
                 key = key.substring(filter.length());
-                ActorPort actorPort = new ActorPort(key, value);
-                actorToPorts.put(key, actorPort);
+                actorToPorts.put(key, value);
             }
         }
         return actorToPorts;
+    }
+
+    public static Map<String, String> getSlotFromProperties(Properties properties) {
+        Map<String, String> m = new HashMap<>();
+        String filter = "robot.port.slot.";
+        for ( Entry<Object, Object> e : properties.entrySet() ) {
+            String key = (String) e.getKey();
+            if ( key.startsWith(filter) ) {
+                String value = (String) e.getValue();
+                key = key.substring(filter.length());
+                m.put(key, value);
+            }
+        }
+        return m;
     }
 
     public static DropDowns getDropdownFromProperties(Properties properties) {
@@ -78,6 +88,21 @@ public class BlocklyDropdown2EnumHelper {
         return dropdownItems;
     }
 
+    public static Map<String, String> getSensorModesFromProperties(Properties properties) {
+        Map<String, String> m = new HashMap<>();
+        String filter = "robot.dropdown.mode.";
+        for ( Entry<Object, Object> e : properties.entrySet() ) {
+            String propertyKey = (String) e.getKey();
+            if ( propertyKey.startsWith(filter) ) {
+                String value = (String) e.getValue();
+                String[] typeAndKey = propertyKey.substring(filter.length()).split("\\.");
+                String key = typeAndKey[1];
+                m.put(key, value);
+            }
+        }
+        return m;
+    }
+
     public static Map<String, WaitUntilSensorBean> getWaitUntilFromProperties(Properties properties) {
         Map<String, WaitUntilSensorBean> map = new HashMap<>();
         String filter = "robot.wait_until.";
@@ -91,6 +116,20 @@ public class BlocklyDropdown2EnumHelper {
             }
         }
         return map;
+    }
+
+    public static Map<String, String> getConfigurationComponentTypesFromProperties(Properties properties) {
+        Map<String, String> configurationComponentTypes = new HashMap<>();
+        String filter = "robot.configuration.";
+        for ( Entry<Object, Object> e : properties.entrySet() ) {
+            String propertyKey = (String) e.getKey();
+            if ( propertyKey.startsWith(filter) ) {
+                String value = (String) e.getValue();
+                String key = propertyKey.substring(filter.length());
+                configurationComponentTypes.put(key, value);
+            }
+        }
+        return configurationComponentTypes;
     }
 
 }

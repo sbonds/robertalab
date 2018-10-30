@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
@@ -12,6 +11,7 @@ import de.fhg.iais.roberta.syntax.action.communication.BluetoothWaitForConnectio
 import de.fhg.iais.roberta.syntax.lang.expr.ConnectConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;

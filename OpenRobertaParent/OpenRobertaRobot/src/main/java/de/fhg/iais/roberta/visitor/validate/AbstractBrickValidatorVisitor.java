@@ -1,12 +1,11 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
 public abstract class AbstractBrickValidatorVisitor extends AbstractProgramValidatorVisitor {
@@ -17,7 +16,7 @@ public abstract class AbstractBrickValidatorVisitor extends AbstractProgramValid
 
     @Override
     protected void checkSensorPort(ExternalSensor<Void> sensor) {
-        Sensor usedSensor = this.brickConfiguration.getSensorOnPort((ISensorPort) sensor.getPort());
+        Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
         if ( usedSensor == null ) {
             sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
             this.errorCount++;

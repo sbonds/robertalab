@@ -6,7 +6,6 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -31,9 +30,9 @@ import de.fhg.iais.roberta.visitor.hardware.actor.ISoundVisitor;
 public class ToneAction<V> extends Action<V> {
     private final Expr<V> frequency;
     private final Expr<V> duration;
-    private final IActorPort port;
+    private final String port;
 
-    private ToneAction(Expr<V> frequency, Expr<V> duration, IActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ToneAction(Expr<V> frequency, Expr<V> duration, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("TONE_ACTION"), properties, comment);
         Assert.isTrue(frequency.isReadOnly() && duration.isReadOnly() && (frequency != null) && (duration != null));
         this.frequency = frequency;
@@ -52,7 +51,7 @@ public class ToneAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ToneAction}.
      */
-    public static <V> ToneAction<V> make(Expr<V> frequency, Expr<V> duration, IActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> ToneAction<V> make(Expr<V> frequency, Expr<V> duration, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ToneAction<>(frequency, duration, port, properties, comment);
     }
 
@@ -73,7 +72,7 @@ public class ToneAction<V> extends Action<V> {
     /**
      * @return port of the buzzer.
      */
-    public IActorPort getPort() {
+    public String  getPort() {
         return this.port;
     }
 

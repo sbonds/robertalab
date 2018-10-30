@@ -27,10 +27,10 @@ import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 public class PinWriteValueAction<V> extends Action<V> {
     private final IPinValue pinValue;
-    private final IActorPort port;
+    private final String port;
     private final Expr<V> value;
 
-    private PinWriteValueAction(IPinValue pinValue, IActorPort port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private PinWriteValueAction(IPinValue pinValue, String port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("WRITE_TO_PIN"), properties, comment);
         Assert.notNull(pinValue);
         Assert.notNull(port);
@@ -52,7 +52,7 @@ public class PinWriteValueAction<V> extends Action<V> {
      */
     public static <V> PinWriteValueAction<V> make(
         IPinValue pinValue,
-        IActorPort port,
+        String port,
         Expr<V> value,
         BlocklyBlockProperties properties,
         BlocklyComment comment) {
@@ -63,7 +63,7 @@ public class PinWriteValueAction<V> extends Action<V> {
         return this.pinValue;
     }
 
-    public IActorPort getPort() {
+    public String  getPort() {
         return this.port;
     }
 

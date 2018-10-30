@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.codegen.WeDoCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
+
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.visitor.WeDoStackMachineVisitor;

@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.visitor.collect;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.NxtConfiguration;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
@@ -18,7 +18,7 @@ public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     private boolean isVolumeVariableNeeded = false;
 
-    public NxtUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, NxtConfiguration configuration) {
+    public NxtUsedHardwareCollectorVisitor(ArrayList<ArrayList<Phrase<Void>>> phrasesSet, Configuration configuration) {
         super(configuration);
         check(phrasesSet);
     }

@@ -7,7 +7,6 @@ import org.apache.commons.lang3.math.NumberUtils;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -29,9 +28,9 @@ import de.fhg.iais.roberta.visitor.hardware.actor.ISoundVisitor;
 public class PlayNoteAction<V> extends Action<V> {
     private final String duration;
     private final String frequency;
-    private final IActorPort port;
+    private final String port;
 
-    private PlayNoteAction(IActorPort port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private PlayNoteAction(String port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PLAY_NOTE_ACTION"), properties, comment);
         Assert.isTrue(NumberUtils.isNumber(duration) && NumberUtils.isNumber(frequency));
         this.duration = duration;
@@ -49,14 +48,14 @@ public class PlayNoteAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link PlayNoteAction}
      */
-    private static <V> PlayNoteAction<V> make(IActorPort port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> PlayNoteAction<V> make(String port, String duration, String frequency, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new PlayNoteAction<>(port, duration, frequency, properties, comment);
     }
 
     /**
      * @return port.
      */
-    public IActorPort getPort() {
+    public String  getPort() {
         return this.port;
     }
 

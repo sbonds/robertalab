@@ -40,7 +40,7 @@ public final class PinTouchSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getTouchSensorMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper);
         return PinTouchSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

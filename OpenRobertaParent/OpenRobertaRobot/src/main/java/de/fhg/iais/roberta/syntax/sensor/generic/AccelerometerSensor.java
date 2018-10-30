@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -46,7 +45,7 @@ public final class AccelerometerSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getAxis);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper);
         return AccelerometerSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

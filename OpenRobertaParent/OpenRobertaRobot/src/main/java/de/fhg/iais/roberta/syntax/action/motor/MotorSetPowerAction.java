@@ -6,8 +6,6 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -32,7 +30,7 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 public class MotorSetPowerAction<V> extends MoveAction<V> {
     private final Expr<V> power;
 
-    private MotorSetPowerAction(IActorPort port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private MotorSetPowerAction(String port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(port, BlockTypeContainer.getByName("MOTOR_SET_POWER_ACTION"), properties, comment);
         Assert.isTrue(port != null && power.isReadOnly());
         this.power = power;
@@ -48,7 +46,7 @@ public class MotorSetPowerAction<V> extends MoveAction<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MotorSetPowerAction}
      */
-    private static <V> MotorSetPowerAction<V> make(IActorPort port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> MotorSetPowerAction<V> make(String port, Expr<V> power, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MotorSetPowerAction<V>(port, power, properties, comment);
     }
 

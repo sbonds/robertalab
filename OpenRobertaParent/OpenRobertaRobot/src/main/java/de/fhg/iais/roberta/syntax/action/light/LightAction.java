@@ -8,7 +8,6 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IBrickLedColor;
 import de.fhg.iais.roberta.inter.mode.action.ILightMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -30,12 +29,12 @@ public class LightAction<V> extends Action<V> {
     private final IBrickLedColor color;
     private final ILightMode mode;
     private static List<Field> fields;
-    private final ISensorPort port;
+    private final String port;
     private static boolean isActor;
     private static boolean isBlink;
 
     private LightAction(
-        ISensorPort port,
+        String port,
         IBrickLedColor color,
         ILightMode mode,
         Expr<V> rgbLedColor,
@@ -60,7 +59,7 @@ public class LightAction<V> extends Action<V> {
      * @return read only object of class {@link LightAction}
      */
     private static <V> LightAction<V> make(
-        ISensorPort port,
+        String port,
         IBrickLedColor color,
         ILightMode mode,
         Expr<V> ledColor,
@@ -93,7 +92,7 @@ public class LightAction<V> extends Action<V> {
     /**
      * @return port.
      */
-    public ISensorPort getPort() {
+    public String getPort() {
         return this.port;
     }
 

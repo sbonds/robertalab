@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
 
 public final class FlameSensor<V> extends Sensor<V> {
 
-    private final ISensorPort port;
+    private final String port;
 
     private FlameSensor(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("FLAMESENSOR_GET_SAMPLE"), properties, comment);
@@ -38,7 +38,7 @@ public final class FlameSensor<V> extends Sensor<V> {
         return new FlameSensor<>(port, properties, comment);
     }
 
-    public ISensorPort getPort() {
+    public String getPort() {
         return this.port;
     }
 

@@ -1,7 +1,5 @@
 package de.fhg.iais.roberta.components;
 
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-
 /**
  * Stores information for port and mode of used actor in a blockly program. This information is used for program validation.
  *
@@ -9,31 +7,22 @@ import de.fhg.iais.roberta.inter.mode.action.IActorPort;
  */
 
 public class UsedActor {
-    private final IActorPort port;
-    private final ActorType type;
+    private final String port;
 
-    public UsedActor(IActorPort port, ActorType type) {
+    public UsedActor(String port) {
         this.port = port;
-        this.type = type;
     }
 
     /**
      * @return the port
      */
-    public IActorPort getPort() {
+    public String getPort() {
         return this.port;
-    }
-
-    /**
-     * @return the actorType
-     */
-    public ActorType getType() {
-        return this.type;
     }
 
     @Override
     public String toString() {
-        return "UsedActor [" + this.port + ", " + this.type + "]";
+        return "UsedActor [" + this.port + "]";
     }
 
     @Override
@@ -42,7 +31,6 @@ public class UsedActor {
         int result = 1;
         try {
             result = prime * result + this.port.hashCode();
-            result = prime * result + this.type.hashCode();
         } catch ( NullPointerException e ) {
             result = 31;
         }
@@ -61,9 +49,6 @@ public class UsedActor {
             return false;
         }
         UsedActor other = (UsedActor) obj;
-        if ( this.type != other.type ) {
-            return false;
-        }
         if ( this.port == null ) {
             if ( other.port != null ) {
                 return false;

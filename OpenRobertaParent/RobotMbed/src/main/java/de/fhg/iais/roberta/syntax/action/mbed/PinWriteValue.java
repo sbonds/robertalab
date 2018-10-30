@@ -38,7 +38,7 @@ public class PinWriteValue<V> extends Action<V> {
     private final IPort port;
     private final Expr<V> value;
 
-    private PinWriteValue(IPinValue pinValue, ISensorPort port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private PinWriteValue(IPinValue pinValue, String port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PIN_WRITE_VALUE"), properties, comment);
         Assert.notNull(pinValue);
         Assert.notNull(port);
@@ -58,7 +58,7 @@ public class PinWriteValue<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of {@link PinWriteValue}
      */
-    public static <V> PinWriteValue<V> make(IPinValue pinValue, ISensorPort port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> PinWriteValue<V> make(IPinValue pinValue, String port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new PinWriteValue<>(pinValue, port, value, properties, comment);
     }
 

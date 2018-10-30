@@ -50,7 +50,7 @@ public class Jaxb2MicrobitConfigurationTransformer {
         List<Value> values = block.getValue();
         {
             Map<ISensorPort, Sensor> sensors = conf.getSensors();
-            for ( ISensorPort port : sensors.keySet() ) {
+            for ( String port : sensors.keySet() ) {
                 Sensor sensor = sensors.get(port);
                 Value hardwareComponent = new Value();
                 hardwareComponent.setName(port.toString());
@@ -62,7 +62,7 @@ public class Jaxb2MicrobitConfigurationTransformer {
         }
         {
             Map<IActorPort, Actor> actors = conf.getActors();
-            for ( IActorPort port : actors.keySet() ) {
+            for ( String port : actors.keySet() ) {
                 Actor actor = actors.get(port);
                 Value hardwareComponent = new Value();
                 hardwareComponent.setName(port.getOraName());

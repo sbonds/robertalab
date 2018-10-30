@@ -3,17 +3,9 @@ package de.fhg.iais.roberta.visitor.collect;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import de.fhg.iais.roberta.components.Actor;
-import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
-import de.fhg.iais.roberta.mode.sensor.TouchSensorMode;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
@@ -104,130 +96,115 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.usedSensors
-            .add(
-                new UsedSensor(
-                    (ISensorPort) colorSensor.getPort(),
-                    SensorType.COLOR,
-                    ColorSensorMode.valueOf(((ColorSensorMode) colorSensor.getMode()).getModeValue())));
+        this.usedSensors.add(new UsedSensor(colorSensor.getPort(), colorSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.usedSensors
-            .add(
-                new UsedSensor(
-                    (ISensorPort) lightSensor.getPort(),
-                    SensorType.LIGHT,
-                    LightSensorMode.valueOf(((LightSensorMode) lightSensor.getMode()).getModeValue())));
+        this.usedSensors.add(new UsedSensor(lightSensor.getPort(), lightSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) soundSensor.getPort(), SensorType.SOUND, soundSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(soundSensor.getPort(), soundSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) temperatureSensor.getPort(), SensorType.TEMPERATURE, temperatureSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(temperatureSensor.getPort(), temperatureSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) voltageSensor.getPort(), SensorType.VOLTAGE, voltageSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(voltageSensor.getPort(), voltageSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        if ( this.brickConfiguration != null ) {
-            Actor actor = this.brickConfiguration.getActors().get(encoderSensor.getPort());
-            if ( actor != null ) {
-                this.usedActors.add(new UsedActor((IActorPort) encoderSensor.getPort(), actor.getName()));
-            }
-        }
+        this.usedActors.add(new UsedActor(encoderSensor.getPort()));
         return null;
     }
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) gyroSensor.getPort(), SensorType.GYRO, gyroSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(gyroSensor.getPort(), gyroSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) infraredSensor.getPort(), SensorType.INFRARED, infraredSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(infraredSensor.getPort(), infraredSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) irSeekerSensor.getPort(), SensorType.IRSEEKER, irSeekerSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(irSeekerSensor.getPort(), irSeekerSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) touchSensor.getPort(), SensorType.TOUCH, TouchSensorMode.TOUCH));
+        this.usedSensors.add(new UsedSensor(touchSensor.getPort(), touchSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) ultrasonicSensor.getPort(), SensorType.ULTRASONIC, ultrasonicSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(ultrasonicSensor.getPort(), ultrasonicSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) humiditySensor.getPort(), SensorType.HUMIDITY, humiditySensor.getMode()));
+        this.usedSensors.add(new UsedSensor(humiditySensor.getPort(), humiditySensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) compassSensor.getPort(), SensorType.COMPASS, compassSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(compassSensor.getPort(), compassSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitMotionSensor(MotionSensor<Void> motionSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) motionSensor.getPort(), SensorType.MOTION, motionSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(motionSensor.getPort(), motionSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitDropSensor(DropSensor<Void> dropSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) dropSensor.getPort(), SensorType.DROP, dropSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(dropSensor.getPort(), dropSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitMoistureSensor(MoistureSensor<Void> mositureSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) mositureSensor.getPort(), SensorType.MOISTURE, mositureSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(mositureSensor.getPort(), mositureSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) accelerometerSensor.getPort(), SensorType.ACCELEROMETER, accelerometerSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(accelerometerSensor.getPort(), accelerometerSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitPulseSensor(PulseSensor<Void> pulseSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) pulseSensor.getPort(), SensorType.PULSE, pulseSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(pulseSensor.getPort(), pulseSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitRfidSensor(RfidSensor<Void> rfidSensor) {
-        this.usedSensors.add(new UsedSensor((ISensorPort) rfidSensor.getPort(), SensorType.RFID, rfidSensor.getMode()));
+        this.usedSensors.add(new UsedSensor(rfidSensor.getPort(), rfidSensor.getMode()));
         return null;
     }
 
@@ -243,12 +220,7 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
         if ( driveAction.getParam().getDuration() != null ) {
             driveAction.getParam().getDuration().getValue().visit(this);
         }
-        if ( this.brickConfiguration != null ) {
-            if ( (this.brickConfiguration.getLeftMotorPort() != null) && (this.brickConfiguration.getRightMotorPort() != null) ) {
-                this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
-                this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
-            }
-        }
+        addLeftAndRightMotorToUsedActors();
         return null;
     }
 
@@ -259,12 +231,7 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
         if ( curveAction.getParamLeft().getDuration() != null ) {
             curveAction.getParamLeft().getDuration().getValue().visit(this);
         }
-        if ( this.brickConfiguration != null ) {
-            if ( (this.brickConfiguration.getLeftMotorPort() != null) && (this.brickConfiguration.getRightMotorPort() != null) ) {
-                this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
-                this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
-            }
-        }
+        addLeftAndRightMotorToUsedActors();
         return null;
     }
 
@@ -274,23 +241,30 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
         if ( turnAction.getParam().getDuration() != null ) {
             turnAction.getParam().getDuration().getValue().visit(this);
         }
-        if ( this.brickConfiguration != null ) {
-            if ( (this.brickConfiguration.getLeftMotorPort() != null) && (this.brickConfiguration.getRightMotorPort() != null) ) {
-                this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
-                this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
-            }
-        }
+        addLeftAndRightMotorToUsedActors();
         return null;
     }
 
     @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
+        addLeftAndRightMotorToUsedActors();
+        return null;
+    }
+
+    private void addLeftAndRightMotorToUsedActors() {
         if ( this.brickConfiguration != null ) {
-            Actor actor = this.brickConfiguration.getActors().get(motorGetPowerAction.getPort());
-            if ( actor != null ) {
-                this.usedActors.add(new UsedActor(motorGetPowerAction.getPort(), actor.getName()));
+            String userDefinedLeftPortName = this.brickConfiguration.getLeftMotor().getUserDefinedPortName();
+            String userDefinedRightPortName = this.brickConfiguration.getRightMotor().getUserDefinedPortName();
+            if ( (userDefinedLeftPortName != null) && (userDefinedRightPortName != null) ) {
+                this.usedActors.add(new UsedActor(userDefinedLeftPortName));
+                this.usedActors.add(new UsedActor(userDefinedRightPortName));
             }
         }
+    }
+
+    @Override
+    public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
+        this.usedActors.add(new UsedActor(motorGetPowerAction.getPort()));
         return null;
     }
 
@@ -300,48 +274,20 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
         if ( motorOnAction.getParam().getDuration() != null ) {
             motorOnAction.getDurationValue().visit(this);
         }
-        if ( this.brickConfiguration != null ) {
-            Actor actor = this.brickConfiguration.getActors().get(motorOnAction.getPort());
-            if ( actor != null ) {
-                this.usedActors.add(new UsedActor(motorOnAction.getPort(), actor.getName()));
-            }
-        }
+        this.usedActors.add(new UsedActor(motorOnAction.getPort()));
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         motorSetPowerAction.getPower().visit(this);
-        if ( this.brickConfiguration != null ) {
-            Actor actor = this.brickConfiguration.getActors().get(motorSetPowerAction.getPort());
-            if ( actor != null ) {
-                this.usedActors.add(new UsedActor(motorSetPowerAction.getPort(), actor.getName()));
-            }
-        }
+        this.usedActors.add(new UsedActor(motorSetPowerAction.getPort()));
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        if ( this.brickConfiguration != null ) {
-            if ( this.brickConfiguration.getActors() != null ) {
-                Actor actor = this.brickConfiguration.getActors().get(motorStopAction.getPort());
-                if ( actor != null ) {
-                    this.usedActors.add(new UsedActor(motorStopAction.getPort(), actor.getName()));
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        if ( this.brickConfiguration != null ) {
-            if ( (this.brickConfiguration.getLeftMotorPort() != null) && (this.brickConfiguration.getRightMotorPort() != null) ) {
-                this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.LARGE));
-                this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.LARGE));
-            }
-        }
+        this.usedActors.add(new UsedActor(motorStopAction.getPort()));
         return null;
     }
 

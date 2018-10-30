@@ -395,7 +395,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         return null;
     }
 
-    private boolean isActorOnPort(IActorPort port) {
+    private boolean isActorOnPort(String port) {
         boolean isActorOnPort = false;
         for ( UsedActor actor : this.usedActors ) {
             isActorOnPort = isActorOnPort ? isActorOnPort : actor.getPort().equals(port);
@@ -552,7 +552,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        IActorPort encoderMotorPort = (IActorPort) encoderSensor.getPort();
+        String encoderMotorPort = (IActorPort) encoderSensor.getPort();
         boolean isRegulated = this.brickConfiguration.isMotorRegulated(encoderMotorPort);
         if ( encoderSensor.getMode() == EncoderSensorMode.RESET ) {
             String methodName = isRegulated ? "hal.resetRegulatedMotorTacho(" : "hal.resetUnregulatedMotorTacho(";

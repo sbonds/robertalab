@@ -50,7 +50,7 @@ public final class DropOffSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getUltrasonicSensorMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper);
         return DropOffSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

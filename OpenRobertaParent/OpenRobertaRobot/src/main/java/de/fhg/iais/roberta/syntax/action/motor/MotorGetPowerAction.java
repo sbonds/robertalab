@@ -5,8 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -27,7 +25,7 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
  */
 public class MotorGetPowerAction<V> extends MoveAction<V> {
 
-    private MotorGetPowerAction(IActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private MotorGetPowerAction(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(port, BlockTypeContainer.getByName("MOTOR_GET_POWER_ACTION"), properties, comment);
         Assert.isTrue(port != null);
 
@@ -42,7 +40,7 @@ public class MotorGetPowerAction<V> extends MoveAction<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MotorGetPowerAction}
      */
-    private static <V> MotorGetPowerAction<V> make(IActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> MotorGetPowerAction<V> make(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MotorGetPowerAction<V>(port, properties, comment);
     }
 

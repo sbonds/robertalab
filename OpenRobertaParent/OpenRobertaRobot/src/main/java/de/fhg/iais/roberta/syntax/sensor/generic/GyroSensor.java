@@ -6,8 +6,6 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -67,10 +65,10 @@ public class GyroSensor<V> extends ExternalSensor<V> {
             List<Field> fields = helper.extractFields(block, (short) 1);
             String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
-                new SensorMetaDataBean(factory.getSensorPort(portName), factory.getGyroSensorMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT), false);
+                new SensorMetaDataBean(factory.getSensorPort(portName), factory.getSensorMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT), false);
             return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
         }
-        sensorMetaDataBean = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getGyroSensorMode);
+        sensorMetaDataBean = extractSensorPortAndMode(block, helper);
         return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
@@ -79,13 +77,13 @@ public class GyroSensor<V> extends ExternalSensor<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         //TODO: move reset to another block and delete astToBlock() method from here
-        String fieldValue = getPort().getOraName();
+        String fieldValue = getPort();
         if ( getMode().toString().equals("ANGLE") || getMode().toString().equals("RATE") ) {
             Mutation mutation = new Mutation();
             mutation.setMode(getMode().toString());
             jaxbDestination.setMutation(mutation);
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
-        } else if (getMode().toString().equals("TILTED")) {
+        } else if ( getMode().toString().equals("TILTED") ) {
             String fieldSlot = getSlot().toString();
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SLOT, fieldSlot);
         }

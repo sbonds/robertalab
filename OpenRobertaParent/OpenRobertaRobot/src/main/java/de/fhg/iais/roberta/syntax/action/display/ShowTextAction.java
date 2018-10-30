@@ -6,7 +6,6 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -34,9 +33,9 @@ public class ShowTextAction<V> extends Action<V> {
     private final Expr<V> msg;
     private final Expr<V> x;
     private final Expr<V> y;
-    private final IActorPort port;
+    private final String port;
 
-    private ShowTextAction(Expr<V> msg, Expr<V> column, Expr<V> row, IActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private ShowTextAction(Expr<V> msg, Expr<V> column, Expr<V> row, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("SHOW_TEXT_ACTION"), properties, comment);
         Assert.isTrue((msg != null) && (column != null) && (row != null));
         this.msg = msg;
@@ -57,7 +56,7 @@ public class ShowTextAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link ShowTextAction}
      */
-    private static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> x, Expr<V> y, IActorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> ShowTextAction<V> make(Expr<V> msg, Expr<V> x, Expr<V> y, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new ShowTextAction<>(msg, x, y, port, properties, comment);
     }
 
@@ -85,7 +84,7 @@ public class ShowTextAction<V> extends Action<V> {
     /**
      * @return port of the display.
      */
-    public IActorPort getPort() {
+    public String  getPort() {
         return this.port;
     }
 

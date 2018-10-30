@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
+
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
@@ -25,7 +25,7 @@ public class Bob3Configuration extends Configuration {
      * @return port on which the left motor is connected
      */
     @Override
-    public IActorPort getLeftMotorPort() {
+    public String  getLeftMotorPort() {
         return null;
     }
 
@@ -40,7 +40,7 @@ public class Bob3Configuration extends Configuration {
      * @return port on which the left motor is connected
      */
     @Override
-    public IActorPort getRightMotorPort() {
+    public String  getRightMotorPort() {
         return null;
     }
 
@@ -81,7 +81,7 @@ public class Bob3Configuration extends Configuration {
          * @return
          */
         @Override
-        public Builder addActor(IActorPort port, Actor actor) {
+        public Builder addActor(String port, Actor actor) {
             return this;
         }
 

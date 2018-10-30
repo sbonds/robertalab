@@ -5,9 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IMotorStopMode;
-import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -30,7 +28,7 @@ import de.fhg.iais.roberta.visitor.hardware.actor.IMotorVisitor;
 public class MotorStopAction<V> extends MoveAction<V> {
     private final IMotorStopMode mode;
 
-    private MotorStopAction(IActorPort port, IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private MotorStopAction(String port, IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(port, BlockTypeContainer.getByName("MOTOR_STOP_ACTION"), properties, comment);
         Assert.isTrue(port != null);
         this.mode = mode;
@@ -46,7 +44,7 @@ public class MotorStopAction<V> extends MoveAction<V> {
      * @param comment added from the user,
      * @return read only object of class {@link MotorStopAction}
      */
-    private static <V> MotorStopAction<V> make(IActorPort port, IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> MotorStopAction<V> make(String port, IMotorStopMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new MotorStopAction<V>(port, mode, properties, comment);
     }
 

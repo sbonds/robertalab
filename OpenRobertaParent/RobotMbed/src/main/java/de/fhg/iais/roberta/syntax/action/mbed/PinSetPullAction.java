@@ -32,7 +32,7 @@ public class PinSetPullAction<V> extends Action<V> {
     private final IPinPull pinPull;
     private final IPort port;
 
-    private PinSetPullAction(IPinPull pinPull, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private PinSetPullAction(IPinPull pinPull, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("PIN_SET_PULL"), properties, comment);
         Assert.notNull(pinPull);
         Assert.notNull(port);
@@ -50,7 +50,7 @@ public class PinSetPullAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of {@link PinSetPullAction}
      */
-    public static <V> PinSetPullAction<V> make(IPinPull pinPull, ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> PinSetPullAction<V> make(IPinPull pinPull, String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new PinSetPullAction<>(pinPull, port, properties, comment);
     }
 

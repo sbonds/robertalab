@@ -21,10 +21,10 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 public class RelayAction<V> extends Action<V> {
-    private final IActorPort port;
+    private final String port;
     private final IRelayMode mode;
 
-    private RelayAction(IActorPort port, IRelayMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private RelayAction(String port, IRelayMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("RELAY_ACTION"), properties, comment);
         Assert.isTrue(mode != null);
         this.port = port;
@@ -41,7 +41,7 @@ public class RelayAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link RelayAction}
      */
-    private static <V> RelayAction<V> make(IActorPort port, IRelayMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private static <V> RelayAction<V> make(String port, IRelayMode mode, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new RelayAction<>(port, mode, properties, comment);
     }
 
@@ -55,7 +55,7 @@ public class RelayAction<V> extends Action<V> {
     /**
      * @return port.
      */
-    public IActorPort getPort() {
+    public String  getPort() {
         return this.port;
     }
 

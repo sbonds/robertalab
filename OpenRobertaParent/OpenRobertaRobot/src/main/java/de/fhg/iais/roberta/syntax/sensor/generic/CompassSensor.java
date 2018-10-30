@@ -5,7 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -65,14 +64,10 @@ public class CompassSensor<V> extends ExternalSensor<V> {
             List<Field> fields = helper.extractFields(block, (short) 1);
             String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorMetaDataBean =
-                new SensorMetaDataBean(
-                    factory.getSensorPort(portName),
-                    factory.getCompassSensorMode("CALIBRATE"),
-                    factory.getSlot(BlocklyConstants.NO_SLOT),
-                    false);
+                new SensorMetaDataBean(factory.getSensorPort(portName), factory.getSensorMode("CALIBRATE"), factory.getSlot(BlocklyConstants.NO_SLOT), false);
             return CompassSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
         }
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getCompassSensorMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper);
         return CompassSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
@@ -82,7 +77,7 @@ public class CompassSensor<V> extends ExternalSensor<V> {
         if ( getMode().toString().equals("CALIBRATE") ) {
             jaxbDestination = new Block();
             JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, getPort().getOraName());
+            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, getPort());
         }
         return jaxbDestination;
     }

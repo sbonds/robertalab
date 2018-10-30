@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 public final class ConfigurationComponent {
     private final String blocklyName;
     private final boolean isActor;
-    private final String userDefinedName;
+    private final String userDefinedPortName;
     private final String portName;
     private final String slotName;
     private final Map<String, String> componentProperties;
@@ -25,7 +25,7 @@ public final class ConfigurationComponent {
         this.isActor = isActor;
         this.portName = portName;
         this.slotName = slotName;
-        this.userDefinedName = userDefinedName;
+        this.userDefinedPortName = userDefinedName;
         this.componentProperties = Collections.unmodifiableMap(new HashMap<>(componentProperties));
     }
 
@@ -49,8 +49,8 @@ public final class ConfigurationComponent {
         return this.slotName;
     }
 
-    public String getUserDefinedName() {
-        return this.userDefinedName;
+    public String getUserDefinedPortName() {
+        return this.userDefinedPortName;
     }
 
     public Map<String, String> getComponentProperties() {
@@ -71,7 +71,7 @@ public final class ConfigurationComponent {
             + "isActor="
             + this.isActor
             + ", userDefinedName="
-            + this.userDefinedName
+            + this.userDefinedPortName
             + ", portName="
             + this.portName
             + ", slotName="

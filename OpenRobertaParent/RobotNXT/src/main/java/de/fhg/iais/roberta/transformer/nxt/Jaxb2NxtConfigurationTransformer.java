@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.components.NxtConfiguration;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
@@ -45,7 +44,7 @@ public class Jaxb2NxtConfigurationTransformer {
                 List<Value> values = extractValues(block, (short) 7);
                 List<ConfigurationComponent> allComponents = extractHardwareComponent(values);
 
-                return new NxtConfiguration.Builder().setTrackWidth(trackWidth).setWheelDiameter(wheelDiameter).addComponents(allComponents).build();
+                return new Configuration.Builder().setTrackWidth(trackWidth).setWheelDiameter(wheelDiameter).addComponents(allComponents).build();
             default:
                 throw new DbcException("There was no correct configuration block found!");
         }

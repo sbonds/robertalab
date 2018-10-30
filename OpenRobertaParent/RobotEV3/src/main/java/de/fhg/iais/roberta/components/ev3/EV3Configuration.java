@@ -29,13 +29,13 @@ public class EV3Configuration extends Configuration {
      * @return port on which the left motor is connected
      */
     @Override
-    public IActorPort getLeftMotorPort() {
+    public String  getLeftMotorPort() {
         return getMotorPortOnSide(MotorSide.LEFT);
     }
 
     @Override
     public Actor getLeftMotor() {
-        IActorPort port = getLeftMotorPort();
+        String port = getLeftMotorPort();
         if ( port != null ) {
             return getActorOnPort(port);
         }
@@ -59,13 +59,13 @@ public class EV3Configuration extends Configuration {
      * @return port on which the left motor is connected
      */
     @Override
-    public IActorPort getRightMotorPort() {
+    public String  getRightMotorPort() {
         return getMotorPortOnSide(MotorSide.RIGHT);
     }
 
     @Override
     public Actor getRightMotor() {
-        IActorPort port = getRightMotorPort();
+        String port = getRightMotorPort();
         if ( port != null ) {
             return getActorOnPort(port);
         }
@@ -98,7 +98,7 @@ public class EV3Configuration extends Configuration {
         }
         if ( !this.sensors.isEmpty() ) {
             sb.append("  sensor port {\n");
-            for ( ISensorPort port : this.sensors.keySet() ) {
+            for ( String port : this.sensors.keySet() ) {
                 sb.append("    ").append(port.getOraName()).append(": ");
                 String sensor = this.sensors.get(port).getType().toString();
                 sb.append(sensor.toLowerCase()).append(";\n");
@@ -107,7 +107,7 @@ public class EV3Configuration extends Configuration {
         }
         if ( !this.actors.isEmpty() ) {
             sb.append("  actor port {\n");
-            for ( IActorPort port : this.actors.keySet() ) {
+            for ( String port : this.actors.keySet() ) {
                 sb.append("    ").append(port.toString()).append(": ");
                 Actor actor = this.actors.get(port);
                 if ( actor.getName() == ActorType.LARGE ) {
@@ -157,7 +157,7 @@ public class EV3Configuration extends Configuration {
          * @return
          */
         @Override
-        public Builder addActor(IActorPort port, Actor actor) {
+        public Builder addActor(String port, Actor actor) {
             this.actorMapping.put(port, actor);
             return this;
         }

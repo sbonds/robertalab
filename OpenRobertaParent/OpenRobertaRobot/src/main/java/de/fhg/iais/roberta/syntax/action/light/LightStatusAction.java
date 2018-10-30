@@ -5,7 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -26,9 +25,9 @@ import de.fhg.iais.roberta.visitor.hardware.actor.ILightVisitor;
  */
 public class LightStatusAction<V> extends Action<V> {
     private final Status status;
-    private final IActorPort port;
+    private final String port;
 
-    private LightStatusAction(IActorPort port, Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private LightStatusAction(String port, Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("LIGHT_STATUS_ACTION"), properties, comment);
         Assert.isTrue(status != null);
         this.status = status;
@@ -44,7 +43,7 @@ public class LightStatusAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of class {@link LightStatusAction}
      */
-    public static <V> LightStatusAction<V> make(IActorPort port, Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
+    public static <V> LightStatusAction<V> make(String port, Status status, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new LightStatusAction<>(port, status, properties, comment);
     }
 
@@ -63,7 +62,7 @@ public class LightStatusAction<V> extends Action<V> {
     /**
      * @return port.
      */
-    public IActorPort getPort() {
+    public String  getPort() {
         return this.port;
     }
 

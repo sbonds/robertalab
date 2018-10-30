@@ -1,8 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.inter.mode.sensor.IRSeekerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -54,7 +52,7 @@ public class IRSeekerSensor<V> extends ExternalSensor<V> {
      * @return corresponding AST object
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper, helper.getDropdownFactory()::getIRSeekerSensorMode);
+        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper);
         return IRSeekerSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

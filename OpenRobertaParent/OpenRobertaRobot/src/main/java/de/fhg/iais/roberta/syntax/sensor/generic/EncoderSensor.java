@@ -5,9 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.sensor.EncoderSensorMode;
-import de.fhg.iais.roberta.mode.sensor.SensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -66,10 +63,10 @@ public class EncoderSensor<V> extends ExternalSensor<V> {
             List<Field> fields = helper.extractFields(block, (short) 1);
             String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT);
             sensorData =
-                new SensorMetaDataBean(factory.getActorPort(portName), factory.getMotorTachoMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT), false);
+                new SensorMetaDataBean(factory.getActorPort(portName), factory.getSensorMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT), false);
             return EncoderSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
         }
-        sensorData = extractActorPortAndMode(block, helper, helper.getDropdownFactory()::getMotorTachoMode);
+        sensorData = extractActorPortAndMode(block, helper);
         return EncoderSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

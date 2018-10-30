@@ -26,7 +26,7 @@ public class Configuration {
     private Map<String, ConfigurationComponent> buildConfigurationComponentMap(List<ConfigurationComponent> configurationComponents) {
         Map<String, ConfigurationComponent> map = new HashMap<>();
         for ( ConfigurationComponent configurationComponent : configurationComponents ) {
-            map.put(configurationComponent.getUserDefinedName(), configurationComponent);
+            map.put(configurationComponent.getUserDefinedPortName(), configurationComponent);
         }
         return map;
     }
@@ -43,8 +43,16 @@ public class Configuration {
         return getMotor("LEFT");
     }
 
+    public String getLeftMotorPort() {
+        return getLeftMotor().getPortName();
+    }
+
     public ConfigurationComponent getRightMotor() {
         return getMotor("RIGHT");
+    }
+
+    public String getRightMotorPort() {
+        return getRightMotor().getPortName();
     }
 
     private ConfigurationComponent getMotor(String side) {
