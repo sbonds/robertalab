@@ -149,11 +149,11 @@ public class ClientProgram {
                     final AbstractProcessor forMessages = new DummyProcessor();
                     final BlocklyProgramAndConfigTransformer transformer =
                         BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
-                    transformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
+                    transformer.getRobotConfiguration().setRobotName(httpSessionState.getRobotName());
                     if ( transformer.getErrorMessage() != null ) {
                         forMessages.setError(transformer.getErrorMessage());
                     } else {
-                        final AbstractProgramValidatorVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(transformer.getBrickConfiguration());
+                        final AbstractProgramValidatorVisitor programChecker = robotFactory.getRobotProgramCheckVisitor(transformer.getRobotConfiguration());
                         programConfigurationCompatibilityCheck(response, transformer, programChecker);
 
                         compilerWorkflow.generateSourceCode(token, programName, transformer, language);
@@ -413,11 +413,11 @@ public class ClientProgram {
 
                     final BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                         BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
-                    programAndConfigTransformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
+                    programAndConfigTransformer.getRobotConfiguration().setRobotName(httpSessionState.getRobotName());
                     Key messageKey = programAndConfigTransformer.getErrorMessage();
                     if ( messageKey == null ) {
                         final AbstractProgramValidatorVisitor programChecker =
-                            robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                            robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getRobotConfiguration());
                         messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
                         if ( messageKey == null ) {
                             ClientProgram.LOG.info("compiler workflow started for program {}", programName);
@@ -477,11 +477,11 @@ public class ClientProgram {
                             final String token = "toknTokn";
                             final BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                                 BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configText);
-                            programAndConfigTransformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
+                            programAndConfigTransformer.getRobotConfiguration().setRobotName(httpSessionState.getRobotName());
                             messageKey = programAndConfigTransformer.getErrorMessage();
                             if ( messageKey == null ) {
                                 final AbstractProgramValidatorVisitor programChecker =
-                                    robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                                    robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getRobotConfiguration());
                                 messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
                                 if ( messageKey == null ) {
                                     ClientProgram.LOG.info("compiler workflow started for program {}", programName);
@@ -521,11 +521,11 @@ public class ClientProgram {
 
                     final BlocklyProgramAndConfigTransformer programAndConfigTransformer =
                         BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
-                    programAndConfigTransformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
+                    programAndConfigTransformer.getRobotConfiguration().setRobotName(httpSessionState.getRobotName());
                     messageKey = programAndConfigTransformer.getErrorMessage();
                     if ( messageKey == null ) {
                         final AbstractProgramValidatorVisitor programChecker =
-                            robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getBrickConfiguration());
+                            robotFactory.getRobotProgramCheckVisitor(programAndConfigTransformer.getRobotConfiguration());
                         messageKey = programConfigurationCompatibilityCheck(response, programAndConfigTransformer, programChecker);
                         if ( messageKey == null ) {
                             ClientProgram.LOG.info("compiler workflow started for program {}", programName);
@@ -561,10 +561,10 @@ public class ClientProgram {
 
                     final BlocklyProgramAndConfigTransformer transformer =
                         BlocklyProgramAndConfigTransformer.transform(robotFactory, programText, configurationText);
-                    transformer.getBrickConfiguration().setRobotName(httpSessionState.getRobotName());
+                    transformer.getRobotConfiguration().setRobotName(httpSessionState.getRobotName());
                     Key messageKey = transformer.getErrorMessage();
                     if ( messageKey == null ) {
-                        final AbstractSimValidatorVisitor programChecker = robotFactory.getSimProgramCheckVisitor(transformer.getBrickConfiguration());
+                        final AbstractSimValidatorVisitor programChecker = robotFactory.getSimProgramCheckVisitor(transformer.getRobotConfiguration());
                         messageKey = programConfigurationCompatibilityCheck(response, transformer, programChecker);
                         transformer.getProgramTransformer().getData();
                         if ( messageKey == null ) {

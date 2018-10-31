@@ -30,7 +30,7 @@ public class Bob3Configuration extends Configuration {
     }
 
     @Override
-    public Actor getLeftMotor() {
+    public Actor getFirstLeftMotor() {
         return null;
     }
 
@@ -45,7 +45,7 @@ public class Bob3Configuration extends Configuration {
     }
 
     @Override
-    public Actor getRightMotor() {
+    public Actor getFirstRightMotor() {
         return null;
 
     }

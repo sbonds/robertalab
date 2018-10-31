@@ -61,7 +61,7 @@ public final class ArduinoUsedHardwareCollectorVisitor extends AbstractUsedHardw
         if ( motorOnAction.getParam().getDuration() != null ) {
             motorOnAction.getDurationValue().visit(this);
         }
-        if ( this.brickConfiguration != null ) {
+        if ( this.robotConfiguration != null ) {
             //Actor actor = this.brickConfiguration.getActors().get(motorOnAction.getPort());
             //if ( actor != null ) {
             //    this.usedActors.add(new UsedActor(motorOnAction.getPort(), actor.getName()));

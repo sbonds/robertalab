@@ -66,8 +66,8 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
         if ( driveAction.getParam().getDuration() != null ) {
             driveAction.getParam().getDuration().getValue().visit(this);
         }
-        if ( this.brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
+        if ( this.robotConfiguration != null ) {
+            this.usedActors.add(new UsedActor(this.robotConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
         }
         return null;
     }
@@ -79,8 +79,8 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
         if ( curveAction.getParamLeft().getDuration() != null ) {
             curveAction.getParamLeft().getDuration().getValue().visit(this);
         }
-        if ( this.brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
+        if ( this.robotConfiguration != null ) {
+            this.usedActors.add(new UsedActor(this.robotConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
         }
         return null;
     }
@@ -91,8 +91,8 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
         if ( turnAction.getParam().getDuration() != null ) {
             turnAction.getParam().getDuration().getValue().visit(this);
         }
-        if ( this.brickConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
+        if ( this.robotConfiguration != null ) {
+            this.usedActors.add(new UsedActor(this.robotConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
         }
         return null;
     }
@@ -104,10 +104,10 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        if ( this.brickConfiguration != null ) {
-            if ( (this.brickConfiguration.getLeftMotorPort() != null) && (this.brickConfiguration.getRightMotorPort() != null) ) {
-                this.usedActors.add(new UsedActor(this.brickConfiguration.getLeftMotorPort(), ActorType.GEARED_MOTOR));
-                this.usedActors.add(new UsedActor(this.brickConfiguration.getRightMotorPort(), ActorType.GEARED_MOTOR));
+        if ( this.robotConfiguration != null ) {
+            if ( (this.robotConfiguration.getLeftMotorPort() != null) && (this.robotConfiguration.getRightMotorPort() != null) ) {
+                this.usedActors.add(new UsedActor(this.robotConfiguration.getLeftMotorPort(), ActorType.GEARED_MOTOR));
+                this.usedActors.add(new UsedActor(this.robotConfiguration.getRightMotorPort(), ActorType.GEARED_MOTOR));
             }
         }
         return null;

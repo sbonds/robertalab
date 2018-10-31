@@ -34,7 +34,7 @@ public class MbotConfiguration extends Configuration {
     }
 
     @Override
-    public Actor getLeftMotor() {
+    public Actor getFirstLeftMotor() {
         String port = getLeftMotorPort();
         if ( port != null ) {
             return getActorOnPort(port);
@@ -53,7 +53,7 @@ public class MbotConfiguration extends Configuration {
     }
 
     @Override
-    public Actor getRightMotor() {
+    public Actor getFirstRightMotor() {
         String port = getRightMotorPort();
         if ( port != null ) {
             return getActorOnPort(port);

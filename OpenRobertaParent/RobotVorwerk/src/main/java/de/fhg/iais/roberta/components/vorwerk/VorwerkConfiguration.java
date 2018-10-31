@@ -79,7 +79,7 @@ public class VorwerkConfiguration extends Configuration {
     }
 
     @Override
-    public Actor getLeftMotor() {
+    public Actor getFirstLeftMotor() {
         return leftMotor;
     }
 
@@ -94,7 +94,7 @@ public class VorwerkConfiguration extends Configuration {
     }
 
     @Override
-    public Actor getRightMotor() {
+    public Actor getFirstRightMotor() {
         return rightMotor;
 
     }

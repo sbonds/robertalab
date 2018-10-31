@@ -279,8 +279,8 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        Actor leftMotor = this.brickConfiguration.getLeftMotor();
-        Actor rightMotor = this.brickConfiguration.getRightMotor();
+        Actor leftMotor = this.brickConfiguration.getFirstLeftMotor();
+        Actor rightMotor = this.brickConfiguration.getFirstRightMotor();
         boolean isRegulatedDrive = leftMotor.isRegulated() || rightMotor.isRegulated();
         boolean isDuration = turnAction.getParam().getDuration() != null;
         boolean isReverseLeftMotor = leftMotor.getRotationDirection() == DriveDirection.BACKWARD;

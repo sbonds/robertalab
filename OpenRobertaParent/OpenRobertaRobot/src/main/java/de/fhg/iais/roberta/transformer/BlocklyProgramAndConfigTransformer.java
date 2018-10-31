@@ -20,13 +20,13 @@ public class BlocklyProgramAndConfigTransformer {
     private static final Logger LOG = LoggerFactory.getLogger(BlocklyProgramAndConfigTransformer.class);
     private Key errorMessage;
     private Jaxb2BlocklyProgramTransformer<Void> programTransformer;
-    private Configuration brickConfiguration;
+    private Configuration robotConfiguration;
 
     private BlocklyProgramAndConfigTransformer(Key errorMessage, Jaxb2BlocklyProgramTransformer<Void> programTransformer, Configuration brickConfiguration) {
         super();
         this.errorMessage = errorMessage;
         this.programTransformer = programTransformer;
-        this.brickConfiguration = brickConfiguration;
+        this.robotConfiguration = brickConfiguration;
     }
 
     /**
@@ -44,10 +44,10 @@ public class BlocklyProgramAndConfigTransformer {
     }
 
     /**
-     * @return the brickConfiguration
+     * @return the robot configuration
      */
-    public Configuration getBrickConfiguration() {
-        return this.brickConfiguration;
+    public Configuration getRobotConfiguration() {
+        return this.robotConfiguration;
     }
 
     /**

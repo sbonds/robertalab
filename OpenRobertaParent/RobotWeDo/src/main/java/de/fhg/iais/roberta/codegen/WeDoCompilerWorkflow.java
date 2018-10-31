@@ -31,7 +31,7 @@ public class WeDoCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            generatedSourceCode = WeDoStackMachineVisitor.generate((WeDoConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree());
+            generatedSourceCode = WeDoStackMachineVisitor.generate((WeDoConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree());
             LOG.info("wedo stack machine code generated");
         } catch ( Exception e ) {
             LOG.error("wedo stack machine code generation failed", e);

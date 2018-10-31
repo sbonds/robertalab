@@ -2,9 +2,9 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
@@ -75,10 +75,10 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     protected ArrayList<ArrayList<Phrase<Void>>> checkedProgram;
     protected int errorCount = 0;
     protected int warningCount = 0;
-    protected Configuration brickConfiguration;
+    protected Configuration robotConfiguration;
 
-    public AbstractProgramValidatorVisitor(Configuration brickConfiguration) {
-        this.brickConfiguration = brickConfiguration;
+    public AbstractProgramValidatorVisitor(Configuration robotConfiguration) {
+        this.robotConfiguration = robotConfiguration;
     }
 
     @Override
@@ -197,7 +197,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        if ( this.brickConfiguration.getActorOnPort((IActorPort) encoderSensor.getPort()) == null ) {
+        if ( this.robotConfiguration.optConfigurationComponent(encoderSensor.getPort()) == null ) {
             encoderSensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_MISSING"));
             this.errorCount++;
         }
@@ -387,22 +387,24 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     }
 
     protected void checkMotorPort(MoveAction<Void> action) {
-        if ( this.brickConfiguration.getActorOnPort(action.getPort()) == null ) {
+        if ( this.robotConfiguration.optConfigurationComponent(action.getPort()) == null ) {
             action.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_MISSING"));
             this.errorCount++;
         }
     }
 
     private void checkLeftRightMotorPort(Phrase<Void> driveAction) {
-        Actor leftMotor = this.brickConfiguration.getLeftMotor();
-        Actor rightMotor = this.brickConfiguration.getRightMotor();
-        checkLeftMotorPresenceAndRegulation(driveAction, leftMotor);
-        checkRightMotorPresenceAndRegulation(driveAction, rightMotor);
-        checkLeftAndRightMotorRotationDirection(driveAction, leftMotor, rightMotor);
-        checkNumberOfMotors(driveAction);
+        if ( validNumberOfMotors(driveAction) ) {
+            ConfigurationComponent leftMotor = this.robotConfiguration.getFirstMotor("LEFT");
+            ConfigurationComponent rightMotor = this.robotConfiguration.getFirstMotor("RIGHT");
+            checkLeftMotorPresenceAndRegulation(driveAction, leftMotor);
+            checkRightMotorPresenceAndRegulation(driveAction, rightMotor);
+            checkMotorRotationDirection(driveAction, leftMotor, rightMotor);
+        }
+        ;
     }
 
-    private void checkRightMotorPresenceAndRegulation(Phrase<Void> driveAction, Actor rightMotor) {
+    private void checkRightMotorPresenceAndRegulation(Phrase<Void> driveAction, ConfigurationComponent rightMotor) {
         if ( rightMotor == null ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING"));
             this.errorCount++;
@@ -411,7 +413,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
         }
     }
 
-    private void checkLeftMotorPresenceAndRegulation(Phrase<Void> driveAction, Actor leftMotor) {
+    private void checkLeftMotorPresenceAndRegulation(Phrase<Void> driveAction, ConfigurationComponent leftMotor) {
         if ( leftMotor == null ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_LEFT_MISSING"));
             this.errorCount++;
@@ -420,26 +422,29 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
         }
     }
 
-    private void checkLeftAndRightMotorRotationDirection(Phrase<Void> driveAction, Actor leftMotor, Actor rightMotor) {
-        if ( (leftMotor != null) && (rightMotor != null) && (leftMotor.getRotationDirection() != rightMotor.getRotationDirection()) ) {
+    private void checkMotorRotationDirection(Phrase<Void> driveAction, ConfigurationComponent m1, ConfigurationComponent m2) {
+        if ( (m1 != null) && (m2 != null) && (m1.getProperty(BlocklyConstants.MOTORROTATION) != m2.getProperty(BlocklyConstants.MOTORROTATION)) ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTORS_ROTATION_DIRECTION"));
             this.errorCount++;
         }
     }
 
-    private void checkNumberOfMotors(Phrase<Void> driveAction) {
-        if ( this.brickConfiguration.getNumberOfRightMotors() > 1 ) {
+    private boolean validNumberOfMotors(Phrase<Void> driveAction) {
+        if ( this.robotConfiguration.getMotors("RIGHT").size() != 1 ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MULTIPLE_RIGHT_MOTORS"));
             this.errorCount++;
+            return false;
         }
-        if ( this.brickConfiguration.getNumberOfLeftMotors() > 1 ) {
+        if ( this.robotConfiguration.getMotors("LEFT").size() > 1 ) {
             driveAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MULTIPLE_LEFT_MOTORS"));
             this.errorCount++;
+            return false;
         }
+        return true;
     }
 
-    private void checkIfMotorRegulated(Phrase<Void> driveAction, Actor motor, String errorMsg) {
-        if ( !motor.isRegulated() ) {
+    private void checkIfMotorRegulated(Phrase<Void> driveAction, ConfigurationComponent motor, String errorMsg) {
+        if ( !motor.getProperty("MOTOR_REGULATION").equals("TRUE") ) {
             driveAction.addInfo(NepoInfo.error(errorMsg));
             this.errorCount++;
         }

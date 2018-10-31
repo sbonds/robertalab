@@ -6,8 +6,6 @@ import de.fhg.iais.roberta.codegen.ICompilerWorkflow;
 import de.fhg.iais.roberta.codegen.WeDoCompilerWorkflow;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
-import de.fhg.iais.roberta.mode.action.ActorPort;
-
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.visitor.WeDoStackMachineVisitor;
@@ -18,14 +16,6 @@ import de.fhg.iais.roberta.visitor.validate.WedoBrickValidatorVisitor;
 public class WeDoFactory extends AbstractRobotFactory {
     public WeDoFactory(PluginProperties pluginProperties) {
         super(pluginProperties);
-    }
-
-    public SensorPort getSensorName(String port) {
-        return new SensorPort(port, port);
-    }
-
-    public ActorPort getActorName(String port) {
-        return new ActorPort(port, port);
     }
 
     @Override

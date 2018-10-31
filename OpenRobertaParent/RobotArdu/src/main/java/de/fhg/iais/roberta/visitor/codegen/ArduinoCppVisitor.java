@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.fhg.iais.roberta.components.Category;
+import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.ConfigurationBlockType;
 import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
@@ -29,11 +29,11 @@ import de.fhg.iais.roberta.syntax.actors.arduino.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DropSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
@@ -49,8 +49,8 @@ import de.fhg.iais.roberta.visitor.collect.ArduinoUsedHardwareCollectorVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 /**
- * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a
- * StringBuilder. <b>This representation is correct C code for Arduino.</b> <br>
+ * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable C representation of a phrase to a StringBuilder.
+ * <b>This representation is correct C code for Arduino.</b> <br>
  */
 public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor implements IArduinoVisitor<Void> {
     private final boolean isTimerSensorUsed;
@@ -87,13 +87,13 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitShowTextAction(ShowTextAction<Void> showTextAction) {
-        this.sb.append("_lcd_" + showTextAction.getPort().getOraName() + ".setCursor(");
+        this.sb.append("_lcd_" + showTextAction.getPort() + ".setCursor(");
         showTextAction.getX().visit(this);
         this.sb.append(",");
         showTextAction.getY().visit(this);
         this.sb.append(");");
         nlIndent();
-        this.sb.append("_lcd_" + showTextAction.getPort().getOraName() + ".print(");
+        this.sb.append("_lcd_" + showTextAction.getPort() + ".print(");
         showTextAction.getMsg().visit(this);
         this.sb.append(");");
         return null;
@@ -101,21 +101,21 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction<Void> clearDisplayAction) {
-        this.sb.append("_lcd_" + clearDisplayAction.getPort().getOraName() + ".clear();");
+        this.sb.append("_lcd_" + clearDisplayAction.getPort() + ".clear();");
         return null;
     }
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
         if ( !lightAction.getMode().toString().equals(BlocklyConstants.DEFAULT) ) {
-            this.sb.append("digitalWrite(_led_" + lightAction.getPort().getOraName() + ", " + lightAction.getMode().getValues()[0] + ");");
+            this.sb.append("digitalWrite(_led_" + lightAction.getPort() + ", " + lightAction.getMode().getValues()[0] + ");");
         } else {
             Map<String, Expr<Void>> Channels = new HashMap<>();
             Channels.put("red", ((RgbColor<Void>) lightAction.getRgbLedColor()).getR());
             Channels.put("green", ((RgbColor<Void>) lightAction.getRgbLedColor()).getG());
             Channels.put("blue", ((RgbColor<Void>) lightAction.getRgbLedColor()).getB());
             Channels.forEach((k, v) -> {
-                this.sb.append("analogWrite(_led_" + k + "_" + lightAction.getPort().getOraName() + ", ");
+                this.sb.append("analogWrite(_led_" + k + "_" + lightAction.getPort() + ", ");
                 v.visit(this);
                 this.sb.append(");");
                 nlIndent();
@@ -133,7 +133,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 "blue"
             };
         for ( int i = 0; i < 3; i++ ) {
-            this.sb.append("analogWrite(_led_" + colors[i] + "_" + lightStatusAction.getPort().getOraName() + ", 0);");
+            this.sb.append("analogWrite(_led_" + colors[i] + "_" + lightStatusAction.getPort() + ", 0);");
             nlIndent();
         }
         return null;
@@ -142,7 +142,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     @Override
     public Void visitToneAction(ToneAction<Void> toneAction) {
         //9 - sound port
-        this.sb.append("tone(_spiele_" + toneAction.getPort().getOraName() + ",");
+        this.sb.append("tone(_spiele_" + toneAction.getPort() + ",");
         toneAction.getFrequency().visit(this);
         this.sb.append(", ");
         toneAction.getDuration().visit(this);
@@ -154,18 +154,18 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         boolean step = motorOnAction.getParam().getDuration() != null;
         if ( step ) {//step motor
-            this.sb.append("Motor_" + motorOnAction.getPort().getOraName() + ".setSpeed(");
+            this.sb.append("Motor_" + motorOnAction.getPort() + ".setSpeed(");
             motorOnAction.getParam().getSpeed().visit(this);
             this.sb.append(");");
             nlIndent();
-            this.sb.append("Motor_" + motorOnAction.getPort().getOraName() + ".step(_SPU_" + motorOnAction.getPort().getOraName() + "*");
+            this.sb.append("Motor_" + motorOnAction.getPort() + ".step(_SPU_" + motorOnAction.getPort() + "*");
             motorOnAction.getDurationValue().visit(this);
             if ( motorOnAction.getDurationMode().equals(MotorMoveMode.DEGREE) ) {
                 this.sb.append("/360");
             }
             this.sb.append(");");
         } else {//servo motor
-            this.sb.append("_servo_" + motorOnAction.getPort().getOraName() + ".write(");
+            this.sb.append("_servo_" + motorOnAction.getPort() + ".write(");
             motorOnAction.getParam().getSpeed().visit(this);
             this.sb.append(");");
         }
@@ -174,20 +174,19 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitRelayAction(RelayAction<Void> relayAction) {
-        this.sb.append("digitalWrite(_relay_").append(relayAction.getPort().getOraName()).append(", ").append(relayAction.getMode().getValues()[0]).append(
-            ");");
+        this.sb.append("digitalWrite(_relay_").append(relayAction.getPort()).append(", ").append(relayAction.getMode().getValues()[0]).append(");");
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("analogRead(_output_" + lightSensor.getPort().getOraName() + ")/10.24");
+        this.sb.append("analogRead(_output_" + lightSensor.getPort() + ")/10.24");
         return null;
     }
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> button) {
-        this.sb.append("digitalRead(_taster_" + button.getPort().getOraName() + ")");
+        this.sb.append("digitalRead(_taster_" + button.getPort() + ")");
         return null;
     }
 
@@ -222,13 +221,13 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitMoistureSensor(MoistureSensor<Void> moistureSensor) {
-        this.sb.append("analogRead(_moisturePin_" + moistureSensor.getPort().getOraName() + ")/10.24");
+        this.sb.append("analogRead(_moisturePin_" + moistureSensor.getPort() + ")/10.24");
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.sb.append("map(analogRead(_TMP36_" + temperatureSensor.getPort().getOraName() + "), 0, 410, -50, 150)");
+        this.sb.append("map(analogRead(_TMP36_" + temperatureSensor.getPort() + "), 0, 410, -50, 150)");
         return null;
     }
 
@@ -240,7 +239,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitVoltageSensor(VoltageSensor<Void> potentiometer) {
-        this.sb.append("((double)analogRead(_output_" + potentiometer.getPort().getOraName() + "))*5/1024");
+        this.sb.append("((double)analogRead(_output_" + potentiometer.getPort() + "))*5/1024");
         return null;
     }
 
@@ -248,10 +247,10 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
         switch ( (HumiditySensorMode) humiditySensor.getMode() ) {
             case HUMIDITY:
-                this.sb.append("_dht_" + humiditySensor.getPort().getOraName() + ".readHumidity()");
+                this.sb.append("_dht_" + humiditySensor.getPort() + ".readHumidity()");
                 break;
             case TEMPERATURE:
-                this.sb.append("_dht_" + humiditySensor.getPort().getOraName() + ".readTemperature()");
+                this.sb.append("_dht_" + humiditySensor.getPort() + ".readTemperature()");
                 break;
             default:
                 throw new DbcException("Invalide mode for Humidity Sensor!");
@@ -261,7 +260,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitDropSensor(DropSensor<Void> dropSensor) {
-        this.sb.append("analogRead(_S_" + dropSensor.getPort().getOraName() + ")/10.24");
+        this.sb.append("analogRead(_S_" + dropSensor.getPort() + ")/10.24");
         return null;
     }
 
@@ -306,7 +305,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitPulseSensor(PulseSensor<Void> pulseSensor) {
-        this.sb.append("analogRead(_SensorPin_" + pulseSensor.getPort().getOraName() + ")");
+        this.sb.append("analogRead(_SensorPin_" + pulseSensor.getPort() + ")");
         return null;
     }
 
@@ -336,16 +335,17 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         nlIndent();
         this.sb.append("}");
         nlIndent();
-        this.sb.append(
-            "return String(((long)(_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[0])<<24)\n    |((long)(_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[1])<<16)\n    | ((long)(_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[2])<<8)\n    | ((long)_mfrc522_"
-                + sensorName
-                + ".uid.uidByte[3]), HEX);");
+        this.sb
+            .append(
+                "return String(((long)(_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[0])<<24)\n    |((long)(_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[1])<<16)\n    | ((long)(_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[2])<<8)\n    | ((long)_mfrc522_"
+                    + sensorName
+                    + ".uid.uidByte[3]), HEX);");
 
         decrIndentation();
         this.nlIndent();
@@ -378,12 +378,12 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 nlIndent();
                 this.sb.append("bool results = false;");
                 nlIndent();
-                this.sb.append("if (_irrecv_" + infraredSensor.getPort().getOraName() + ".decode(&_results_" + infraredSensor.getPort().getOraName() + ")) {");
+                this.sb.append("if (_irrecv_" + infraredSensor.getPort() + ".decode(&_results_" + infraredSensor.getPort() + ")) {");
                 incrIndentation();
                 nlIndent();
                 this.sb.append("results = true;");
                 nlIndent();
-                this.sb.append("_irrecv_" + infraredSensor.getPort().getOraName() + ".resume();");
+                this.sb.append("_irrecv_" + infraredSensor.getPort() + ".resume();");
                 decrIndentation();
                 nlIndent();
                 this.sb.append("}");
@@ -394,12 +394,12 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 nlIndent();
                 this.sb.append("long int results = 0;");
                 nlIndent();
-                this.sb.append("if (_irrecv_" + infraredSensor.getPort().getOraName() + ".decode(&_results_" + infraredSensor.getPort().getOraName() + ")) {");
+                this.sb.append("if (_irrecv_" + infraredSensor.getPort() + ".decode(&_results_" + infraredSensor.getPort() + ")) {");
                 incrIndentation();
                 nlIndent();
-                this.sb.append("results = _results_" + infraredSensor.getPort().getOraName() + ".value;");
+                this.sb.append("results = _results_" + infraredSensor.getPort() + ".value;");
                 nlIndent();
-                this.sb.append("_irrecv_" + infraredSensor.getPort().getOraName() + ".resume();");
+                this.sb.append("_irrecv_" + infraredSensor.getPort() + ".resume();");
                 decrIndentation();
                 nlIndent();
                 this.sb.append("}");
@@ -423,7 +423,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitMotionSensor(MotionSensor<Void> motionSensor) {
-        this.sb.append("digitalRead(_output_" + motionSensor.getPort().getOraName() + ")");
+        this.sb.append("digitalRead(_output_" + motionSensor.getPort() + ")");
         return null;
     }
 

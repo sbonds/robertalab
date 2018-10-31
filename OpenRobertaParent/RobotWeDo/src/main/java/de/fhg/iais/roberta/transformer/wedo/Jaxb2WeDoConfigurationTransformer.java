@@ -7,15 +7,10 @@ import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.ConfigurationBlock;
-import de.fhg.iais.roberta.components.ConfigurationBlockType;
-import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.IRobotFactory;
-import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * JAXB to brick configuration. Client should provide a tree of jaxb objects. Generates a BrickConfiguration object.
@@ -37,6 +32,7 @@ public class Jaxb2WeDoConfigurationTransformer {
     }
 
     public BlockSet transformInverse(Configuration conf) {
+        //TODO: fix the reverse transform for WeDo
         int idCount = 1;
         BlockSet blockSet = new BlockSet();
         Instance instance = new Instance();
@@ -45,7 +41,6 @@ public class Jaxb2WeDoConfigurationTransformer {
         instance.setY("20");
         Block block = mkBlock(idCount++);
         block.setType("robBrick_WeDo-board");
-        //TODO: add other configuration blocks and fix the whole reverse transform for the WeDo
         return blockSet;
     }
 
@@ -58,41 +53,20 @@ public class Jaxb2WeDoConfigurationTransformer {
         return block;
     }
 
-    private Field mkField(String name, String value) {
-        Field field = new Field();
-        field.setName(name);
-        field.setValue(value);
-        return field;
-    }
-
     private Configuration blockToBrickConfiguration(List<List<Block>> blocks) {
-        Map<String, ConfigurationBlock> configurationBlocks = new HashMap<String, ConfigurationBlock>();
-        for ( int i = 0; i < blocks.size(); i++ ) {
-            configurationBlocks.put(blocks.get(i).get(0).getField().get(0).getValue(), extractConfigurationBlockComponents(blocks.get(i)));
+        List<ConfigurationComponent> allComponents = new ArrayList<>();
+        for ( List<Block> block : blocks ) {
+            allComponents.add(extractConfigurationBlockComponents(block));
         }
-        return new WeDoConfiguration(configurationBlocks).getConfiguration();
+        return new Configuration.Builder().setTrackWidth(0.0f).setWheelDiameter(0.0f).addComponents(allComponents).build();
     }
 
-    private ConfigurationBlock extractConfigurationBlockComponents(List<Block> block) {
-        ConfigurationBlockType confType = ConfigurationBlockType.get(block.get(0).getType());
-        String name = block.get(0).getField().get(0).getValue();
-        Map<String, String> confPorts = new HashMap<String, String>();
+    private ConfigurationComponent extractConfigurationBlockComponents(List<Block> block) {
+        String userDefinedName = block.get(0).getField().get(0).getValue();
+        Map<String, String> m = new HashMap<>();
         for ( int i = 1; i < block.get(0).getField().size(); i++ ) {
-            confPorts.put(block.get(0).getField().get(i).getName(), block.get(0).getField().get(i).getValue());
+            m.put(block.get(0).getField().get(i).getName(), block.get(0).getField().get(i).getValue());
         }
-        return new ConfigurationBlock(confType, name, confPorts);
-    }
-
-    private List<Field> extractFields(Block block, int numOfFields) {
-        List<Field> fields;
-        fields = block.getField();
-        Assert.isTrue(fields.size() == numOfFields, "Number of fields is not equal to " + numOfFields + "!");
-        return fields;
-    }
-
-    private String extractField(List<Field> fields, String name, int fieldLocation) {
-        Field field = fields.get(fieldLocation);
-        Assert.isTrue(field.getName().equals(name), "Field name is not equal to " + name + "!");
-        return field.getValue();
+        return new ConfigurationComponent("b", true, "?1", "?2", userDefinedName, m);
     }
 }

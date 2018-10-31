@@ -104,7 +104,7 @@ public class BlocklyDropdownFactory {
         }
         final String sUpper = port.trim().toUpperCase(Locale.GERMAN);
         String actorPort = this.actorToPorts.get(sUpper);
-        Assert.notNull(actorPort, "Undefined actor port! %s", port);
+        Assert.notNull(actorPort, "Undefined actor port %s", port);
         return actorPort;
     }
 

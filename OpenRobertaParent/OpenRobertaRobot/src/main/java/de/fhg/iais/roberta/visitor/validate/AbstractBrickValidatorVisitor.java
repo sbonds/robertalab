@@ -1,11 +1,10 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction.Mode;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
-import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 
 public abstract class AbstractBrickValidatorVisitor extends AbstractProgramValidatorVisitor {
@@ -16,62 +15,63 @@ public abstract class AbstractBrickValidatorVisitor extends AbstractProgramValid
 
     @Override
     protected void checkSensorPort(ExternalSensor<Void> sensor) {
-        Sensor usedSensor = this.brickConfiguration.getSensorOnPort(sensor.getPort());
+        ConfigurationComponent usedSensor = this.robotConfiguration.getConfigurationComponent(sensor.getPort());
         if ( usedSensor == null ) {
             sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
             this.errorCount++;
         } else {
+            String type = usedSensor.getProperty("TYPE");
             switch ( sensor.getKind().getName() ) {
                 case "COLOR_SENSING":
-                    if ( (usedSensor.getType() != SensorType.COLOR) && (usedSensor.getType() != SensorType.HT_COLOR) ) {
+                    if ( !type.equals("COLOR") && !type.equals("HT_COLOR") ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case "TOUCH_SENSING":
-                    if ( usedSensor.getType() != SensorType.TOUCH ) {
+                    if ( !type.equals("TOUCH") ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case "ULTRASONIC_SENSING":
-                    if ( usedSensor.getType() != SensorType.ULTRASONIC ) {
+                    if ( !type.equals("ULTRASONIC") ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case "INFRARED_SENSING":
-                    if ( usedSensor.getType() != SensorType.INFRARED ) {
+                    if ( !type.equals("INFRARED") ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case "GYRO_SENSING":
-                    if ( usedSensor.getType() != SensorType.GYRO ) {
+                    if ( !type.equals("GYRO") ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case "SOUND_SENSING":
-                    if ( usedSensor.getType() != SensorType.SOUND ) {
+                    if ( !type.equals("SOUND") ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case "LIGHT_SENSING":
-                    if ( usedSensor.getType() != SensorType.LIGHT ) {
+                    if ( !type.equals("LIGHT") ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case "COMPASS_SENSING":
-                    if ( usedSensor.getType() != SensorType.COMPASS ) {
+                    if ( !type.equals("COMPASS") ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }
                     break;
                 case "IRSEEKER_SENSING":
-                    if ( usedSensor.getType() != SensorType.IRSEEKER ) {
+                    if ( !type.equals("IRSEEKER") ) {
                         sensor.addInfo(NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
                         this.errorCount++;
                     }

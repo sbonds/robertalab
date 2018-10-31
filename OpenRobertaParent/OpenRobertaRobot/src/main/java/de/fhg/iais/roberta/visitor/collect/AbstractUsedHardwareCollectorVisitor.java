@@ -59,12 +59,12 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     protected final Set<UsedSensor> usedSensors = new LinkedHashSet<>();
     protected final Set<UsedActor> usedActors = new LinkedHashSet<>();
 
-    protected final Configuration brickConfiguration;
+    protected final Configuration robotConfiguration;
 
     protected boolean isTimerSensorUsed;
 
-    public AbstractUsedHardwareCollectorVisitor(Configuration brickConfiguration) {
-        this.brickConfiguration = brickConfiguration;
+    public AbstractUsedHardwareCollectorVisitor(Configuration robotConfiguration) {
+        this.robotConfiguration = robotConfiguration;
     }
 
     /**
@@ -252,9 +252,9 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
     }
 
     private void addLeftAndRightMotorToUsedActors() {
-        if ( this.brickConfiguration != null ) {
-            String userDefinedLeftPortName = this.brickConfiguration.getLeftMotor().getUserDefinedPortName();
-            String userDefinedRightPortName = this.brickConfiguration.getRightMotor().getUserDefinedPortName();
+        if ( this.robotConfiguration != null ) {
+            String userDefinedLeftPortName = this.robotConfiguration.getFirstMotor("LEFT").getUserDefinedPortName();
+            String userDefinedRightPortName = this.robotConfiguration.getFirstMotor("RIGHT").getUserDefinedPortName();
             if ( (userDefinedLeftPortName != null) && (userDefinedRightPortName != null) ) {
                 this.usedActors.add(new UsedActor(userDefinedLeftPortName));
                 this.usedActors.add(new UsedActor(userDefinedRightPortName));
