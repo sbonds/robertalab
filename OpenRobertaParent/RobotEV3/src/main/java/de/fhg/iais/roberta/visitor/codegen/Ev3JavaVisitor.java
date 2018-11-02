@@ -548,7 +548,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             this.sb.append(methodName + "ActorPort." + encoderMotorPort + ");");
         } else {
             String methodName = isRegulated ? "hal.getRegulatedMotorTachoValue(" : "hal.getUnregulatedMotorTachoValue(";
-            this.sb.append(methodName + "ActorPort." + encoderMotorPort + ", " + encoderSensor.getMode() + ")");
+            this.sb.append(methodName + "ActorPort." + encoderMotorPort + ", MotorTachoMode." + encoderSensor.getMode() + ")");
         }
         return null;
     }

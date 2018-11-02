@@ -62,6 +62,14 @@ public class AstToEv3PythonVisitorTest {
     private static final String CFG_TOUCH_SENSOR =
         "" //
             + "        '1':Hal.makeTouchSensor(ev3dev.INPUT_1),\n";
+    private static final String CFG_COLOR_SENSOR =
+        "" //
+            + "        '3':Hal.makeColorSensor(ev3dev.INPUT_3),\n";
+
+    private static final String CFG_ULTRASONIC_SENSOR =
+        "" //
+            + "        '4':Hal.makeUltrasonicSensor(ev3dev.INPUT_4),\n";
+
     private static final String MAIN_METHOD =
         "" //
             + "def main():\n"
@@ -95,10 +103,16 @@ public class AstToEv3PythonVisitorTest {
         ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
         ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", Collections.emptyMap());
         ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
+        ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", BlocklyConstants.NO_SLOT, "3", Collections.emptyMap());
+        ConfigurationComponent ultrasonicSensor2 = new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", Collections.emptyMap());
 
         final Configuration.Builder builder = new Configuration.Builder();
         brickConfiguration =
-            builder.setTrackWidth(11f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor)).build();
+            builder
+                .setTrackWidth(17f)
+                .setWheelDiameter(5.6f)
+                .addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor, colorSensor, ultrasonicSensor2))
+                .build();
     }
 
     @Test
@@ -137,7 +151,7 @@ public class AstToEv3PythonVisitorTest {
                 + "    'EYESOPEN': "
                 + IMG_EYESOPEN
                 + ",\n}\n"
-                + make_globals(CFG_MOTOR_B, CFG_TOUCH_SENSOR)
+                + make_globals(CFG_MOTOR_B, CFG_TOUCH_SENSOR + CFG_COLOR_SENSOR)
                 + "def run():\n"
                 + "    if hal.isPressed('1'):\n"
                 + "        hal.ledOn('green', 'on')\n"
@@ -163,7 +177,7 @@ public class AstToEv3PythonVisitorTest {
                 + "    'FLOWERS': "
                 + IMG_FLOWERS
                 + ",\n}\n"
-                + make_globals(CFG_MOTOR_B, CFG_TOUCH_SENSOR)
+                + make_globals(CFG_MOTOR_B, CFG_TOUCH_SENSOR + CFG_ULTRASONIC_SENSOR)
                 + "def run():\n"
                 + "    if hal.isPressed('1'):\n"
                 + "        hal.ledOn('green', 'on')\n"
@@ -536,6 +550,7 @@ public class AstToEv3PythonVisitorTest {
             "" //
                 + IMPORTS
                 + GLOBALS
+
                 + "\nvariablenName = hal.getColorSensorColour('3')\n"
                 + "def macheEtwas(x):\n"
                 + "    global variablenName\n"

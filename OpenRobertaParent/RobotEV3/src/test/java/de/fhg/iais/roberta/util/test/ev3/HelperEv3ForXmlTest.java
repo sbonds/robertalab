@@ -44,7 +44,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
         ConfigurationComponent motorD = new ConfigurationComponent("MEDIUM", true, "D", BlocklyConstants.NO_SLOT, "D", motorDproperties);
 
         final Configuration.Builder builder = new Configuration.Builder();
-        builder.setTrackWidth(11f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, motorC, motorD));
+        builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, motorC, motorD));
         return builder.build();
     }
 

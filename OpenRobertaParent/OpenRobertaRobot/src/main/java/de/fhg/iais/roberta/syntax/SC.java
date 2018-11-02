@@ -44,5 +44,11 @@ public interface SC {
     String UP = "UP";
     String DOWN = "DOWN";
     String NONE = "NONE";
+    String MEDIUM = "MEDIUM";
+    String LARGE = "LARGE";
+    String OTHER = "OTHER";
+    String GYRO = "GYRO";
+    String INFRARED = "INFRARED";
+    String IRSEEKER = "IRSEEKER";
 
 }

@@ -246,7 +246,7 @@ public class AstToLejosJavaVisitorTest {
                 + "            hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
                 + "            hal.rotateDirectionRegulated(TurnDirection.RIGHT, 50);\n"
                 + "        }\n"
-                + "        if ( (hal.getRegulatedMotorTachoValue(ActorPort.A, SC.ROTATION) + hal.getInfraredSensorDistance(SensorPort.S4)) == hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
+                + "        if ( (hal.getRegulatedMotorTachoValue(ActorPort.A, MotorTachoMode.ROTATION) + hal.getInfraredSensorDistance(SensorPort.S4)) == hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
                 + "            hal.ledOff();\n"
                 + "        } else {\n"
                 + "            hal.resetGyroSensor(SensorPort.S2);\n"
