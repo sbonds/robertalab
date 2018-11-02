@@ -6,21 +6,15 @@ import java.util.Map;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Actor;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.components.ev3.EV3Configuration;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.KeysSensorMode;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.ev3.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.ev3.CompassSensorMode;
-import de.fhg.iais.roberta.mode.sensor.ev3.IRSeekerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.ev3.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.MotorDuration;
@@ -92,7 +86,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  * StringBuilder. <b>This representation is correct Python code.</b> <br>
  */
 public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv3Visitor<Void> {
-    protected final EV3Configuration brickConfiguration;
+    protected final Configuration brickConfiguration;
 
     protected final Map<String, String> predefinedImage = new HashMap<>();
 
@@ -110,7 +104,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    private Ev3PythonVisitor(EV3Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
+    private Ev3PythonVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation, ILanguage language) {
         super(programPhrases, indentation);
 
         Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
@@ -138,7 +132,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
      * @param programPhrases to generate the code from
      */
     public static String generate(
-        EV3Configuration brickConfiguration,
+        Configuration brickConfiguration,
         ArrayList<ArrayList<Phrase<Void>>> programPhrases,
         boolean withWrapping,
         ILanguage language) {
@@ -339,16 +333,17 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        if ( isActorOnPort(motorOnAction.getUserDefinedPort()) ) {
+        String userDefinedPort = motorOnAction.getUserDefinedPort();
+        if ( isActorOnPort(userDefinedPort) ) {
             String methodName;
-            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorOnAction.getUserDefinedPort());
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             boolean duration = motorOnAction.getParam().getDuration() != null;
             if ( duration ) {
                 methodName = isRegulated ? "hal.rotateRegulatedMotor('" : "hal.rotateUnregulatedMotor('";
             } else {
                 methodName = isRegulated ? "hal.turnOnRegulatedMotor('" : "hal.turnOnUnregulatedMotor('";
             }
-            this.sb.append(methodName + motorOnAction.getUserDefinedPort().toString() + "', ");
+            this.sb.append(methodName + userDefinedPort.toString() + "', ");
             motorOnAction.getParam().getSpeed().visit(this);
             if ( duration ) {
                 this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
@@ -362,10 +357,11 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        if ( isActorOnPort(motorSetPowerAction.getUserDefinedPort()) ) {
-            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorSetPowerAction.getUserDefinedPort());
+        String userDefinedPort = motorSetPowerAction.getUserDefinedPort();
+        if ( isActorOnPort(userDefinedPort) ) {
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             String methodName = isRegulated ? "hal.setRegulatedMotorSpeed('" : "hal.setUnregulatedMotorSpeed('";
-            this.sb.append(methodName + motorSetPowerAction.getUserDefinedPort().toString() + "', ");
+            this.sb.append(methodName + userDefinedPort + "', ");
             motorSetPowerAction.getPower().visit(this);
             this.sb.append(")");
         }
@@ -374,10 +370,11 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        if ( isActorOnPort(motorGetPowerAction.getUserDefinedPort()) ) {
-            boolean isRegulated = this.brickConfiguration.isMotorRegulated(motorGetPowerAction.getUserDefinedPort());
+        String userDefinedPort = motorGetPowerAction.getUserDefinedPort();
+        if ( isActorOnPort(userDefinedPort) ) {
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             String methodName = isRegulated ? "hal.getRegulatedMotorSpeed('" : "hal.getUnregulatedMotorSpeed('";
-            this.sb.append(methodName + motorGetPowerAction.getUserDefinedPort().toString() + "')");
+            this.sb.append(methodName + userDefinedPort + "')");
         }
         return null;
     }
@@ -387,7 +384,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         if ( isActorOnPort(motorStopAction.getUserDefinedPort()) ) {
             this.sb
                 .append("hal.stopMotor('")
-                .append(motorStopAction.getUserDefinedPort().toString())
+                .append(motorStopAction.getUserDefinedPort())
                 .append("', ")
                 .append(getEnumCode(motorStopAction.getMode()))
                 .append(')');
@@ -401,8 +398,8 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
             boolean isDuration = driveAction.getParam().getDuration() != null;
             String methodName = isDuration ? "hal.driveDistance(" : "hal.regulatedDrive(";
             this.sb.append(methodName);
-            this.sb.append("'" + this.brickConfiguration.getFirstMotorPort(SC.LEFT).toString() + "', ");
-            this.sb.append("'" + this.brickConfiguration.getFirstMotorPort(SC.RIGHT).toString() + "', False, ");
+            this.sb.append("'" + this.brickConfiguration.getFirstMotorPort(SC.LEFT) + "', ");
+            this.sb.append("'" + this.brickConfiguration.getFirstMotorPort(SC.RIGHT) + "', False, ");
             this.sb.append(getEnumCode(driveAction.getDirection()) + ", ");
             driveAction.getParam().getSpeed().visit(this);
             if ( isDuration ) {
@@ -416,13 +413,15 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        if ( isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)) && isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)) ) {
+        String leftMotorPort = this.brickConfiguration.getFirstMotorPort(SC.LEFT);
+        String rightMotorPort = this.brickConfiguration.getFirstMotorPort(SC.RIGHT);
+        if ( isActorOnPort(leftMotorPort) && isActorOnPort(rightMotorPort) ) {
             boolean isDuration = turnAction.getParam().getDuration() != null;
-            boolean isRegulated = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)).isRegulated();
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(leftMotorPort);
             String methodName = "hal.rotateDirection" + (isDuration ? "Angle" : isRegulated ? "Regulated" : "Unregulated") + "(";
             this.sb.append(methodName);
-            this.sb.append("'" + this.brickConfiguration.getFirstMotorPort(SC.LEFT).toString() + "', ");
-            this.sb.append("'" + this.brickConfiguration.getFirstMotorPort(SC.RIGHT).toString() + "', False, ");
+            this.sb.append("'" + leftMotorPort + "', ");
+            this.sb.append("'" + rightMotorPort + "', False, ");
             this.sb.append(getEnumCode(turnAction.getDirection()) + ", ");
             turnAction.getParam().getSpeed().visit(this);
             if ( isDuration ) {
@@ -436,24 +435,28 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        if ( isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)) && isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)) ) {
+        String leftMotorPort = this.brickConfiguration.getFirstMotorPort(SC.LEFT);
+        String rightMotorPort = this.brickConfiguration.getFirstMotorPort(SC.RIGHT);
+        if ( isActorOnPort(leftMotorPort) && isActorOnPort(rightMotorPort) ) {
             this.sb.append("hal.stopMotors(");
-            this.sb.append("'" + this.brickConfiguration.getFirstMotorPort(SC.LEFT).toString() + "', ");
-            this.sb.append("'" + this.brickConfiguration.getFirstMotorPort(SC.RIGHT).toString() + "')");
+            this.sb.append("'" + leftMotorPort + "', ");
+            this.sb.append("'" + rightMotorPort + "')");
         }
         return null;
     }
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        if ( isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)) && isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)) ) {
+        String leftMotorPort = this.brickConfiguration.getFirstMotorPort(SC.LEFT);
+        String rightMotorPort = this.brickConfiguration.getFirstMotorPort(SC.RIGHT);
+        if ( isActorOnPort(leftMotorPort) && isActorOnPort(rightMotorPort) ) {
             MotorDuration<Void> duration = curveAction.getParamLeft().getDuration();
 
             this.sb.append("hal.driveInCurve(");
             this.sb.append(getEnumCode(curveAction.getDirection()) + ", ");
-            this.sb.append("'" + this.brickConfiguration.getFirstMotorPort(SC.LEFT).toString() + "', ");
+            this.sb.append("'" + leftMotorPort + "', ");
             curveAction.getParamLeft().getSpeed().visit(this);
-            this.sb.append(", '" + this.brickConfiguration.getFirstMotorPort(SC.RIGHT).toString() + "', ");
+            this.sb.append(", '" + rightMotorPort + "', ");
             curveAction.getParamRight().getSpeed().visit(this);
             if ( duration != null ) {
                 this.sb.append(", ");
@@ -466,12 +469,12 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        switch ( (KeysSensorMode) keysSensor.getMode() ) {
-            case PRESSED:
-                this.sb.append("hal.isKeyPressed(" + getEnumCode(keysSensor.getPort()) + ")");
+        switch ( keysSensor.getMode() ) {
+            case SC.PRESSED:
+                this.sb.append("hal.isKeyPressed(" + keysSensor.getPort() + ")");
                 break;
-            case WAIT_FOR_PRESS_AND_RELEASE:
-                this.sb.append("hal.isKeyPressedAndReleased(" + getEnumCode(keysSensor.getPort()) + ")");
+            case SC.WAIT_FOR_PRESS_AND_RELEASE:
+                this.sb.append("hal.isKeyPressedAndReleased(" + keysSensor.getPort() + ")");
                 break;
             default:
                 throw new DbcException("Invalide mode for KeysSensor!");
@@ -482,17 +485,17 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
         String colorSensorPort = colorSensor.getPort();
-        switch ( (ColorSensorMode) colorSensor.getMode() ) {
-            case AMBIENTLIGHT:
+        switch ( colorSensor.getMode() ) {
+            case SC.AMBIENTLIGHT:
                 this.sb.append("hal.getColorSensorAmbient('" + colorSensorPort + "')");
                 break;
-            case COLOUR:
+            case SC.COLOUR:
                 this.sb.append("hal.getColorSensorColour('" + colorSensorPort + "')");
                 break;
-            case LIGHT:
+            case SC.LIGHT:
                 this.sb.append("hal.getColorSensorRed('" + colorSensorPort + "')");
                 break;
-            case RGB:
+            case SC.RGB:
                 this.sb.append("hal.getColorSensorRgb('" + colorSensorPort + "')");
                 break;
             default:
@@ -507,7 +510,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         if ( encoderSensor.getMode() == SC.RESET ) {
             this.sb.append("hal.resetMotorTacho('" + encoderSensorPort + "')");
         } else {
-            this.sb.append("hal.getMotorTachoValue('" + encoderSensorPort + "', " + getEnumCode(encoderSensor.getMode()) + ")");
+            this.sb.append("hal.getMotorTachoValue('" + encoderSensorPort + "', " + encoderSensor.getMode() + ")");
         }
         return null;
     }
@@ -518,7 +521,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         if ( gyroSensor.getMode() == SC.RESET ) {
             this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
         } else {
-            this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + "', " + getEnumCode(gyroSensor.getMode()) + ")");
+            this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + "', " + gyroSensor.getMode() + ")");
         }
         return null;
     }
@@ -526,13 +529,13 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         String compassSensorPort = compassSensor.getPort();
-        switch ( (CompassSensorMode) compassSensor.getMode() ) {
-            case CALIBRATE:
+        switch ( compassSensor.getMode() ) {
+            case SC.CALIBRATE:
                 // Calibration is not supported by ev3dev hitechnic sensor for now
                 break;
-            case ANGLE:
-            case COMPASS:
-                this.sb.append("hal.getHiTecCompassSensorValue('" + compassSensorPort + "', " + getEnumCode(compassSensor.getMode()) + ")");
+            case SC.ANGLE:
+            case SC.COMPASS:
+                this.sb.append("hal.getHiTecCompassSensorValue('" + compassSensorPort + "', " + compassSensor.getMode() + ")");
                 break;
             default:
                 throw new DbcException("Invalid Compass Mode!");
@@ -543,11 +546,11 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         String infraredSensorPort = infraredSensor.getPort();
-        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
-            case DISTANCE:
+        switch ( infraredSensor.getMode() ) {
+            case SC.DISTANCE:
                 this.sb.append("hal.getInfraredSensorDistance('" + infraredSensorPort + "')");
                 break;
-            case PRESENCE:
+            case SC.PRESENCE:
                 this.sb.append("hal.getInfraredSensorSeek('" + infraredSensorPort + "')");
                 break;
             default:
@@ -560,11 +563,11 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
         String irSeekerSensorPort = irSeekerSensor.getPort();
-        switch ( (IRSeekerSensorMode) irSeekerSensor.getMode() ) {
-            case MODULATED:
+        switch ( irSeekerSensor.getMode() ) {
+            case SC.MODULATED:
                 this.sb.append("hal.getHiTecIRSeekerSensorValue('" + irSeekerSensorPort + "', 'AC')");
                 break;
-            case UNMODULATED:
+            case SC.UNMODULATED:
                 this.sb.append("hal.getHiTecIRSeekerSensorValue('" + irSeekerSensorPort + "', 'DC')");
                 break;
             default:
@@ -576,12 +579,12 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
         String timerNumber = timerSensor.getPort();
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case DEFAULT:
-            case VALUE:
+        switch ( timerSensor.getMode() ) {
+            case SC.DEFAULT:
+            case SC.VALUE:
                 this.sb.append("hal.getTimerValue(" + timerNumber + ")");
                 break;
-            case RESET:
+            case SC.RESET:
                 this.sb.append("hal.resetTimer(" + timerNumber + ")");
                 break;
             default:
@@ -1026,9 +1029,9 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     private void appendActors(StringBuilder sb) {
         sb.append("    'actors': {\n");
-        for ( Map.Entry<IActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
-            Actor actor = entry.getValue();
-            String port = entry.getKey();
+        for ( ConfigurationComponent actor : this.brickConfiguration.getActors() ) {
+
+            String port = actor.getUserDefinedPortName();
             if ( (actor != null) && isActorUsed(actor, port) ) {
                 sb.append("        '").append(port.toString()).append("':");
                 sb.append(generateRegenerateActor(actor, port));

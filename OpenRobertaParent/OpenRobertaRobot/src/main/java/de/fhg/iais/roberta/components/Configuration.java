@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -37,6 +38,14 @@ public class Configuration {
 
     public Collection<ConfigurationComponent> getConfigurationComponents() {
         return this.configurationComponents.values();
+    }
+
+    public Collection<ConfigurationComponent> getActors() {
+        return this.configurationComponents.values().stream().filter(item -> item.isActor()).collect(Collectors.toList());
+    }
+
+    public Collection<ConfigurationComponent> getSensors() {
+        return this.configurationComponents.values().stream().filter(item -> item.isSensor()).collect(Collectors.toList());
     }
 
     public ConfigurationComponent getConfigurationComponent(String userDefinedName) {
@@ -79,6 +88,10 @@ public class Configuration {
             }
         }
         return found;
+    }
+
+    public boolean isMotorRegulated(String port) {
+        return getConfigurationComponent(port).getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
     }
 
     private Map<String, ConfigurationComponent> buildConfigurationComponentMap(Collection<ConfigurationComponent> configurationComponents) {

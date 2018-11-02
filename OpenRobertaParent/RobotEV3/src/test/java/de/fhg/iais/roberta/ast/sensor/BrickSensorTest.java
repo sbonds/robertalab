@@ -21,7 +21,7 @@ public class BrickSensorTest {
     public void getKey() throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_brick1.xml");
         KeysSensor<Void> bs = (KeysSensor<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals(new SensorPort("ENTER", "ENTER"), bs.getPort());
+        Assert.assertEquals("ENTER", bs.getPort());
     }
 
     @Test

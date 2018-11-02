@@ -38,8 +38,8 @@ public class CompassSensorTest {
         CompassSensor<Void> cs = (CompassSensor<Void>) transformer.getTree().get(0).get(1);
         CompassSensor<Void> cs1 = (CompassSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals("S2", cs.getPort());
-        Assert.assertEquals("S4", cs1.getPort());
+        Assert.assertEquals("2", cs.getPort());
+        Assert.assertEquals("4", cs1.getPort());
     }
 
     @Test

@@ -38,8 +38,8 @@ public class IRSeekerSensorTest {
         IRSeekerSensor<Void> cs = (IRSeekerSensor<Void>) transformer.getTree().get(0).get(1);
         IRSeekerSensor<Void> cs1 = (IRSeekerSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals("S1", cs.getPort());
-        Assert.assertEquals("S1", cs1.getPort());
+        Assert.assertEquals("1", cs.getPort());
+        Assert.assertEquals("1", cs1.getPort());
     }
 
     @Test

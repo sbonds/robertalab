@@ -7,8 +7,6 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.IPort;
-import de.fhg.iais.roberta.mode.sensor.PinValue;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -33,7 +31,7 @@ import de.fhg.iais.roberta.visitor.hardware.IMbedVisitor;
  */
 public class PinWriteValue<V> extends Action<V> {
     private final String pinValue;
-    private final IPort port;
+    private final String port;
     private final Expr<V> value;
 
     private PinWriteValue(String pinValue, String port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
@@ -64,7 +62,7 @@ public class PinWriteValue<V> extends Action<V> {
         return this.pinValue;
     }
 
-    public IPort getPort() {
+    public String getPort() {
         return this.port;
     }
 
@@ -96,12 +94,13 @@ public class PinWriteValue<V> extends Action<V> {
         String port = helper.extractField(fields, BlocklyConstants.PIN);
         String pinvalue = helper.extractField(fields, BlocklyConstants.VALUETYPE);
         Phrase<V> value = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
-        return PinWriteValue.make(
-            factory.getPinGetValueSensorMode(pinvalue),
-            factory.sanitizePort(port),
-            helper.convertPhraseToExpr(value),
-            helper.extractBlockProperties(block),
-            helper.extractComment(block));
+        return PinWriteValue
+            .make(
+                factory.getPinGetValueSensorMode(pinvalue),
+                factory.sanitizePort(port),
+                helper.convertPhraseToExpr(value),
+                helper.extractBlockProperties(block),
+                helper.extractComment(block));
     }
 
     @Override

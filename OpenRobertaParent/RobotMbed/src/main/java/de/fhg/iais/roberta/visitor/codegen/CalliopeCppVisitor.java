@@ -7,9 +7,6 @@ import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.PinPull;
-import de.fhg.iais.roberta.mode.sensor.PinValue;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -517,12 +514,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case DEFAULT:
-            case VALUE:
+        switch ( timerSensor.getMode() ) {
+            case SC.DEFAULT:
+            case SC.VALUE:
                 this.sb.append("( _uBit.systemTime() - _initTime )");
                 break;
-            case RESET:
+            case SC.RESET:
                 this.sb.append("_initTime = _uBit.systemTime();");
                 break;
             default:
@@ -542,13 +539,13 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
         String port = pinValueSensor.getPort();
         this.sb.append("_uBit.io." + port);
-        switch ( (PinValue) pinValueSensor.getMode() ) {
-            case DIGITAL:
-            case ANALOG:
+        switch ( pinValueSensor.getMode() ) {
+            case SC.DIGITAL:
+            case SC.ANALOG:
                 this.sb.append(".get").append(pinValueSensor.getMode().getValues()[0]);
                 break;
-            case PULSE_HIGH:
-            case PULSE_LOW:
+            case SC.PULSE_HIGH:
+            case SC.PULSE_LOW:
                 this.sb.append(".read").append(pinValueSensor.getMode().getValues()[0]);
                 break;
             default:
@@ -567,7 +564,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             port = "P2";
         }
         String valueType = "AnalogValue(";
-        if ( pinWriteValueSensor.getMode() == PinValue.DIGITAL ) {
+        if ( pinWriteValueSensor.getMode().equals(SC.DIGITAL) ) {
             valueType = "DigitalValue(";
         }
         this.sb.append("_uBit.io." + port + ".set" + valueType);
@@ -580,14 +577,14 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
         String port = pinSetPullAction.getPort();
         this.sb.append("_uBit.io." + port + ".setPull(");
-        switch ( (PinPull) pinSetPullAction.getMode() ) {
-            case UP:
+        switch ( pinSetPullAction.getMode() ) {
+            case SC.UP:
                 this.sb.append("PullUp");
                 break;
-            case DOWN:
+            case SC.DOWN:
                 this.sb.append("PullDown");
                 break;
-            case NONE:
+            case SC.NONE:
             default:
                 this.sb.append("PullNone");
                 break;

@@ -1,19 +1,17 @@
 package de.fhg.iais.roberta.syntax.codegen.ev3;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.components.Actor;
-import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.Sensor;
-import de.fhg.iais.roberta.components.SensorType;
-import de.fhg.iais.roberta.components.ev3.EV3Configuration;
-import de.fhg.iais.roberta.mode.action.ActorPort;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
-import de.fhg.iais.roberta.mode.action.MotorSide;
-
+import de.fhg.iais.roberta.components.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class AstToLejosJavaVisitorTest {
@@ -99,13 +97,26 @@ public class AstToLejosJavaVisitorTest {
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
-        Configuration.Builder<?> builder = new EV3Configuration.Builder();
-        builder.setTrackWidth(17).setWheelDiameter(5.6);
-        builder
-            .addActor(new ActorPort("A", "MA"), new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
-            .addActor(new ActorPort("B", "MB"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
-        builder.addSensor("1", new Sensor(SensorType.TOUCH)).addSensor("2", new Sensor(SensorType.ULTRASONIC));
-        brickConfiguration = builder.build();
+
+        Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
+        ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
+
+        Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
+        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
+        ConfigurationComponent touchSensor = new ConfigurationComponent("TOUCH", false, "S1", BlocklyConstants.NO_SLOT, "1", Collections.emptyMap());
+        ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
+
+        final Configuration.Builder builder = new Configuration.Builder();
+        brickConfiguration =
+            builder.setTrackWidth(17f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor)).build();
+    }
+
+    private static Map<String, String> createMap(String... args) {
+        Map<String, String> m = new HashMap<>();
+        for ( int i = 0; i < args.length; i += 2 ) {
+            m.put(args[i], args[i + 1]);
+        }
+        return m;
     }
 
     @Test

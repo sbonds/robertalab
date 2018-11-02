@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
@@ -29,8 +28,7 @@ public class Ev3DevCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            this.generatedSourceCode =
-                Ev3PythonVisitor.generate((EV3Configuration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
+            this.generatedSourceCode = Ev3PythonVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
             LOG.info("ev3dev code generated");
         } catch ( Exception e ) {
             LOG.error("ev3dev code generation failed", e);

@@ -36,8 +36,8 @@ public class GyroSensorTest {
         GyroSensor<Void> cs = (GyroSensor<Void>) transformer.getTree().get(0).get(1);
         GyroSensor<Void> cs1 = (GyroSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals("S2", cs.getPort());
-        Assert.assertEquals("S4", cs1.getPort());
+        Assert.assertEquals("2", cs.getPort());
+        Assert.assertEquals("4", cs1.getPort());
     }
 
     @Test

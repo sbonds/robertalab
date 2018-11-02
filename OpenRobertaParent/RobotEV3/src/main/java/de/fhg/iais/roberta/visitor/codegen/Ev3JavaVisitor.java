@@ -5,17 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import de.fhg.iais.roberta.components.Actor;
-import de.fhg.iais.roberta.components.ActorType;
-import de.fhg.iais.roberta.components.Sensor;
-import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.components.ev3.EV3Configuration;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
-import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.BlockType;
@@ -92,7 +86,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractJavaVisitor;
  */
 
 public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Visitor<Void> {
-    protected final EV3Configuration brickConfiguration;
+    protected final Configuration brickConfiguration;
 
     protected Map<String, String> predefinedImage = new HashMap<>();
     protected final Set<UsedSensor> usedSensors;
@@ -113,7 +107,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     private Ev3JavaVisitor(
         String programName,
         ArrayList<ArrayList<Phrase<Void>>> programPhrases,
-        EV3Configuration brickConfiguration,
+        Configuration brickConfiguration,
         int indentation,
         ILanguage language) {
         super(programPhrases, programName, indentation);
@@ -143,7 +137,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
      */
     public static String generate(
         String programName,
-        EV3Configuration brickConfiguration,
+        Configuration brickConfiguration,
         ArrayList<ArrayList<Phrase<Void>>> phrasesSet,
         boolean withWrapping,
         ILanguage language) {
@@ -397,18 +391,17 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        if ( isActorOnPort(motorOnAction.getUserDefinedPort()) ) {
+        String userDefinedPort = motorOnAction.getUserDefinedPort();
+        if ( isActorOnPort(userDefinedPort) ) {
             String methodName;
-
-            boolean isRegulated =
-                this.brickConfiguration.getConfigurationComponent(motorOnAction.getUserDefinedPort()).getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             boolean duration = motorOnAction.getParam().getDuration() != null;
             if ( duration ) {
                 methodName = isRegulated ? "hal.rotateRegulatedMotor(" : "hal.rotateUnregulatedMotor(";
             } else {
                 methodName = isRegulated ? "hal.turnOnRegulatedMotor(" : "hal.turnOnUnregulatedMotor(";
             }
-            this.sb.append(methodName + "ActorPort." + motorOnAction.getUserDefinedPort() + ", ");
+            this.sb.append(methodName + "ActorPort." + userDefinedPort + ", ");
             motorOnAction.getParam().getSpeed().visit(this);
             if ( duration ) {
                 this.sb.append(", " + getEnumCode(motorOnAction.getDurationMode()));
@@ -422,11 +415,11 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        if ( isActorOnPort(motorSetPowerAction.getUserDefinedPort()) ) {
-            boolean isRegulated =
-                this.brickConfiguration.getConfigurationComponent(motorSetPowerAction.getUserDefinedPort()).getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
+        String userDefinedPort = motorSetPowerAction.getUserDefinedPort();
+        if ( isActorOnPort(userDefinedPort) ) {
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             String methodName = isRegulated ? "hal.setRegulatedMotorSpeed(" : "hal.setUnregulatedMotorSpeed(";
-            this.sb.append(methodName + "ActorPort." + motorSetPowerAction.getUserDefinedPort() + ", ");
+            this.sb.append(methodName + "ActorPort." + userDefinedPort + ", ");
             motorSetPowerAction.getPower().visit(this);
             this.sb.append(");");
         }
@@ -435,22 +428,22 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        if ( isActorOnPort(motorGetPowerAction.getUserDefinedPort()) ) {
-            boolean isRegulated =
-                this.brickConfiguration.getConfigurationComponent(motorGetPowerAction.getUserDefinedPort()).getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
+        String userDefinedPort = motorGetPowerAction.getUserDefinedPort();
+        if ( isActorOnPort(userDefinedPort) ) {
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             String methodName = isRegulated ? "hal.getRegulatedMotorSpeed(" : "hal.getUnregulatedMotorSpeed(";
-            this.sb.append(methodName + "ActorPort." + motorGetPowerAction.getUserDefinedPort() + ")");
+            this.sb.append(methodName + "ActorPort." + userDefinedPort + ")");
         }
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        if ( isActorOnPort(motorStopAction.getUserDefinedPort()) ) {
-            boolean isRegulated =
-                this.brickConfiguration.getConfigurationComponent(motorStopAction.getUserDefinedPort()).getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
+        String userDefinedPort = motorStopAction.getUserDefinedPort();
+        if ( isActorOnPort(userDefinedPort) ) {
+            boolean isRegulated = this.brickConfiguration.isMotorRegulated(userDefinedPort);
             String methodName = isRegulated ? "hal.stopRegulatedMotor(" : "hal.stopUnregulatedMotor(";
-            this.sb.append(methodName + "ActorPort." + motorStopAction.getUserDefinedPort() + ", " + getEnumCode(motorStopAction.getMode()) + ");");
+            this.sb.append(methodName + "ActorPort." + userDefinedPort + ", " + getEnumCode(motorStopAction.getMode()) + ");");
         }
         return null;
     }
@@ -526,7 +519,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        String colorSensorPort = "SensorPort." + colorSensor.getPort();
+        String colorSensorPort = "SensorPort.S" + colorSensor.getPort();
         switch ( colorSensor.getMode() ) {
             case SC.AMBIENTLIGHT:
                 this.sb.append("hal.getColorSensorAmbient(" + colorSensorPort + ")");
@@ -549,8 +542,8 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         String encoderMotorPort = encoderSensor.getPort();
-        boolean isRegulated = this.brickConfiguration.getConfigurationComponent(encoderSensor.getPort()).getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
-        if ( encoderSensor.getMode() == SC.RESET ) {
+        boolean isRegulated = this.brickConfiguration.isMotorRegulated(encoderMotorPort);
+        if ( encoderSensor.getMode().equals(SC.RESET) ) {
             String methodName = isRegulated ? "hal.resetRegulatedMotorTacho(" : "hal.resetUnregulatedMotorTacho(";
             this.sb.append(methodName + "ActorPort." + encoderMotorPort + ");");
         } else {
@@ -562,7 +555,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        String gyroSensorPort = "SensorPort." + gyroSensor.getPort();
+        String gyroSensorPort = "SensorPort.S" + gyroSensor.getPort();
         switch ( gyroSensor.getMode() ) {
             case SC.ANGLE:
                 this.sb.append("hal.getGyroSensorAngle(" + gyroSensorPort + ")");
@@ -581,7 +574,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        String infraredSensorPort = "SensorPort." + infraredSensor.getPort();
+        String infraredSensorPort = "SensorPort.S" + infraredSensor.getPort();
         switch ( infraredSensor.getMode() ) {
             case SC.DISTANCE:
                 this.sb.append("hal.getInfraredSensorDistance(" + infraredSensorPort + ")");
@@ -614,14 +607,14 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("hal.isPressed(" + "SensorPort." + touchSensor.getPort() + ")");
+        this.sb.append("hal.isPressed(" + "SensorPort.S" + touchSensor.getPort() + ")");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        String ultrasonicSensorPort = "SensorPort." + ultrasonicSensor.getPort();
-        if ( ultrasonicSensor.getMode() == SC.DISTANCE ) {
+        String ultrasonicSensorPort = "SensorPort.S" + ultrasonicSensor.getPort();
+        if ( ultrasonicSensor.getMode().equals(SC.DISTANCE) ) {
             this.sb.append("hal.getUltraSonicSensorDistance(" + ultrasonicSensorPort + ")");
         } else {
             this.sb.append("hal.getUltraSonicSensorPresence(" + ultrasonicSensorPort + ")");
@@ -631,13 +624,13 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
-        this.sb.append("hal.getSoundLevel(" + "SensorPort." + soundSensor.getPort() + ")");
+        this.sb.append("hal.getSoundLevel(" + "SensorPort.S" + soundSensor.getPort() + ")");
         return null;
     }
 
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
-        String compassSensorPort = "SensorPort." + compassSensor.getPort();
+        String compassSensorPort = "SensorPort.S" + compassSensor.getPort();
         switch ( compassSensor.getMode() ) {
             case SC.CALIBRATE:
                 this.sb.append("hal.hiTecCompassStartCalibration(" + compassSensorPort + ");");
@@ -660,7 +653,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor<Void> irSeekerSensor) {
-        String irSeekerSensorPort = "SensorPort." + irSeekerSensor.getPort();
+        String irSeekerSensorPort = "SensorPort.S" + irSeekerSensor.getPort();
         switch ( irSeekerSensor.getMode() ) {
             case SC.MODULATED:
                 this.sb.append("hal.getHiTecIRSeekerModulated(" + irSeekerSensorPort + ")");
@@ -1053,21 +1046,22 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
     }
 
     private void appendSensors(StringBuilder sb) {
-        for ( Map.Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
+
+        for ( ConfigurationComponent sensor : this.brickConfiguration.getSensors() ) {
             sb.append(this.INDENT).append(this.INDENT).append(this.INDENT);
             sb.append("    .addSensor(");
-            sb.append("SensorPort." + entry.getKey()).append(", ");
-            sb.append(generateRegenerateSensor(entry.getValue()));
+            sb.append("SensorPort." + sensor.getUserDefinedPortName()).append(", ");
+            sb.append(generateRegenerateSensor(sensor));
             sb.append(")\n");
         }
     }
 
     private void appendActors(StringBuilder sb) {
-        for ( Map.Entry<IActorPort, Actor> entry : this.brickConfiguration.getActors().entrySet() ) {
+        for ( ConfigurationComponent actor : this.brickConfiguration.getActors() ) {
             sb.append(this.INDENT).append(this.INDENT).append(this.INDENT);
             sb.append("    .addActor(");
-            sb.append("ActorPort." + entry.getKey()).append(", ");
-            sb.append(generateRegenerateActor(entry.getValue()));
+            sb.append("ActorPort." + actor.getUserDefinedPortName()).append(", ");
+            sb.append(generateRegenerateActor(actor));
             sb.append(")\n");
         }
     }
@@ -1090,38 +1084,31 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     private String generateRegenerateUsedSensor(UsedSensor usedSensor) {
         StringBuilder sb = new StringBuilder();
-        SensorType sensor = (SensorType) usedSensor.getType();
-        IMode mode = usedSensor.getMode();
+        ConfigurationComponent sensor = this.brickConfiguration.getConfigurationComponent(usedSensor.getPort());
+
+        String mode = usedSensor.getMode();
 
         sb.append("new UsedSensor(");
         sb.append("SensorPort." + usedSensor.getPort()).append(", ");
-        sb.append(sensor.getClass().getSimpleName() + "." + sensor.name()).append(", ");
-        sb.append(mode.getClass().getSimpleName() + "." + mode.toString()).append(")");
+        sb.append(sensor.getClass().getSimpleName() + "." + sensor.getComponentType()).append(", ");
+        sb.append(mode.getClass().getSimpleName() + "." + mode).append(")");
         return sb.toString();
     }
 
-    private String generateRegenerateActor(Actor actor) {
+    private String generateRegenerateActor(ConfigurationComponent actor) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("new Actor(").append(getActorTypeCode(actor.getName()));
-        sb.append(", ").append(actor.isRegulated());
-        sb.append(", ").append(getEnumCode(actor.getRotationDirection())).append(", ").append(getEnumCode(actor.getMotorSide())).append(")");
+        sb.append("new Actor(").append(actor.getComponentType());
+        sb.append(", ").append(actor.getProperty(SC.MOTOR_REGULATION));
+        sb.append(", ").append(actor.getProperty(SC.MOTOR_REVERSE)).append(", ").append(actor.getProperty(SC.MOTOR_DRIVE)).append(")");
         return sb.toString();
     }
 
-    private String generateRegenerateSensor(Sensor sensor) {
+    private String generateRegenerateSensor(ConfigurationComponent sensor) {
         StringBuilder sb = new StringBuilder();
-        sb.append("new Sensor(").append(getSensorTypeCode(sensor.getType()));
+        sb.append("new Sensor(").append(sensor.getComponentType());
         sb.append(")");
         return sb.toString();
-    }
-
-    private String getActorTypeCode(ActorType type) {
-        return type.getClass().getSimpleName() + "." + type.name();
-    }
-
-    private String getSensorTypeCode(SensorType type) {
-        return type.getClass().getSimpleName() + "." + type.name();
     }
 
     private void initPredefinedImages() {

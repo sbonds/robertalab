@@ -3,8 +3,8 @@ package de.fhg.iais.roberta.visitor.codegen;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
@@ -116,12 +116,12 @@ public final class MbedSimVisitor extends AbstractSimVisitor<Void> implements IM
     //TODO: this code is duplicated for all specific sim visitors (refactor)
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case DEFAULT:
-            case VALUE:
+        switch ( timerSensor.getMode() ) {
+            case SC.DEFAULT:
+            case SC.VALUE:
                 this.sb.append("createGetSample(CONST.TIMER, 'timer" + timerSensor.getPort() + "')");
                 break;
-            case RESET:
+            case SC.RESET:
                 String end = createClosingBracket();
                 this.sb.append("createResetTimer('timer" + timerSensor.getPort() + "'");
                 this.sb.append(end);

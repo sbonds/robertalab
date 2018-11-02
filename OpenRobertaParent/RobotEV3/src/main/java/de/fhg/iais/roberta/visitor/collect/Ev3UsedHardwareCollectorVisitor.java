@@ -5,10 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.inter.mode.general.IMode;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
@@ -69,11 +66,11 @@ public final class Ev3UsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        IMode mode = infraredSensor.getMode();
+        String mode = infraredSensor.getMode();
         if ( infraredSensor.getMode().equals(SC.PRESENCE) ) {
             mode = SC.SEEK;
         }
-        this.usedSensors.add(new UsedSensor((ISensorPort) infraredSensor.getPort(), SensorType.INFRARED, mode));
+        this.usedSensors.add(new UsedSensor(infraredSensor.getPort(), mode));
         return null;
     }
 

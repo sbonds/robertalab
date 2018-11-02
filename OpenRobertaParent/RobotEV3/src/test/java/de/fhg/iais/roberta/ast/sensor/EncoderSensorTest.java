@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
@@ -39,8 +38,8 @@ public class EncoderSensorTest {
         EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0).get(1);
         EncoderSensor<Void> cs1 = (EncoderSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals(new ActorPort("A", "MA"), cs.getPort());
-        Assert.assertEquals(new ActorPort("D", "MD"), cs1.getPort());
+        Assert.assertEquals("A", cs.getPort());
+        Assert.assertEquals("D", cs1.getPort());
     }
 
     @Test

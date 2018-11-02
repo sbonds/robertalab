@@ -8,9 +8,8 @@ import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.PinValue;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
@@ -257,12 +256,12 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case DEFAULT:
-            case VALUE:
+        switch ( timerSensor.getMode() ) {
+            case SC.DEFAULT:
+            case SC.VALUE:
                 this.sb.append("( microbit.running_time() - timer1 )");
                 break;
-            case RESET:
+            case SC.RESET:
                 this.sb.append("timer1 = microbit.running_time()");
                 break;
             default:
@@ -669,7 +668,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
         this.sb.append("microbit.pin" + pinWriteValueSensor.getPort());
         String valueType = "analog(";
-        if ( pinWriteValueSensor.getMode() == PinValue.DIGITAL ) {
+        if ( pinWriteValueSensor.getMode().equals(SC.DIGITAL) ) {
             valueType = "digital(";
         }
         this.sb.append(".write_" + valueType);

@@ -3,7 +3,6 @@ package de.fhg.iais.roberta.ast.stmt;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.Slot;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
@@ -19,7 +18,7 @@ public class SensorStmtTest {
         TouchSensor<Void> touchSensor =
             TouchSensor
                 .make(
-                    new SensorMetaDataBean("1", SC.TOUCH, Slot.EMPTY_SLOT, false),
+                    new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false),
                     BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
                     null);
         SensorStmt<Void> sensorStmt = SensorStmt.make(touchSensor);
@@ -33,7 +32,7 @@ public class SensorStmtTest {
         TouchSensor<Void> touchSensor =
             TouchSensor
                 .make(
-                    new SensorMetaDataBean("1", SC.TOUCH, Slot.EMPTY_SLOT, false),
+                    new SensorMetaDataBean("1", SC.TOUCH, "EMPTY_SLOT", false),
                     BlocklyBlockProperties.make("1", "1", false, false, false, false, false, true, false),
                     null);
         SensorStmt<Void> sensorStmt = SensorStmt.make(touchSensor);

@@ -28,7 +28,7 @@ import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
  */
 public abstract class AbstractHelperForXmlTest {
     private final IRobotFactory robotFactory;
-    private final Configuration robotConfiguration;
+    protected final Configuration robotConfiguration;
 
     protected AbstractHelperForXmlTest(IRobotFactory robotFactory, Configuration robotConfiguration) {
         this.robotFactory = robotFactory;

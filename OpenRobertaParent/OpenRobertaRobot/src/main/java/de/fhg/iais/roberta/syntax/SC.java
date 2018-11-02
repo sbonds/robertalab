@@ -36,5 +36,13 @@ public interface SC {
     String COMPASS = "COMPASS";
     String MODULATED = "MODULATED";
     String UNMODULATED = "UNMODULATED";
+    String SEEK = "SEEK";
+    String DIGITAL = "DIGITAL";
+    String ANALOG = "ANALOG";
+    String PULSE_HIGH = "PULSE_HIGH";
+    String PULSE_LOW = "PULSE_LOW";
+    String UP = "UP";
+    String DOWN = "DOWN";
+    String NONE = "NONE";
 
 }

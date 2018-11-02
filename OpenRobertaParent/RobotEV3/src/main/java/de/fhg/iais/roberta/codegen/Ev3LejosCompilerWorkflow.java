@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.ev3.EV3Configuration;
 import de.fhg.iais.roberta.components.ev3.JavaSourceCompiler;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
@@ -31,7 +30,7 @@ public class Ev3LejosCompilerWorkflow extends AbstractCompilerWorkflow {
         }
         try {
             this.generatedSourceCode =
-                Ev3JavaVisitor.generate(programName, (EV3Configuration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
+                Ev3JavaVisitor.generate(programName, data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
             LOG.info("ev3lejos java code generated");
         } catch ( Exception e ) {
             LOG.error("ev3lejos java code generation failed", e);
