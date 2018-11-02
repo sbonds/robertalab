@@ -542,11 +542,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
         switch ( pinValueSensor.getMode() ) {
             case SC.DIGITAL:
             case SC.ANALOG:
-                this.sb.append(".get").append(pinValueSensor.getMode().getValues()[0]);
+                this.sb.append(".get").append(pinValueSensor.getMode().getValues()[0]); 
                 break;
             case SC.PULSE_HIGH:
             case SC.PULSE_LOW:
-                this.sb.append(".read").append(pinValueSensor.getMode().getValues()[0]);
+                this.sb.append(".read").append(pinValueSensor.getMode().getValues()[0]); 
                 break;
             default:
                 throw new DbcException("Value type  " + pinValueSensor.getMode() + " is not supported.");
@@ -564,7 +564,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
             port = "P2";
         }
         String valueType = "AnalogValue(";
-        if ( pinWriteValueSensor.getMode().equals(SC.DIGITAL) ) {
+        if ( pinWriteValueSensor.getMode() == PinValue.DIGITAL ) {
             valueType = "DigitalValue(";
         }
         this.sb.append("_uBit.io." + port + ".set" + valueType);

@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.transformers.arduino;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
@@ -37,67 +36,6 @@ public class Jaxb2MakeBlockConfigurationTransformer {
         List<Instance> instances = blockSet.getInstance();
         List<Block> blocks = instances.get(0).getBlock();
         return blockToBrickConfiguration(blocks.get(0));
-    }
-
-    public BlockSet transformInverse(Configuration conf) {
-        int idCount = 1;
-        BlockSet blockSet = new BlockSet();
-        Instance instance = new Instance();
-        blockSet.getInstance().add(instance);
-        instance.setX("20");
-        instance.setY("20");
-        Block block = mkBlock(idCount++);
-        block.setType("robBrick_makeBlock-Brick");
-        instance.getBlock().add(block);
-        //        List<Field> fields = block.getField();
-        //        fields.add(mkField("WHEEL_DIAMETER", Util1.formatDouble1digit(conf.getWheelDiameterCM())));
-        //        fields.add(mkField("TRACK_WIDTH", Util1.formatDouble1digit(conf.getTrackWidthCM())));
-        List<Value> values = block.getValue();
-        {
-            Map<ISensorPort, Sensor> sensors = conf.getSensors();
-            for ( String port : sensors.keySet() ) {
-                Sensor sensor = sensors.get(port);
-                Value hardwareComponent = new Value();
-                hardwareComponent.setName(port.toString());
-                Block sensorBlock = mkBlock(idCount++);
-                hardwareComponent.setBlock(sensorBlock);
-                sensorBlock.setType(sensor.getType().blocklyName());
-                values.add(hardwareComponent);
-            }
-        }
-        {
-            Map<IActorPort, Actor> actors = conf.getActors();
-            for ( String port : actors.keySet() ) {
-                Actor actor = actors.get(port);
-                Value hardwareComponent = new Value();
-                hardwareComponent.setName(port);
-                Block actorBlock = mkBlock(idCount++);
-                hardwareComponent.setBlock(actorBlock);
-                actorBlock.setType(actor.getName().blocklyName());
-                List<Field> actorFields = actorBlock.getField();
-                //String rotation = actor.getProperty(SC.MOTOR_REVERSE).equals(SC.OFF) ? "OFF" : "ON";
-                //actorFields.add(mkField("MOTOR_REVERSE", rotation));
-                actorFields.add(mkField("MOTOR_DRIVE", actor.getMotorSide().toString()));
-                values.add(hardwareComponent);
-            }
-        }
-        return blockSet;
-    }
-
-    private Block mkBlock(int id) {
-        Block block = new Block();
-        block.setId("" + id);
-        block.setInline(false);
-        block.setDisabled(false);
-        block.setIntask(true);
-        return block;
-    }
-
-    private Field mkField(String name, String value) {
-        Field field = new Field();
-        field.setName(name);
-        field.setValue(value);
-        return field;
     }
 
     private Configuration blockToBrickConfiguration(Block block) {

@@ -212,10 +212,10 @@ public final class Bob3CppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        if ( pinTouchSensor.getSlot().getValues()[0].equals("0") ) {
-            this.sb.append("( myBob.getArm(" + pinTouchSensor.getPort() + ") > " + pinTouchSensor.getSlot().getValues()[0] + " )");
+        if ( pinTouchSensor.getSlot().equals("0") ) {
+            this.sb.append("( myBob.getArm(" + pinTouchSensor.getPort() + ") > " + pinTouchSensor.getSlot() + " )");
         } else {
-            this.sb.append("( myBob.getArm(" + pinTouchSensor.getPort() + ") == " + pinTouchSensor.getSlot().getValues()[0] + " )");
+            this.sb.append("( myBob.getArm(" + pinTouchSensor.getPort() + ") == " + pinTouchSensor.getSlot() + " )");
         }
         return null;
     }

@@ -8,13 +8,13 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.codegen.AbstractCompilerWorkflow;
-import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.GetSampleType;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
@@ -72,7 +72,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
                 sensorMetaDataBean =
                     new SensorMetaDataBean(
                         factory.sanitizePort(port),
-                        factory.getTouchSensorMode("TOUCH"),
+                        factory.getMode(SC.TOUCH),
                         factory.getSlot(BlocklyConstants.EMPTY_SLOT),
                         this.isPortInMutation);
                 this.sensor = TouchSensor.make(sensorMetaDataBean, properties, comment);

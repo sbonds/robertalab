@@ -16,8 +16,4 @@ public class Jaxb2Bob3ConfigurationTransformer {
     public Configuration transform(BlockSet blockSet) {
         return new Bob3Configuration();
     }
-
-    public BlockSet transformInverse(Configuration conf) {
-        return null;
-    }
 }

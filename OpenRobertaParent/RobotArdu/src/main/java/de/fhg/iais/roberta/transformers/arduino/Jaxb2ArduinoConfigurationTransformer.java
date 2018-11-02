@@ -32,28 +32,6 @@ public class Jaxb2ArduinoConfigurationTransformer {
         return blockToBrickConfiguration(blocks);
     }
 
-    public BlockSet transformInverse(Configuration conf) {
-        int idCount = 1;
-        BlockSet blockSet = new BlockSet();
-        Instance instance = new Instance();
-        blockSet.getInstance().add(instance);
-        instance.setX("20");
-        instance.setY("20");
-        Block block = mkBlock(idCount++);
-        block.setType("robBrick_Arduino-board");
-        //TODO: add other configuration blocks and fix the whole reverse transform for the Arduino
-        return blockSet;
-    }
-
-    private Block mkBlock(int id) {
-        Block block = new Block();
-        block.setId("" + id);
-        block.setInline(false);
-        block.setDisabled(false);
-        block.setIntask(true);
-        return block;
-    }
-
     private Configuration blockToBrickConfiguration(List<List<Block>> blocks) {
         Map<String, ConfigurationBlock> configurationBlocks = new HashMap<String, ConfigurationBlock>();
         for ( int i = 1; i < blocks.size(); i++ ) {
@@ -65,7 +43,7 @@ public class Jaxb2ArduinoConfigurationTransformer {
     private ConfigurationBlock extractConfigurationBlockComponents(List<Block> block) {
         ConfigurationBlockType confType = ConfigurationBlockType.get(block.get(0).getType());
         String name = block.get(0).getField().get(0).getValue();
-        Map<String, String> confPorts = new HashMap<String, String>();
+        Map<String, String> confPorts = new HashMap<>();
         for ( int i = 1; i < block.get(0).getField().size(); i++ ) {
             confPorts.put(block.get(0).getField().get(i).getName(), block.get(0).getField().get(i).getValue());
         }

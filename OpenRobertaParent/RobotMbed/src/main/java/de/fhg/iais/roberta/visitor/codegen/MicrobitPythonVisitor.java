@@ -668,7 +668,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
         this.sb.append("microbit.pin" + pinWriteValueSensor.getPort());
         String valueType = "analog(";
-        if ( pinWriteValueSensor.getMode().equals(SC.DIGITAL) ) {
+        if ( pinWriteValueSensor.getMode() == PinValue.DIGITAL ) {
             valueType = "digital(";
         }
         this.sb.append(".write_" + valueType);
@@ -681,14 +681,14 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
         // TODO add as soon as microbit runtime is updated
         //        this.sb.append("microbit.pin" + pinSetPullAction.getPort().getValues()[0] + ".set_pull(");
-        //        switch ( (PinPull) pinSetPullAction.getMode() ) {
-        //            case UP:
+        //        switch ( pinSetPullAction.getMode() ) {
+        //            case SC.UP:
         //                this.sb.append("PULL_UP");
         //                break;
-        //            case DOWN:
+        //            case SC.DOWN:
         //                this.sb.append("PULL_DOWN");
         //                break;
-        //            case NONE:
+        //            case SC.NONE:
         //            default:
         //                this.sb.append("NO_PULL");
         //                break;

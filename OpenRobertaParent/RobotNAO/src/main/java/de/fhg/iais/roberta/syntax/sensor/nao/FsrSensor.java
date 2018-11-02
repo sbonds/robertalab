@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor.nao;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -34,7 +33,7 @@ public final class FsrSensor<V> extends ExternalSensor<V> {
      * @return read only object of class {@link FsrSensor}
      */
     public static <V> FsrSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new FsrSensor<V>(sensorMetaDataBean, properties, comment);
+        return new FsrSensor<>(sensorMetaDataBean, properties, comment);
     }
 
     @Override

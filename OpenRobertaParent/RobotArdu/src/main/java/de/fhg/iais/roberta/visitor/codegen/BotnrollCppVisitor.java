@@ -11,8 +11,6 @@ import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
@@ -356,20 +354,20 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         } else {
             colors = "colorsRight, ";
         }
-        switch ( (ColorSensorMode) colorSensor.getMode() ) {
-            case COLOUR:
+        switch ( colorSensor.getMode() ) {
+            case SC.COLOUR:
                 this.sb.append("bnr.colorSensorColor(");
                 this.sb.append(colors);
                 this.sb.append(port);
                 this.sb.append(")");
                 break;
-            case RGB:
+            case SC.RGB:
                 this.sb.append("bnr.colorSensorRGB(" + colors + port);
                 this.sb.append(")[0], bnr.colorSensorRGB(" + colors + port);
                 this.sb.append(")[1], bnr.colorSensorRGB(" + colors + port);
                 this.sb.append(")[2]");
                 break;
-            case LIGHT:
+            case SC.LIGHT:
                 this.sb.append("bnr.colorSensorLight(" + colors + port);
                 this.sb.append(")");
                 break;
@@ -394,11 +392,11 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
         String port = infraredSensor.getPort();
-        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
-            case OBSTACLE:
+        switch ( infraredSensor.getMode() ) {
+            case SC.OBSTACLE:
                 this.sb.append("bnr.infraredSensorObstacle(");
                 break;
-            case PRESENCE:
+            case SC.PRESENCE:
                 this.sb.append("bnr.infraredSensorPresence(");
                 break;
             default:

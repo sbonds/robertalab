@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * This class represents model of the hardware configuration of a robot (assume we have "left" and "right" motor). It is used in the code generation. <br>
@@ -154,6 +155,14 @@ public class Configuration {
 
         public Configuration build() {
             return new Configuration(this.configurationComponents, this.wheelDiameter, this.trackWidth);
+        }
+
+        public <CC> CC build(Class<CC> clazz) {
+            try {
+                return clazz.getConstructor(Collection.class).newInstance(this.configurationComponents);
+            } catch ( Exception e ) {
+                throw new DbcException("configuration class " + clazz.getSimpleName() + " has no constructor usable by the configuration builder", e);
+            }
         }
     }
 }

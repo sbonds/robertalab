@@ -314,7 +314,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.sb.append("lineFinder" + infraredSensor.getPort() + ".readSensors" + "()&" + infraredSensor.getMode().getValues()[0]);
+        this.sb.append("lineFinder" + infraredSensor.getPort() + ".readSensors" + "()&" + infraredSensor.getMode());
         return null;
     }
 

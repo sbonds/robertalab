@@ -40,7 +40,7 @@ public class SensorExprTest {
         Assert.assertEquals(a, sensorExpr.getSens().toString());
     }
 
-    @Test
+    @Test 
     public void getPresedance() throws Exception {
         TouchSensor<Void> touchSensor =
             TouchSensor

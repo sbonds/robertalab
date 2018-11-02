@@ -78,7 +78,7 @@ public final class Ev3SimVisitor extends AbstractSimVisitor<Void> implements IEv
     public Void visitDriveAction(DriveAction<Void> driveAction) {
         String end = createClosingBracket();
         this.sb.append("createDriveAction(");
-        driveAction.getParam().getSpeed().visit(this);
+        driveAction.getParam().getSpeed().visit(this); 
         ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
         IDriveDirection leftMotorRotationDirection = DriveDirection.get(leftMotor.getProperty(SC.MOTOR_REVERSE));
 

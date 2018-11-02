@@ -5,18 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.fhg.iais.roberta.components.Category;
-import de.fhg.iais.roberta.components.ConfigurationBlock;
 import de.fhg.iais.roberta.components.ConfigurationBlockType;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
-import de.fhg.iais.roberta.mode.sensor.HumiditySensorMode;
-import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.PinValue;
-import de.fhg.iais.roberta.mode.sensor.RfidSensorMode;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -245,11 +242,11 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitHumiditySensor(HumiditySensor<Void> humiditySensor) {
-        switch ( (HumiditySensorMode) humiditySensor.getMode() ) {
-            case HUMIDITY:
+        switch ( humiditySensor.getMode() ) {
+            case SC.HUMIDITY:
                 this.sb.append("_dht_" + humiditySensor.getPort() + ".readHumidity()");
                 break;
-            case TEMPERATURE:
+            case SC.TEMPERATURE:
                 this.sb.append("_dht_" + humiditySensor.getPort() + ".readTemperature()");
                 break;
             default:
@@ -357,11 +354,11 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
 
     @Override
     public Void visitRfidSensor(RfidSensor<Void> rfidSensor) {
-        switch ( (RfidSensorMode) rfidSensor.getMode() ) {
-            case PRESENCE:
+        switch ( rfidSensor.getMode() ) {
+            case SC.PRESENCE:
                 this.sb.append("_mfrc522_" + rfidSensor.getPort() + ".PICC_IsNewCardPresent()");
                 break;
-            case SERIAL:
+            case SC.SERIAL:
                 this.sb.append("_readRFIDData()");
                 break;
             default:
@@ -371,8 +368,8 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     }
 
     public void measureIRValue(UsedSensor infraredSensor) {
-        switch ( (InfraredSensorMode) infraredSensor.getMode() ) {
-            case PRESENCE:
+        switch ( infraredSensor.getMode() ) {
+            case SC.PRESENCE:
                 this.sb.append("bool _getIRResults()\n{");
                 incrIndentation();
                 nlIndent();
@@ -388,7 +385,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 nlIndent();
                 this.sb.append("}");
                 break;
-            case VALUE:
+            case SC.VALUE:
                 this.sb.append("long int _getIRResults()\n{");
                 incrIndentation();
                 nlIndent();
@@ -463,14 +460,14 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
                 break;
             }
         }
-        for ( ConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
+        for ( ConfigurationComponent usedConfigurationBlock : this.usedConfigurationBlocks ) {
             if ( usedConfigurationBlock.getConfType().equals(ConfigurationBlockType.ULTRASONIC) ) {
                 this.measureDistanceUltrasonicSensor(usedConfigurationBlock.getConfName());
                 this.nlIndent();
                 break;
             }
         }
-        for ( ConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
+        for ( ConfigurationComponent usedConfigurationBlock : this.usedConfigurationBlocks ) {
             if ( usedConfigurationBlock.getConfType().equals(ConfigurationBlockType.RFID) ) {
                 this.readRFIDData(usedConfigurationBlock.getConfName());
                 this.nlIndent();
@@ -506,7 +503,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
         this.nlIndent();
         this.sb.append("#include <math.h>");
         this.nlIndent();
-        for ( ConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
+        for ( ConfigurationComponent usedConfigurationBlock : this.usedConfigurationBlocks ) {
             switch ( (ConfigurationBlockType) usedConfigurationBlock.getConfType() ) {
                 case HUMIDITY:
                     this.sb.append("#include <DHT.h>");
@@ -581,7 +578,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     }
 
     private void generateConfigurationSetup() {
-        for ( ConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
+        for ( ConfigurationComponent usedConfigurationBlock : this.usedConfigurationBlocks ) {
             switch ( (ConfigurationBlockType) usedConfigurationBlock.getConfType() ) {
                 case HUMIDITY:
                     this.sb.append("_dht_" + usedConfigurationBlock.getConfName() + ".begin();");
@@ -669,7 +666,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     }
 
     private void generateConfigurationVariables() {
-        for ( ConfigurationBlock usedConfigurationBlock : this.usedConfigurationBlocks ) {
+        for ( ConfigurationComponent usedConfigurationBlock : this.usedConfigurationBlocks ) {
             String blockName = usedConfigurationBlock.getConfName();
             switch ( (ConfigurationBlockType) usedConfigurationBlock.getConfType() ) {
                 case HUMIDITY:
@@ -817,13 +814,13 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     public Void visitPinWriteValueAction(PinWriteValueAction<Void> pinWriteValueSensor) {
         this.sb.append("pinMode(" + pinWriteValueSensor.getPort() + ", OUTPUT);");
         nlIndent();
-        switch ( (PinValue) pinWriteValueSensor.getMode() ) {
-            case ANALOG:
+        switch ( pinWriteValueSensor.getMode() ) {
+            case SC.ANALOG:
                 this.sb.append("analogWrite(" + pinWriteValueSensor.getPort() + ", ");
                 pinWriteValueSensor.getValue().visit(this);
                 this.sb.append(");");
                 break;
-            case DIGITAL:
+            case SC.DIGITAL:
                 this.sb.append("digitalWrite(" + pinWriteValueSensor.getPort() + ", ");
                 pinWriteValueSensor.getValue().visit(this);
                 this.sb.append(");");
