@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
@@ -26,6 +27,10 @@ public class Configuration {
         this.trackWidthCM = trackWidthCM;
     }
 
+    public String getRobotName() {
+        return this.robotName;
+    }
+
     public void setRobotName(String robotName) {
         this.robotName = robotName;
     }
@@ -36,7 +41,7 @@ public class Configuration {
 
     public ConfigurationComponent getConfigurationComponent(String userDefinedName) {
         ConfigurationComponent configurationComponent = this.configurationComponents.get(userDefinedName);
-        Assert.notNull(configurationComponent, "co configuration component for user defined name " + userDefinedName);
+        Assert.notNull(configurationComponent, "configuration component missing for user defined name " + userDefinedName);
         return configurationComponent;
     }
 
@@ -45,11 +50,11 @@ public class Configuration {
         return configurationComponent;
     }
 
-    public float getNxtWheelDiameterCM() {
+    public float getWheelDiameterCM() {
         return this.wheelDiameterCM;
     }
 
-    public float getNxtTrackWidthCM() {
+    public float getTrackWidthCM() {
         return this.trackWidthCM;
     }
 
@@ -69,7 +74,7 @@ public class Configuration {
     public List<ConfigurationComponent> getMotors(String side) {
         List<ConfigurationComponent> found = new ArrayList<>();
         for ( ConfigurationComponent component : this.configurationComponents.values() ) {
-            if ( component.getProperty("MOTOR_DRIVE").equals(side) ) {
+            if ( component.isActor() && side.equals(component.getOptProperty(SC.MOTOR_DRIVE)) ) {
                 found.add(component);
             }
         }
@@ -82,6 +87,13 @@ public class Configuration {
             map.put(configurationComponent.getUserDefinedPortName(), configurationComponent);
         }
         return map;
+    }
+
+    /**
+     * @return text which defines the brick configuration
+     */
+    public String generateText(String name) {
+        return "";
     }
 
     /**

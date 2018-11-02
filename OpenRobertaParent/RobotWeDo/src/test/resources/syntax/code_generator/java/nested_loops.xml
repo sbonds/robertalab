@@ -38,8 +38,8 @@
 									<value name="A">
 										<block type="robSensors_getSample" id="(2lak@[yH*8U1wza,|.+"
 											intask="true" deletable="false" movable="false">
-											<mutation input="TOUCH"></mutation>
-											<field name="SENSORTYPE">TOUCH</field>
+											<mutation input="TOUCH_PRESSED"></mutation>
+											<field name="SENSORTYPE">TOUCH_PRESSED</field>
 											<field name="SENSORPORT">1</field>
                                             <field name="SLOT" />
 											<data>wedo</data>

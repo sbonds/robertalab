@@ -5,8 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.factory.BlocklyDropdown2EnumHelper;
-import de.fhg.iais.roberta.mode.sensor.Axis;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -68,11 +66,7 @@ public class Joystick<V> extends ExternalSensor<V> {
         String mode = helper.extractField(fields, BlocklyConstants.MODE);
         boolean isPortInMutation = (block.getMutation() != null) && (block.getMutation().getPort() != null);
         SensorMetaDataBean sensorData =
-            new SensorMetaDataBean(
-                factory.getSensorPort(port),
-                BlocklyDropdown2EnumHelper.getModeValue(mode, Axis.class),
-                factory.getSlot(BlocklyConstants.EMPTY_SLOT),
-                isPortInMutation);
+            new SensorMetaDataBean(factory.sanitizePort(port), factory.getMode(mode), factory.getSlot(BlocklyConstants.EMPTY_SLOT), isPortInMutation);
         return Joystick.make(mode, sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
@@ -80,7 +74,7 @@ public class Joystick<V> extends ExternalSensor<V> {
     public Block astToBlock() {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        String fieldValue = this.getPort().getOraName();
+        String fieldValue = this.getPort();
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         return jaxbDestination;
     }

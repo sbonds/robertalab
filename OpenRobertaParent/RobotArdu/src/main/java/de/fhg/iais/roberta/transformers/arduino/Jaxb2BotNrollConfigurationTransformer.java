@@ -12,7 +12,6 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.arduino.BotNrollConfiguration;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
@@ -21,6 +20,8 @@ import de.fhg.iais.roberta.inter.mode.action.IMotorSide;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorSide;
+import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -72,13 +73,13 @@ public class Jaxb2BotNrollConfigurationTransformer {
             for ( String port : actors.keySet() ) {
                 Actor actor = actors.get(port);
                 Value hardwareComponent = new Value();
-                hardwareComponent.setName(port.getOraName());
+                hardwareComponent.setName(port);
                 Block actorBlock = mkBlock(idCount++);
                 hardwareComponent.setBlock(actorBlock);
                 actorBlock.setType(actor.getName().blocklyName());
                 List<Field> actorFields = actorBlock.getField();
                 actorFields.add(mkField("MOTOR_REGULATION", ("" + actor.isRegulated()).toUpperCase()));
-                String rotation = actor.getRotationDirection() == DriveDirection.FOREWARD ? "OFF" : "ON";
+                String rotation = actor.getProperty(SC.MOTOR_REVERSE).equals(SC.OFF) ? "OFF" : "ON";
                 actorFields.add(mkField("MOTOR_REVERSE", rotation));
                 if ( !actor.getName().blocklyName().equals("robBrick_motor_middle") ) {
                     actorFields.add(mkField("MOTOR_DRIVE", actor.getMotorSide().toString()));
@@ -124,7 +125,7 @@ public class Jaxb2BotNrollConfigurationTransformer {
         for ( Value value : values ) {
             if ( value.getName().startsWith("S") ) {
                 // Extract sensor
-                sensors.add(Pair.of(this.factory.getSensorPort(value.getName()), new Sensor(SensorType.get(value.getBlock().getType()))));
+                sensors.add(Pair.of(this.factory.sanitizePort(value.getName()), new Sensor(SensorType.get(value.getBlock().getType()))));
             } else {
                 // Extract actor
                 IMotorSide motorSide;
@@ -135,15 +136,15 @@ public class Jaxb2BotNrollConfigurationTransformer {
                             .add(
                                 Pair
                                     .of(
-                                        this.factory.getActorPort(value.getName()),
+                                        this.factory.sanitizePort(value.getName()),
                                         new Actor(ActorType.get(value.getBlock().getType()), true, DriveDirection.FOREWARD, motorSide)));
 
                         break;
                     case "robBrick_motor_middle":
                         //fields = extractFields(value.getBlock(), (short) 2);
-                        if ( this.factory.getActorPort(value.getName()).getCodeName().equals("MA") ) {
+                        if ( this.factory.sanitizePort(value.getName()).equals("MA") ) {
                             motorSide = MotorSide.LEFT;
-                        } else if ( this.factory.getActorPort(value.getName()).getCodeName().equals("MB") ) {
+                        } else if ( this.factory.sanitizePort(value.getName()).equals("MB") ) {
                             motorSide = MotorSide.RIGHT;
                         } else {
                             motorSide = MotorSide.NONE;
@@ -153,7 +154,7 @@ public class Jaxb2BotNrollConfigurationTransformer {
                             .add(
                                 Pair
                                     .of(
-                                        this.factory.getActorPort(value.getName()),
+                                        this.factory.sanitizePort(value.getName()),
                                         new Actor(
                                             ActorType.get(value.getBlock().getType()),
                                             extractField(fields, "MOTOR_REGULATION", 0).equals("TRUE"),

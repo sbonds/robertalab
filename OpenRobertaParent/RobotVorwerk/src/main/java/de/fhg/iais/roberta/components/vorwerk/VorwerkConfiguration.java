@@ -74,7 +74,7 @@ public class VorwerkConfiguration extends Configuration {
      * @return port on which the left motor is connected
      */
     @Override
-    public String  getLeftMotorPort() {
+    public String  getFirstMotorPort(SC.LEFT) {
         return null;
     }
 
@@ -89,7 +89,7 @@ public class VorwerkConfiguration extends Configuration {
      * @return port on which the left motor is connected
      */
     @Override
-    public String  getRightMotorPort() {
+    public String  getFirstMotorPort(SC.RIGHT) {
         return null;
     }
 

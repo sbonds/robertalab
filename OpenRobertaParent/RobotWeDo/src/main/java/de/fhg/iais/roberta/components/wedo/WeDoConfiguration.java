@@ -27,7 +27,7 @@ public class WeDoConfiguration extends Configuration {
         if ( components.size() > 1 ) {
             sb.append(" configuration blocks {\n");
             for ( ConfigurationComponent component : components ) {
-                sb.append("    ").append(component.getBlocklyName()).append(", ").append("Name: ").append(component.getUserDefinedPortName());
+                sb.append("    ").append(component.getComponentType()).append(", ").append("Name: ").append(component.getUserDefinedPortName());
                 sb.append(", port: ").append(component.getPortName()).append(", slot: ").append(component.getSlotName()).append(";\n");
             }
             sb.append("  }\n");

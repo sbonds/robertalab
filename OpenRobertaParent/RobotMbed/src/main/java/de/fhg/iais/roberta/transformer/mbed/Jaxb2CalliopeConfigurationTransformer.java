@@ -10,12 +10,12 @@ import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
-import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.syntax.SC;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
@@ -65,13 +65,13 @@ public class Jaxb2CalliopeConfigurationTransformer {
             for ( String port : actors.keySet() ) {
                 Actor actor = actors.get(port);
                 Value hardwareComponent = new Value();
-                hardwareComponent.setName(port.getOraName());
+                hardwareComponent.setName(port);
                 Block actorBlock = mkBlock(idCount++);
                 hardwareComponent.setBlock(actorBlock);
                 actorBlock.setType(actor.getName().blocklyName());
                 List<Field> actorFields = actorBlock.getField();
                 actorFields.add(mkField("MOTOR_REGULATION", ("" + actor.isRegulated()).toUpperCase()));
-                String rotation = actor.getRotationDirection() == DriveDirection.FOREWARD ? "OFF" : "ON";
+                String rotation = actor.getProperty(SC.MOTOR_REVERSE).equals(SC.OFF) ? "OFF" : "ON";
                 actorFields.add(mkField("MOTOR_REVERSE", rotation));
                 if ( !actor.getName().blocklyName().equals("robBrick_motor_middle") ) {
                     actorFields.add(mkField("MOTOR_DRIVE", actor.getMotorSide().toString()));

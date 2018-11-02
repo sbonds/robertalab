@@ -3,8 +3,7 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.KeysSensorMode;
-
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
@@ -22,14 +21,14 @@ public class BrickSensorTest {
     public void getKey() throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_brick1.xml");
         KeysSensor<Void> bs = (KeysSensor<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals(new SensorPort("ENTER", "BTNCENTER"), bs.getPort());
+        Assert.assertEquals("ENTER", bs.getPort());
     }
 
     @Test
     public void getMode() throws Exception {
         Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_brick1.xml");
         KeysSensor<Void> bs = (KeysSensor<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals(KeysSensorMode.PRESSED, bs.getMode());
+        Assert.assertEquals(SC.PRESSED, bs.getMode());
     }
 
     @Test

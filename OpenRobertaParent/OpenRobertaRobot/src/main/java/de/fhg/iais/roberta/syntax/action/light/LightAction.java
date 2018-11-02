@@ -132,7 +132,7 @@ public class LightAction<V> extends Action<V> {
         String color = helper.extractField(fields, BlocklyConstants.SWITCH_COLOR, BlocklyConstants.DEFAULT);
         return LightAction
             .make(
-                factory.getSensorPort(port),
+                factory.sanitizePort(port),
                 factory.getBrickLedColor(color),
                 factory.getBlinkMode(mode),
                 helper.convertPhraseToExpr(ledColor),

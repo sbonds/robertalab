@@ -35,11 +35,10 @@ public class LightActionTest {
         LightAction<Void> cs2 = (LightAction<Void>) transformer.getTree().get(0).get(3);
         LightAction<Void> cs3 = (LightAction<Void>) transformer.getTree().get(0).get(4);
 
-        Assert.assertEquals("S1", cs.getPort().getCodeName());
-        Assert.assertEquals("S2", cs1.getPort().getCodeName());
-        Assert.assertEquals("S3", cs2.getPort().getCodeName());
-        Assert.assertEquals("S4", cs3.getPort().getCodeName());
-
+        Assert.assertEquals("1", cs.getPort());
+        Assert.assertEquals("2", cs1.getPort());
+        Assert.assertEquals("3", cs2.getPort());
+        Assert.assertEquals("4", cs3.getPort());
     }
 
     @Test

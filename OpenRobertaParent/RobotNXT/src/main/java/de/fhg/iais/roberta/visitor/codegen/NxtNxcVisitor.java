@@ -1,17 +1,19 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedActor;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorMoveMode;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
@@ -54,7 +56,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -83,10 +84,9 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     private final boolean timeSensorUsed;
     private final boolean isVolumeVariableNeeded;
 
-    protected final Set<UsedActor> usedActors;
-    //private final String tmpArr;
-    //private int tmpArrCount = 0;
-    ArrayList<VarDeclaration<Void>> usedVars;
+    private final Set<UsedActor> usedActors;
+    private final Set<UsedSensor> usedSensors;
+    private final ArrayList<VarDeclaration<Void>> usedVars;
 
     /**
      * initialize the Nxc code generator visitor.
@@ -101,6 +101,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         NxtUsedHardwareCollectorVisitor codePreprocessVisitor = new NxtUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
         this.usedVars = codePreprocessVisitor.getVisitedVars();
         this.usedActors = codePreprocessVisitor.getUsedActors();
+        this.usedSensors = codePreprocessVisitor.getUsedSensors();
         this.timeSensorUsed = codePreprocessVisitor.isTimerSensorUsed();
         this.isVolumeVariableNeeded = codePreprocessVisitor.isVolumeVariableNeeded();
         this.loopsLabels = codePreprocessVisitor.getloopsLabelContainer();
@@ -465,25 +466,27 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     private boolean isActorOnPort(String port) {
-        boolean isActorOnPort = false;
         if ( port != null ) {
             for ( UsedActor actor : this.usedActors ) {
-                isActorOnPort = isActorOnPort ? isActorOnPort : actor.getPort().equals(port);
+                if ( actor.getPort().equals(port) ) {
+                    return true;
+                }
             }
         }
-        return isActorOnPort;
+        return false;
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        if ( isActorOnPort(motorOnAction.getPort()) ) {
-            final boolean reverse = this.brickConfiguration.getActorOnPort(motorOnAction.getPort()).getRotationDirection() == DriveDirection.BACKWARD;
+        String userDefinedPort = motorOnAction.getUserDefinedPort();
+        if ( isActorOnPort(userDefinedPort) ) {
+            final boolean reverse = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getProperty(SC.MOTOR_REVERSE).equals("ON");
             final boolean isDuration = motorOnAction.getParam().getDuration() != null;
-            final boolean isRegulatedDrive = this.brickConfiguration.isMotorRegulated(motorOnAction.getPort());
+            final boolean isRegulatedDrive = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getProperty(SC.MOTOR_REGULATION).equals("TRUE");
             String sign = reverse ? "-" : "";
             String methodNamePart = reverse ? "OnRev" : "OnFwd";
             if ( isDuration ) {
-                this.sb.append("RotateMotor(OUT_" + motorOnAction.getPort() + ", " + sign + "SpeedTest(");
+                this.sb.append("RotateMotor(OUT_" + userDefinedPort + ", " + sign + "SpeedTest(");
                 motorOnAction.getParam().getSpeed().visit(this);
                 this.sb.append(")");
                 if ( motorOnAction.getDurationMode() == MotorMoveMode.ROTATIONS ) {
@@ -494,11 +497,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 motorOnAction.getParam().getDuration().getValue().visit(this);
             } else {
                 if ( isRegulatedDrive ) {
-                    this.sb.append(methodNamePart + "Reg(OUT_" + motorOnAction.getPort() + ", SpeedTest(");
+                    this.sb.append(methodNamePart + "Reg(OUT_" + userDefinedPort + ", SpeedTest(");
                     motorOnAction.getParam().getSpeed().visit(this);
                     this.sb.append("), OUT_REGMODE_SPEED");
                 } else {
-                    this.sb.append(methodNamePart + "(OUT_" + motorOnAction.getPort() + ", SpeedTest(");
+                    this.sb.append(methodNamePart + "(OUT_" + userDefinedPort + ", SpeedTest(");
                     motorOnAction.getParam().getSpeed().visit(this);
                     this.sb.append(")");
                 }
@@ -510,12 +513,13 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
-        if ( isActorOnPort(motorSetPowerAction.getPort()) ) {
-            final boolean reverse = this.brickConfiguration.getActorOnPort(motorSetPowerAction.getPort()).getRotationDirection() == DriveDirection.BACKWARD;
+        String userDefinedPort = motorSetPowerAction.getUserDefinedPort();
+        if ( isActorOnPort(userDefinedPort) ) {
+            final boolean reverse = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
             String sign = reverse ? "-" : "";
             final String methodName = "OnFwdReg";
             //final boolean isRegulated = brickConfiguration.isMotorRegulated(motorSetPowerAction.getPort());
-            this.sb.append(methodName + "(OUT_" + motorSetPowerAction.getPort() + ", " + sign + "SpeedTest(");
+            this.sb.append(methodName + "(OUT_" + userDefinedPort + ", " + sign + "SpeedTest(");
             motorSetPowerAction.getPower().visit(this);
             this.sb.append("), OUT_REGMODE_SPEED");
             this.sb.append(");");
@@ -525,9 +529,9 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        if ( isActorOnPort(motorGetPowerAction.getPort()) ) {
+        if ( isActorOnPort(motorGetPowerAction.getUserDefinedPort()) ) {
             final String methodName = "MotorPower";
-            this.sb.append(methodName + "(OUT_" + motorGetPowerAction.getPort());
+            this.sb.append(methodName + "(OUT_" + motorGetPowerAction.getUserDefinedPort());
             this.sb.append(")");
         }
         return null;
@@ -536,13 +540,13 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         if ( motorStopAction.getMode() == MotorStopMode.FLOAT ) {
-            if ( isActorOnPort(motorStopAction.getPort()) ) {
-                this.sb.append("Float(OUT_" + motorStopAction.getPort());
+            if ( isActorOnPort(motorStopAction.getUserDefinedPort()) ) {
+                this.sb.append("Float(OUT_" + motorStopAction.getUserDefinedPort());
                 this.sb.append(");");
             }
         } else {
-            if ( isActorOnPort(motorStopAction.getPort()) ) {
-                this.sb.append("Off(OUT_" + motorStopAction.getPort());
+            if ( isActorOnPort(motorStopAction.getUserDefinedPort()) ) {
+                this.sb.append("Off(OUT_" + motorStopAction.getUserDefinedPort());
                 this.sb.append(");");
             }
         }
@@ -551,11 +555,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
+        if ( isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)) && isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)) ) {
             final boolean isDuration = driveAction.getParam().getDuration() != null;
             final boolean reverse =
-                (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD)
-                    || (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD);
+                this.brickConfiguration.getFirstMotor(SC.LEFT).getProperty(SC.MOTOR_REVERSE).equals(SC.ON)
+                    || this.brickConfiguration.getFirstMotor(SC.RIGHT).getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
             final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
             String methodName = "";
             if ( isDuration ) {
@@ -564,12 +568,15 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 methodName = "OnFwdReg";
             }
             this.sb.append(methodName + "(OUT_");
-            if ( this.brickConfiguration.getLeftMotorPort().toString().charAt(0) < this.brickConfiguration.getRightMotorPort().toString().charAt(0) ) {
-                this.sb.append(this.brickConfiguration.getLeftMotorPort());
-                this.sb.append(this.brickConfiguration.getRightMotorPort());
+            if ( this.brickConfiguration.getFirstMotorPort(SC.LEFT).toString().charAt(0) < this.brickConfiguration
+                .getFirstMotorPort(SC.RIGHT)
+                .toString()
+                .charAt(0) ) {
+                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.LEFT));
+                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.RIGHT));
             } else {
-                this.sb.append(this.brickConfiguration.getRightMotorPort());
-                this.sb.append(this.brickConfiguration.getLeftMotorPort());
+                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.RIGHT));
+                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.LEFT));
             }
             if ( (!reverse && localReverse) || (!localReverse && reverse) ) {
                 this.sb.append(", -1 * ");
@@ -595,11 +602,11 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
+        ConfigurationComponent leftMotor = this.brickConfiguration.getFirstMotor(SC.LEFT);
+        ConfigurationComponent rigthMotor = this.brickConfiguration.getFirstMotor(SC.RIGHT);
+        if ( isActorOnPort(leftMotor.getUserDefinedPortName()) && isActorOnPort(rigthMotor.getUserDefinedPortName()) ) {
             final boolean isDuration = turnAction.getParam().getDuration() != null;
-            final boolean reverse =
-                (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.BACKWARD)
-                    || (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getRightMotorPort()).getRotationDirection() == DriveDirection.BACKWARD);
+            final boolean reverse = leftMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON) || rigthMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
 
             String methodName = "";
             int turnpct = 100;
@@ -609,13 +616,13 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 methodName = "OnFwdSync";
             }
             this.sb.append(methodName + "(OUT_");
-            if ( this.brickConfiguration.getLeftMotorPort().toString().charAt(0) < this.brickConfiguration.getRightMotorPort().toString().charAt(0) ) {
+            if ( leftMotor.getUserDefinedPortName().charAt(0) < this.brickConfiguration.getFirstMotorPort(SC.RIGHT).toString().charAt(0) ) {
                 turnpct *= -1;
-                this.sb.append(this.brickConfiguration.getLeftMotorPort());
-                this.sb.append(this.brickConfiguration.getRightMotorPort());
+                this.sb.append(leftMotor.getUserDefinedPortName());
+                this.sb.append(rigthMotor.getUserDefinedPortName());
             } else {
-                this.sb.append(this.brickConfiguration.getRightMotorPort());
-                this.sb.append(this.brickConfiguration.getLeftMotorPort());
+                this.sb.append(rigthMotor.getUserDefinedPortName());
+                this.sb.append(leftMotor.getUserDefinedPortName());
             }
             if ( reverse ) {
                 turnpct *= -1;
@@ -643,10 +650,9 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
+        if ( isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)) && isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)) ) {
             final boolean isDuration = curveAction.getParamLeft().getDuration() != null;
-            final boolean confForward =
-                this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection() == DriveDirection.FOREWARD;
+            final boolean confForward = this.brickConfiguration.getFirstMotor(SC.LEFT).getProperty(SC.MOTOR_REVERSE).equals(SC.OFF);
             final boolean blockForward = curveAction.getDirection() == DriveDirection.FOREWARD;
             String methodName = "";
             if ( isDuration ) {
@@ -655,8 +661,8 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 methodName = "SteerDrive";
             }
             this.sb.append(methodName);
-            this.sb.append("(OUT_" + this.brickConfiguration.getLeftMotorPort());
-            this.sb.append(", OUT_" + this.brickConfiguration.getRightMotorPort());
+            this.sb.append("(OUT_" + this.brickConfiguration.getFirstMotorPort(SC.LEFT));
+            this.sb.append(", OUT_" + this.brickConfiguration.getFirstMotorPort(SC.RIGHT));
             this.sb.append(", SpeedTest(");
             curveAction.getParamLeft().getSpeed().visit(this);
             this.sb.append("), SpeedTest(");
@@ -674,14 +680,17 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
-        if ( isActorOnPort(this.brickConfiguration.getLeftMotorPort()) && isActorOnPort(this.brickConfiguration.getRightMotorPort()) ) {
+        if ( isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)) && isActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.RIGHT)) ) {
             this.sb.append("Off(OUT_");
-            if ( this.brickConfiguration.getLeftMotorPort().toString().charAt(0) < this.brickConfiguration.getRightMotorPort().toString().charAt(0) ) {
-                this.sb.append(this.brickConfiguration.getLeftMotorPort());
-                this.sb.append(this.brickConfiguration.getRightMotorPort());
+            if ( this.brickConfiguration.getFirstMotorPort(SC.LEFT).toString().charAt(0) < this.brickConfiguration
+                .getFirstMotorPort(SC.RIGHT)
+                .toString()
+                .charAt(0) ) {
+                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.LEFT));
+                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.RIGHT));
             } else {
-                this.sb.append(this.brickConfiguration.getRightMotorPort());
-                this.sb.append(this.brickConfiguration.getLeftMotorPort());
+                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.RIGHT));
+                this.sb.append(this.brickConfiguration.getFirstMotorPort(SC.LEFT));
             }
             this.sb.append(");");
         }
@@ -702,8 +711,9 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
+        String portName = this.brickConfiguration.getConfigurationComponent(lightSensor.getPort()).getPortName();
         this.sb.append("SensorLight(");
-        this.sb.append(lightSensor.getPort().getCodeName());
+        this.sb.append(portName);
         this.sb.append(", ");
         this.sb.append("\"" + lightSensor.getMode() + "\"");
         this.sb.append(")");
@@ -712,61 +722,48 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        this.sb.append("ButtonPressed(" + keysSensor.getPort().getCodeName() + ", false)");
+        this.sb.append("ButtonPressed(" + getCodeName(keysSensor.getPort()) + ", false)");
         return null;
     }
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        if ( this.brickConfiguration.getSensorOnPort((ISensorPort) colorSensor.getPort()).getType().toString().contains("HT_COLOR") ) {
+        if ( this.brickConfiguration.getConfigurationComponent(colorSensor.getPort()).getProperty(SC.TYPE).equals(SC.HT_COLOR) ) {
             this.sb.append("SensorHtColor(");
         } else {
             this.sb.append("SensorColor(");
         }
-        this.sb.append(colorSensor.getPort().getCodeName());
-        this.sb.append(", ");
-        ColorSensorMode sensorMode = (ColorSensorMode) colorSensor.getMode();
-        switch ( sensorMode ) {
-            case COLOUR:
-                this.sb.append("\"COLOR\"");
-                break;
-            case AMBIENTLIGHT:
-                this.sb.append("\"AMBIENTLIGHT\"");
-                break;
-            case LIGHT:
-                this.sb.append("\"LIGHT\"");
-                break;
-            default:
-                throw new DbcException("Invalide Color Sensor Mode: " + sensorMode + " !");
-        }
-        this.sb.append(")");
+        String portName = this.brickConfiguration.getConfigurationComponent(colorSensor.getPort()).getPortName();
+        this.sb.append(portName + ", \"" + colorSensor.getMode() + "\")");
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
+        String portName = this.brickConfiguration.getConfigurationComponent(soundSensor.getPort()).getPortName();
         this.sb.append("Sensor(");
-        this.sb.append(soundSensor.getPort().getCodeName());
+        this.sb.append(portName);
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
-        ActorPort encoderMotorPort = (ActorPort) encoderSensor.getPort();
-        EncoderSensorMode mode = (EncoderSensorMode) encoderSensor.getMode();
+        String userDefinedPort = encoderSensor.getPort();
+        String port = this.brickConfiguration.getConfigurationComponent(userDefinedPort).getPortName();
+        String mode = encoderSensor.getMode();
         switch ( mode ) {
-            case RESET:
-                this.sb.append("ResetTachoCount(OUT_" + encoderMotorPort + ");");
+            case SC.RESET:
+                this.sb.append("ResetTachoCount(OUT_" + port + ");");
                 break;
-            case ROTATION:
-                this.sb.append("MotorTachoCount(OUT_" + encoderMotorPort + ") / 360.0");
+            case SC.ROTATION:
+                this.sb.append("MotorTachoCount(OUT_" + port + ") / 360.0");
                 break;
-            case DEGREE:
-                this.sb.append("MotorTachoCount(OUT_" + encoderMotorPort + ")");
+            case SC.DEGREE:
+                this.sb.append("MotorTachoCount(OUT_" + port + ")");
                 break;
-            case DISTANCE:
-                this.sb.append("MotorTachoCount(OUT_" + encoderMotorPort + ") * PI / 360.0 * WHEELDIAMETER");
+            case SC.DISTANCE:
+                this.sb.append("MotorTachoCount(OUT_" + port + ") * PI / 360.0 * WHEELDIAMETER");
                 break;
             default:
                 throw new DbcException("Invalide encoder sensor mode:" + mode + "!");
@@ -777,13 +774,13 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        String timerNumber = timerSensor.getPort().getOraName();
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case DEFAULT:
-            case VALUE:
+        String timerNumber = timerSensor.getPort();
+        switch ( timerSensor.getMode() ) {
+            case SC.DEFAULT:
+            case SC.VALUE:
                 this.sb.append("GetTimerValue(timer" + timerNumber + ")");
                 break;
-            case RESET:
+            case SC.RESET:
                 this.sb.append("ResetTimerValue(timer" + timerNumber + ");");
                 break;
             default:
@@ -794,14 +791,16 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("Sensor(" + touchSensor.getPort().getCodeName());
+        String portName = this.brickConfiguration.getConfigurationComponent(touchSensor.getPort()).getPortName();
+        this.sb.append("Sensor(" + portName);
         this.sb.append(")");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("SensorUS(" + ultrasonicSensor.getPort().getCodeName() + ")");
+        String portName = this.brickConfiguration.getConfigurationComponent(ultrasonicSensor.getPort()).getPortName();
+        this.sb.append("SensorUS(" + portName + ")");
         return null;
     }
 
@@ -1230,27 +1229,31 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     }
 
     private void generateSensors() {
-        for ( final Entry<ISensorPort, Sensor> entry : this.brickConfiguration.getSensors().entrySet() ) {
+        for ( UsedSensor usedSensor : this.usedSensors ) {
             nlIndent();
             this.sb.append("SetSensor(");
-            switch ( entry.getValue().getType() ) {
-                case COLOR:
-                    this.sb.append(entry.getKey().getCodeName() + ", SENSOR_COLORFULL);");
+            ConfigurationComponent configurationComponent = this.brickConfiguration.getConfigurationComponent(usedSensor.getPort());
+            String sensorType = configurationComponent.getComponentType();
+            this.sb.append(configurationComponent.getPortName()).append(", ");
+
+            switch ( sensorType ) {
+                case SC.COLOR:
+                    this.sb.append("SENSOR_COLORFULL);");
                     break;
-                case HT_COLOR:
-                    this.sb.append(entry.getKey().getCodeName() + ", SENSOR_LOWSPEED);");
+                case SC.HT_COLOR:
+                    this.sb.append("SENSOR_LOWSPEED);");
                     break;
-                case LIGHT:
-                    this.sb.append(entry.getKey().getCodeName() + ", SENSOR_LIGHT);");
+                case SC.LIGHT:
+                    this.sb.append("SENSOR_LIGHT);");
                     break;
-                case TOUCH:
-                    this.sb.append(entry.getKey().getCodeName() + ", SENSOR_TOUCH);");
+                case SC.TOUCH:
+                    this.sb.append("SENSOR_TOUCH);");
                     break;
-                case ULTRASONIC:
-                    this.sb.append(entry.getKey().getCodeName() + ", SENSOR_LOWSPEED);");
+                case SC.ULTRASONIC:
+                    this.sb.append("SENSOR_LOWSPEED);");
                     break;
-                case SOUND:
-                    this.sb.append(entry.getKey().getCodeName() + ", SENSOR_SOUND);");
+                case SC.SOUND:
+                    this.sb.append("SENSOR_SOUND);");
                     break;
                 default:
                     break;
@@ -1259,6 +1262,26 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         if ( this.timeSensorUsed ) {
             nlIndent();
             this.sb.append("SetTimerValue(timer1);");
+        }
+    }
+
+    private String getCodeName(String userDefinedName) {
+        switch ( userDefinedName ) {
+            case "A":
+            case "B":
+            case "C":
+                return "OUT_" + userDefinedName;
+            case "1":
+            case "2":
+            case "3":
+                return "S" + userDefinedName;
+            case "ENTER":
+                return "BTNCENTER";
+            case "LEFT":
+            case "RIGHT":
+                return "BTN" + userDefinedName;
+            default:
+                throw new DbcException("Invalid hardware component " + userDefinedName);
         }
     }
 

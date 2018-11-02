@@ -35,7 +35,7 @@ public class NxtCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            this.generatedSourceCode = NxtNxcVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+            this.generatedSourceCode = NxtNxcVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
             LOG.info("nxt code generated");
         } catch ( Exception e ) {
             LOG.error("nxt code generation failed", e);

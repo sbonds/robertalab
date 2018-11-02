@@ -30,8 +30,8 @@ public class EV3ProgramUsedHardwareCheckTest {
             .addActor(new ActorPort("A", "MA"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT))
             .addActor(new ActorPort("B", "MB"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
             .addActor(new ActorPort("D", "MD"), new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.NONE))
-            .addSensor(new SensorPort("1", "S1"), new Sensor(SensorType.TOUCH))
-            .addSensor(new SensorPort("2", "S2"), new Sensor(SensorType.ULTRASONIC))
+            .addSensor("1", new Sensor(SensorType.TOUCH))
+            .addSensor("2", new Sensor(SensorType.ULTRASONIC))
             .build();
     }
 

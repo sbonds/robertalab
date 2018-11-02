@@ -387,7 +387,7 @@ public abstract class AbstractProgramValidatorVisitor extends AbstractCollectorV
     }
 
     protected void checkMotorPort(MoveAction<Void> action) {
-        if ( this.robotConfiguration.optConfigurationComponent(action.getPort()) == null ) {
+        if ( this.robotConfiguration.optConfigurationComponent(action.getUserDefinedPort()) == null ) {
             action.addInfo(NepoInfo.error("CONFIGURATION_ERROR_MOTOR_MISSING"));
             this.errorCount++;
         }

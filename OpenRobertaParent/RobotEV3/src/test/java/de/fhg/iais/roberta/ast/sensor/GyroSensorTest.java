@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
@@ -25,8 +25,8 @@ public class GyroSensorTest {
         GyroSensor<Void> cs = (GyroSensor<Void>) transformer.getTree().get(0).get(1);
         GyroSensor<Void> cs1 = (GyroSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals(GyroSensorMode.ANGLE, cs.getMode());
-        Assert.assertEquals(GyroSensorMode.RATE, cs1.getMode());
+        Assert.assertEquals(SC.ANGLE, cs.getMode());
+        Assert.assertEquals(SC.RATE, cs1.getMode());
     }
 
     @Test
@@ -36,8 +36,8 @@ public class GyroSensorTest {
         GyroSensor<Void> cs = (GyroSensor<Void>) transformer.getTree().get(0).get(1);
         GyroSensor<Void> cs1 = (GyroSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals("S2", cs.getPort().getCodeName());
-        Assert.assertEquals("S4", cs1.getPort().getCodeName());
+        Assert.assertEquals("S2", cs.getPort());
+        Assert.assertEquals("S4", cs1.getPort());
     }
 
     @Test

@@ -71,7 +71,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
             case BlocklyConstants.TOUCH:
                 sensorMetaDataBean =
                     new SensorMetaDataBean(
-                        factory.getSensorPort(port),
+                        factory.sanitizePort(port),
                         factory.getTouchSensorMode("TOUCH"),
                         factory.getSlot(BlocklyConstants.EMPTY_SLOT),
                         this.isPortInMutation);
@@ -80,7 +80,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
             case BlocklyConstants.ULTRASONIC:
                 sensorMetaDataBean =
                     new SensorMetaDataBean(
-                        factory.getSensorPort(port),
+                        factory.sanitizePort(port),
                         factory.getUltrasonicSensorMode(sensorType.getSensorMode()),
                         factory.getSlot(BlocklyConstants.EMPTY_SLOT),
                         this.isPortInMutation);
@@ -90,7 +90,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
             case BlocklyConstants.GYRO:
                 sensorMetaDataBean =
                     new SensorMetaDataBean(
-                        factory.getSensorPort(port),
+                        factory.sanitizePort(port),
                         factory.getGyroSensorMode(sensorType.getSensorMode()),
                         factory.getSlot(BlocklyConstants.EMPTY_SLOT),
                         this.isPortInMutation);
@@ -99,7 +99,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
             case BlocklyConstants.TIME:
                 sensorMetaDataBean =
                     new SensorMetaDataBean(
-                        factory.getSensorPort(port),
+                        factory.sanitizePort(port),
                         factory.getTimerSensorMode(sensorType.getSensorMode()),
                         factory.getSlot(BlocklyConstants.EMPTY_SLOT),
                         this.isPortInMutation);
@@ -108,7 +108,7 @@ public class GetSampleSensor<V> extends Sensor<V> {
             case BlocklyConstants.ACCELERATION:
                 sensorMetaDataBean =
                     new SensorMetaDataBean(
-                        factory.getSensorPort(port),
+                        factory.sanitizePort(port),
                         factory.getAxis(BlocklyConstants.DEFAULT),
                         factory.getSlot(BlocklyConstants.EMPTY_SLOT),
                         this.isPortInMutation);

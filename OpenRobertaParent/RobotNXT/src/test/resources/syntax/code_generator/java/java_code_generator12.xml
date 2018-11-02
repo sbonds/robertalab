@@ -52,7 +52,7 @@
                   <block type="robSensors_getSample" id="iE8+PPXd4cp8P(98v/^s" intask="true" deletable="false" movable="false">
                     <mutation input="LIGHT_LIGHT" />
                     <field name="SENSORTYPE">LIGHT_LIGHT</field>
-                    <field name="SENSORPORT">3</field>
+                    <field name="SENSORPORT">4</field>
                     <field name="SLOT" />
                     <data>nxt</data>
                   </block>
@@ -86,7 +86,7 @@
                   <block type="robSensors_getSample" id="Yt_6]Y[-BP?W`4:G4KRP" intask="true" deletable="false" movable="false">
                     <mutation input="LIGHT_LIGHT" />
                     <field name="SENSORTYPE">LIGHT_LIGHT</field>
-                    <field name="SENSORPORT">3</field>
+                    <field name="SENSORPORT">4</field>
                     <field name="SLOT" />
                     <data>nxt</data>
                   </block>

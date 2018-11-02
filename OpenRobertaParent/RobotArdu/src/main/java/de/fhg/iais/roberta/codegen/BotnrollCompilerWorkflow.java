@@ -41,7 +41,7 @@ public class BotnrollCompilerWorkflow extends AbstractCompilerWorkflow {
         }
         try {
             this.generatedSourceCode =
-                BotnrollCppVisitor.generate((BotNrollConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+                BotnrollCppVisitor.generate((BotNrollConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
             LOG.info("botnroll c++ code generated");
         } catch ( Exception e ) {
             LOG.error("botnroll c++ code generation failed", e);

@@ -78,7 +78,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
     @Override
     public V visitMotorOnAction(MotorOnAction<V> motorOnAction) {
         boolean isDuration = motorOnAction.getParam().getDuration() != null;
-        ConfigurationComponent confMotorBlock = this.getConfigurationComponent(motorOnAction.getPort());
+        ConfigurationComponent confMotorBlock = this.getConfigurationComponent(motorOnAction.getUserDefinedPort());
         String brickName = confMotorBlock.getProperty("VAR");
         String port = confMotorBlock.getProperty("CONNECTOR");
         if ( (brickName != null) && (port != null) ) {
@@ -98,7 +98,7 @@ public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
 
     @Override
     public V visitMotorStopAction(MotorStopAction<V> motorStopAction) {
-        ConfigurationComponent confMotorBlock = this.getConfigurationComponent(motorStopAction.getPort());
+        ConfigurationComponent confMotorBlock = this.getConfigurationComponent(motorStopAction.getUserDefinedPort());
         String brickName = confMotorBlock.getProperty("VAR");
         String port = confMotorBlock.getProperty("CONNECTOR");
         if ( (brickName != null) && (port != null) ) {

@@ -7,7 +7,6 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.sensor.IPinPull;
 import de.fhg.iais.roberta.inter.mode.sensor.IPort;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.sensor.PinValue;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
@@ -85,7 +84,7 @@ public class PinSetPullAction<V> extends Action<V> {
         String port = helper.extractField(fields, BlocklyConstants.PIN_PORT);
         String pinPull = helper.extractField(fields, BlocklyConstants.PIN_PULL);
         return PinSetPullAction
-            .make(factory.getPinPullMode(pinPull), factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
+            .make(factory.getPinPullMode(pinPull), factory.sanitizePort(port), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -94,7 +93,7 @@ public class PinSetPullAction<V> extends Action<V> {
 
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN_PULL, this.pinPull.toString());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN_PORT, this.port.getOraName());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN_PORT, this.port);
 
         return jaxbDestination;
     }

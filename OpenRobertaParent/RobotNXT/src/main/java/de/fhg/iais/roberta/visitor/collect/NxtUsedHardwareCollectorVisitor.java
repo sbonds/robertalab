@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.visitor.collect;
 import java.util.ArrayList;
 
 import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
@@ -33,6 +34,7 @@ public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
 
     @Override
     public Void visitLightAction(LightAction<Void> lightAction) {
+        this.usedSensors.add(new UsedSensor(lightAction.getPort(), "COLOR"));
         return null;
     }
 
@@ -73,7 +75,7 @@ public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
             type = "int";
             defVal = "0";
         }
-    
+
         if ( !expr.getVarType().toString().contains("ARRAY") ) {
             this.tmpArrVarCount += 1;
             String str = expr.toString().replaceAll("defVal=ARRAY", defVal);
@@ -92,12 +94,12 @@ public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
                     values += value;
                 }
             }
-    
+
             this.tmpArrVar += "\n" + type + " __tmpArr" + this.tmpArrVarCount + "[] = {" + values + "};";
         }
         return null;
     }
-    
+
     @Override
     public Void visitMathOnListFunct(MathOnListFunct<Void> mathOnListFunct) {
         List<Expr<Void>> param = mathOnListFunct.getParam();
@@ -106,15 +108,15 @@ public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
         }
         generateArrTmpVar(mathOnListFunct.getParam().get(0));
         return null;
-    
+
     }
-    
+
     @Override
     public Void visitLengthOfIsEmptyFunct(LengthOfIsEmptyFunct<Void> lengthOfIsEmptyFunct) {
         generateArrTmpVar(lengthOfIsEmptyFunct.getParam().get(0));
         return null;
     }
-    
+
     @Override
     public Void visitIndexOfFunct(IndexOfFunct<Void> indexOfFunct) {
         int listsInLine = StringUtils.countMatches(indexOfFunct.getParam().get(1).toString(), "ListCreate");
@@ -124,7 +126,7 @@ public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
         }
         return null;
     }
-    
+
     @Override
     public Void visitListGetIndex(ListGetIndex<Void> listGetIndex) {
         int listsInLine = StringUtils.countMatches(listGetIndex.getParam().get(1).toString(), "ListCreate");
@@ -134,7 +136,7 @@ public final class NxtUsedHardwareCollectorVisitor extends AbstractUsedHardwareC
         }
         return null;
     }
-    
+
     @Override
     public Void visitListSetIndex(ListSetIndex<Void> listSetIndex) {
         int listsInLine = StringUtils.countMatches(listSetIndex.getParam().get(0).toString(), "ListCreate");

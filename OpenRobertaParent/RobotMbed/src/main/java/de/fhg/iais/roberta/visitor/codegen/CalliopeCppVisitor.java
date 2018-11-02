@@ -7,11 +7,11 @@ import de.fhg.iais.roberta.components.mbed.CalliopeConfiguration;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.GestureSensorMode;
 import de.fhg.iais.roberta.mode.sensor.PinPull;
 import de.fhg.iais.roberta.mode.sensor.PinValue;
 import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LightStatusAction;
 import de.fhg.iais.roberta.syntax.action.mbed.BothMotorsOnAction;
@@ -395,8 +395,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         this.sb.append("_uBit.soundmotor.motor");
-        if ( !motorOnAction.getPort().getCodeName().equals("AB") ) {
-            this.sb.append(motorOnAction.getPort());
+        if ( !motorOnAction.getUserDefinedPort().equals("AB") ) {
+            this.sb.append(motorOnAction.getUserDefinedPort());
         }
         // fix for IT Gipfel
         else {
@@ -434,12 +434,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         this.sb.append("_uBit.soundmotor.motor");
-        if ( motorStopAction.getPort().getCodeName().equals("AB") ) {
+        if ( motorStopAction.getUserDefinedPort().equals("AB") ) {
             this.sb.append("AOff();");
             nlIndent();
             this.sb.append("_uBit.soundmotor.motorB");
         } else {
-            this.sb.append(motorStopAction.getPort());
+            this.sb.append(motorStopAction.getUserDefinedPort());
         }
         this.sb.append("Off();");
         return null;
@@ -472,17 +472,17 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        this.sb.append("_uBit.button" + keysSensor.getPort().getCodeName() + ".isPressed()");
+        this.sb.append("_uBit.button" + keysSensor.getPort() + ".isPressed()");
         return null;
     }
 
     @Override
     public Void visitGestureSensor(GestureSensor<Void> gestureSensor) {
         this.sb.append("(_uBit.accelerometer.getGesture() == MICROBIT_ACCELEROMETER_EVT_");
-        if ( (gestureSensor.getMode() == GestureSensorMode.UP)
-            || (gestureSensor.getMode() == GestureSensorMode.DOWN)
-            || (gestureSensor.getMode() == GestureSensorMode.LEFT)
-            || (gestureSensor.getMode() == GestureSensorMode.RIGHT) ) {
+        if ( (gestureSensor.getMode() == SC.UP)
+            || (gestureSensor.getMode() == SC.DOWN)
+            || (gestureSensor.getMode() == SC.LEFT)
+            || (gestureSensor.getMode() == SC.RIGHT) ) {
             this.sb.append("TILT_");
         }
         this.sb.append(gestureSensor.getMode() + ")");
@@ -510,7 +510,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         this.sb.append("_uBit.accelerometer.get");
-        this.sb.append(gyroSensor.getPort().getCodeName());
+        this.sb.append(gyroSensor.getPort());
         this.sb.append("()");
         return null;
     }
@@ -533,14 +533,14 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        String port = pinTouchSensor.getPort().getCodeName();
+        String port = pinTouchSensor.getPort();
         this.sb.append("_uBit.io." + port + ".isTouched()");
         return null;
     }
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
-        String port = pinValueSensor.getPort().getCodeName();
+        String port = pinValueSensor.getPort();
         this.sb.append("_uBit.io." + port);
         switch ( (PinValue) pinValueSensor.getMode() ) {
             case DIGITAL:
@@ -560,10 +560,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
-        String port = pinWriteValueSensor.getPort().getCodeName();
-        if ( pinWriteValueSensor.getPort().getCodeName().equals("4") ) {
+        String port = pinWriteValueSensor.getPort();
+        if ( pinWriteValueSensor.getPort().equals("4") ) {
             port = "P19";
-        } else if ( pinWriteValueSensor.getPort().getCodeName().equals("5") ) {
+        } else if ( pinWriteValueSensor.getPort().equals("5") ) {
             port = "P2";
         }
         String valueType = "AnalogValue(";
@@ -578,7 +578,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
 
     @Override
     public Void visitPinSetPullAction(PinSetPullAction<Void> pinSetPullAction) {
-        String port = pinSetPullAction.getPort().getCodeName();
+        String port = pinSetPullAction.getPort();
         this.sb.append("_uBit.io." + port + ".setPull(");
         switch ( (PinPull) pinSetPullAction.getMode() ) {
             case UP:
@@ -1038,10 +1038,10 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements IMbe
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
         this.sb.append("_uBit.accelerometer.get");
-        if ( accelerometerSensor.getPort().getOraName().equals("STRENGTH") ) {
+        if ( accelerometerSensor.getPort().equals("STRENGTH") ) {
             this.sb.append("Strength");
         } else {
-            this.sb.append(accelerometerSensor.getPort().getOraName());
+            this.sb.append(accelerometerSensor.getPort());
         }
         this.sb.append("()");
         return null;

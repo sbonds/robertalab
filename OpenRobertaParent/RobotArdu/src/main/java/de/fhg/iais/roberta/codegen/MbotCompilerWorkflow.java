@@ -40,7 +40,7 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            this.generatedSourceCode = MbotCppVisitor.generate((MbotConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+            this.generatedSourceCode = MbotCppVisitor.generate((MbotConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
             LOG.info("mbot c++ code generated");
         } catch ( Exception e ) {
             LOG.error("mbot c++ code generation failed", e);

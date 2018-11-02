@@ -31,7 +31,7 @@ public class Ev3SimCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            this.generatedSourceCode = Ev3SimVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree(), language);
+            this.generatedSourceCode = Ev3SimVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), language);
             LOG.info("javascript ev3 simulation code generated");
         } catch ( Exception e ) {
             LOG.error("javascript ev3 simulation code generation failed", e);

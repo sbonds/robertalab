@@ -1,8 +1,8 @@
 <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="" description="" tags="">
   <instance x="16" y="-1">
     <block type="robSensors_getSample" id="39" >
-      <mutation input="TOUCH"></mutation>
-      <field name="SENSORTYPE">TOUCH</field>
+      <mutation input="TOUCH_PRESSED"></mutation>
+      <field name="SENSORTYPE">TOUCH_PRESSED</field>
       <field name="SENSORPORT">1</field>
     </block>
   </instance>

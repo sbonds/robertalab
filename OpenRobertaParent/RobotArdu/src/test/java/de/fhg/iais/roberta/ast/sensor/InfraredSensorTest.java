@@ -27,8 +27,8 @@ public class InfraredSensorTest {
         InfraredSensor<Void> cs = (InfraredSensor<Void>) transformer.getTree().get(0).get(1);
         InfraredSensor<Void> cs1 = (InfraredSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals(InfraredSensorMode.OBSTACLE, cs.getMode());
-        Assert.assertEquals(InfraredSensorMode.PRESENCE, cs1.getMode());
+        Assert.assertEquals(SC.OBSTACLE, cs.getMode());
+        Assert.assertEquals(SC.PRESENCE, cs1.getMode());
     }
 
     @Test
@@ -38,8 +38,8 @@ public class InfraredSensorTest {
         InfraredSensor<Void> cs = (InfraredSensor<Void>) transformer.getTree().get(0).get(1);
         InfraredSensor<Void> cs1 = (InfraredSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals("S4", cs.getPort().getCodeName());
-        Assert.assertEquals("S3", cs1.getPort().getCodeName());
+        Assert.assertEquals("S4", cs.getPort());
+        Assert.assertEquals("S3", cs1.getPort());
     }
 
     @Test

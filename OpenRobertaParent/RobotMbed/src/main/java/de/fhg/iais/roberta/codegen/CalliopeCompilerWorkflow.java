@@ -42,7 +42,7 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
         }
         try {
             generatedSourceCode =
-                CalliopeCppVisitor.generate((CalliopeConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+                CalliopeCppVisitor.generate((CalliopeConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
             LOG.info("arduino c++ code generated");
         } catch ( Exception e ) {
             LOG.error("arduino c++ code generation failed", e);
@@ -73,7 +73,7 @@ public class CalliopeCompilerWorkflow extends AbstractCompilerWorkflow {
     @Override
     public void generateSourceAndCompile(String token, String programName, BlocklyProgramAndConfigTransformer transformer, ILanguage language) {
         MbedUsedHardwareCollectorVisitor usedHardwareVisitor =
-            new MbedUsedHardwareCollectorVisitor(transformer.getProgramTransformer().getTree(), transformer.getBrickConfiguration());
+            new MbedUsedHardwareCollectorVisitor(transformer.getProgramTransformer().getTree(), transformer.getRobotConfiguration());
         EnumSet<CalliopeCompilerFlag> compilerFlags =
             usedHardwareVisitor.isRadioUsed() ? EnumSet.of(CalliopeCompilerFlag.RADIO_USED) : EnumSet.noneOf(CalliopeCompilerFlag.class);
         generateSourceCode(token, programName, transformer, language);

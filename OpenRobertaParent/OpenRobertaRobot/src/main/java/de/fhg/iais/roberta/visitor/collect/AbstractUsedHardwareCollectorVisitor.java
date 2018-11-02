@@ -264,7 +264,7 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        this.usedActors.add(new UsedActor(motorGetPowerAction.getPort()));
+        this.usedActors.add(new UsedActor(motorGetPowerAction.getUserDefinedPort()));
         return null;
     }
 
@@ -274,20 +274,20 @@ public abstract class AbstractUsedHardwareCollectorVisitor extends AbstractColle
         if ( motorOnAction.getParam().getDuration() != null ) {
             motorOnAction.getDurationValue().visit(this);
         }
-        this.usedActors.add(new UsedActor(motorOnAction.getPort()));
+        this.usedActors.add(new UsedActor(motorOnAction.getUserDefinedPort()));
         return null;
     }
 
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         motorSetPowerAction.getPower().visit(this);
-        this.usedActors.add(new UsedActor(motorSetPowerAction.getPort()));
+        this.usedActors.add(new UsedActor(motorSetPowerAction.getUserDefinedPort()));
         return null;
     }
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.usedActors.add(new UsedActor(motorStopAction.getPort()));
+        this.usedActors.add(new UsedActor(motorStopAction.getUserDefinedPort()));
         return null;
     }
 

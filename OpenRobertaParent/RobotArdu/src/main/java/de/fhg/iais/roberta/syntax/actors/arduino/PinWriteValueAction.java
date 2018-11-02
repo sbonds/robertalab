@@ -7,9 +7,6 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
-import de.fhg.iais.roberta.inter.mode.sensor.IPinValue;
-import de.fhg.iais.roberta.mode.sensor.PinValue;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -26,11 +23,11 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.IArduinoVisitor;
 
 public class PinWriteValueAction<V> extends Action<V> {
-    private final IPinValue pinValue;
+    private final String pinValue;
     private final String port;
     private final Expr<V> value;
 
-    private PinWriteValueAction(IPinValue pinValue, String port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private PinWriteValueAction(String pinValue, String port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("WRITE_TO_PIN"), properties, comment);
         Assert.notNull(pinValue);
         Assert.notNull(port);
@@ -50,20 +47,15 @@ public class PinWriteValueAction<V> extends Action<V> {
      * @param comment added from the user,
      * @return read only object of {@link PinWriteValue}
      */
-    public static <V> PinWriteValueAction<V> make(
-        IPinValue pinValue,
-        String port,
-        Expr<V> value,
-        BlocklyBlockProperties properties,
-        BlocklyComment comment) {
+    public static <V> PinWriteValueAction<V> make(String pinValue, String port, Expr<V> value, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new PinWriteValueAction<>(pinValue, port, value, properties, comment);
     }
 
-    public IPinValue getMode() {
+    public String getMode() {
         return this.pinValue;
     }
 
-    public String  getPort() {
+    public String getPort() {
         return this.port;
     }
 
@@ -92,8 +84,8 @@ public class PinWriteValueAction<V> extends Action<V> {
         Phrase<V> value = helper.extractValue(values, new ExprParam(BlocklyConstants.VALUE, BlocklyType.NUMBER_INT));
         return PinWriteValueAction
             .make(
-                factory.getPinGetValueSensorMode(pinvalue),
-                factory.getActorPort(port),
+                factory.getMode(pinvalue),
+                factory.sanitizePort(port),
                 helper.convertPhraseToExpr(value),
                 helper.extractBlockProperties(block),
                 helper.extractComment(block));
@@ -108,7 +100,7 @@ public class PinWriteValueAction<V> extends Action<V> {
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.VALUETYPE, this.pinValue.toString());
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN, this.port.getOraName());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.PIN, this.port);
         return jaxbDestination;
     }
 

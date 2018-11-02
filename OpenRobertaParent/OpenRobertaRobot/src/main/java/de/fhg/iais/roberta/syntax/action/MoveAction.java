@@ -15,7 +15,7 @@ public abstract class MoveAction<V> extends Action<V> {
     /**
      * @return port on which the motor is connected.
      */
-    public String getPort() {
+    public String getUserDefinedPort() {
         return this.port;
     }
 

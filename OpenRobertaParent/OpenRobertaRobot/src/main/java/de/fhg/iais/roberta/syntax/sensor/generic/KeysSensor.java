@@ -53,7 +53,6 @@ public class KeysSensor<V> extends ExternalSensor<V> {
      */
     public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
         SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper);
-
         return KeysSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 }

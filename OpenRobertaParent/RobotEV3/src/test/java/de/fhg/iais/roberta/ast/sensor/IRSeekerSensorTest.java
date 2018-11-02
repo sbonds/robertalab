@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.fhg.iais.roberta.inter.mode.sensor.IRSeekerSensorMode;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
@@ -27,8 +27,8 @@ public class IRSeekerSensorTest {
         IRSeekerSensor<Void> cs = (IRSeekerSensor<Void>) transformer.getTree().get(0).get(1);
         IRSeekerSensor<Void> cs1 = (IRSeekerSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals(IRSeekerSensorMode.MODULATED, cs.getMode());
-        Assert.assertEquals(IRSeekerSensorMode.UNMODULATED, cs1.getMode());
+        Assert.assertEquals(SC.MODULATED, cs.getMode());
+        Assert.assertEquals(SC.UNMODULATED, cs1.getMode());
     }
 
     @Test
@@ -38,8 +38,8 @@ public class IRSeekerSensorTest {
         IRSeekerSensor<Void> cs = (IRSeekerSensor<Void>) transformer.getTree().get(0).get(1);
         IRSeekerSensor<Void> cs1 = (IRSeekerSensor<Void>) transformer.getTree().get(1).get(1);
 
-        Assert.assertEquals("S1", cs.getPort().getCodeName());
-        Assert.assertEquals("S1", cs1.getPort().getCodeName());
+        Assert.assertEquals("S1", cs.getPort());
+        Assert.assertEquals("S1", cs1.getPort());
     }
 
     @Test

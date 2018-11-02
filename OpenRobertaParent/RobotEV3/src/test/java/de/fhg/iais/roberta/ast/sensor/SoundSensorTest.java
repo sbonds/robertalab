@@ -23,7 +23,7 @@ public class SoundSensorTest {
 
         SoundSensor<Void> cs = (SoundSensor<Void>) transformer.getTree().get(0).get(1);
 
-        Assert.assertEquals("S1", cs.getPort().getCodeName());
+        Assert.assertEquals("S1", cs.getPort());
     }
 
     @Test

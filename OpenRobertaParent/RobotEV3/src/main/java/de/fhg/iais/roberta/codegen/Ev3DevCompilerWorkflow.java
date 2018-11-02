@@ -30,7 +30,7 @@ public class Ev3DevCompilerWorkflow extends AbstractCompilerWorkflow {
         }
         try {
             this.generatedSourceCode =
-                Ev3PythonVisitor.generate((EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+                Ev3PythonVisitor.generate((EV3Configuration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
             LOG.info("ev3dev code generated");
         } catch ( Exception e ) {
             LOG.error("ev3dev code generation failed", e);

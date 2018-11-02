@@ -86,7 +86,7 @@ public class AstToEv3PythonVisitorTest {
         builder.setTrackWidth(17).setWheelDiameter(5.6);
         builder.addActor(new ActorPort("A", "MA"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.LEFT));
         builder.addActor(new ActorPort("B", "MB"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
-        builder.addSensor(new SensorPort("1", "S1"), new Sensor(SensorType.TOUCH)).addSensor(new SensorPort("2", "S2"), new Sensor(SensorType.ULTRASONIC));
+        builder.addSensor("1", new Sensor(SensorType.TOUCH)).addSensor("2", new Sensor(SensorType.ULTRASONIC));
         brickConfiguration = builder.build();
     }
 

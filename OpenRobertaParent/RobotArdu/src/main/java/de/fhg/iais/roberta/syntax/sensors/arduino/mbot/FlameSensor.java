@@ -5,7 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -21,7 +20,7 @@ public final class FlameSensor<V> extends Sensor<V> {
 
     private final String port;
 
-    private FlameSensor(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    private FlameSensor(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         super(BlockTypeContainer.getByName("FLAMESENSOR_GET_SAMPLE"), properties, comment);
         this.port = port;
         setReadOnly();
@@ -34,7 +33,7 @@ public final class FlameSensor<V> extends Sensor<V> {
      * @param comment added from the user,
      * @return read only object of class {@link FlameSensor}
      */
-    static <V> FlameSensor<V> make(ISensorPort port, BlocklyBlockProperties properties, BlocklyComment comment) {
+    static <V> FlameSensor<V> make(String port, BlocklyBlockProperties properties, BlocklyComment comment) {
         return new FlameSensor<>(port, properties, comment);
     }
 
@@ -58,14 +57,14 @@ public final class FlameSensor<V> extends Sensor<V> {
         final BlocklyDropdownFactory factory = helper.getDropdownFactory();
         final List<Field> fields = helper.extractFields(block, (short) 3);
         final String port = helper.extractField(fields, BlocklyConstants.SENSORPORT);
-        return FlameSensor.make(factory.getSensorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
+        return FlameSensor.make(factory.sanitizePort(port), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         final Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
-        final String fieldValue = this.port.getOraName();
+        final String fieldValue = this.port;
         JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
 
         return jaxbDestination;

@@ -88,7 +88,7 @@ public class LightStatusAction<V> extends Action<V> {
             || block.getType().equals("robActions_leds_off") ) {
             status = LightStatusAction.Status.OFF;
         }
-        return LightStatusAction.make(factory.getActorPort(port), status, helper.extractBlockProperties(block), helper.extractComment(block));
+        return LightStatusAction.make(factory.sanitizePort(port), status, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,7 @@ import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
+import de.fhg.iais.roberta.util.DropDown;
 import de.fhg.iais.roberta.util.DropDowns;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -46,66 +48,45 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public class BlocklyDropdownFactory {
     private static final Logger LOG = LoggerFactory.getLogger(BlocklyDropdownFactory.class);
-    private final Map<String, String> sensorToPorts;
-    private final Map<String, String> actorToPorts;
+    @SuppressWarnings("unused")
+    private final Set<String> sensorToPorts;
+    private final Set<String> actorToPorts;
     private final Map<String, String> slots;
 
     private final Map<String, WaitUntilSensorBean> waMap;
-    private final Map<String, String> sensorModes;
-    private final DropDowns blocklyDropdownItems;
-    private final Map<String, String> configurationComponentTypes;
+    private final Map<String, String> modes;
+    private final DropDowns blocklyDropdownColorItems;
+    private final DropDown configurationComponentTypes;
 
     public BlocklyDropdownFactory(Properties properties) {
         this.sensorToPorts = BlocklyDropdown2EnumHelper.getSensorPortsFromProperties(properties);
         this.actorToPorts = BlocklyDropdown2EnumHelper.getActorPortsFromProperties(properties);
         this.slots = BlocklyDropdown2EnumHelper.getSlotFromProperties(properties);
-        this.blocklyDropdownItems = BlocklyDropdown2EnumHelper.getDropdownFromProperties(properties);
+        this.blocklyDropdownColorItems = BlocklyDropdown2EnumHelper.getDropdownColorFromProperties(properties);
         this.waMap = BlocklyDropdown2EnumHelper.getWaitUntilFromProperties(properties);
-        this.sensorModes = BlocklyDropdown2EnumHelper.getSensorModesFromProperties(properties);
+        this.modes = BlocklyDropdown2EnumHelper.getModesFromProperties(properties);
         this.configurationComponentTypes = BlocklyDropdown2EnumHelper.getConfigurationComponentTypesFromProperties(properties);
     }
 
-    public String getConfigurationComponentType(String key) {
-        Assert.nonEmptyString(key, "Invalid component key");
-        String configurationComponentType = this.configurationComponentTypes.get(key);
-        Assert.notNull(configurationComponentType, "No associated component type for %s in the properties", key);
+    public String getConfigurationComponentTypeByBlocklyName(String blocklyName) {
+        Assert.nonEmptyString(blocklyName, "Invalid blockly name");
+        String configurationComponentType = this.configurationComponentTypes.getBySecond(blocklyName);
+        Assert.notNull(configurationComponentType, "No associated component type for %s in the properties", blocklyName);
         return configurationComponentType;
     }
 
-    /**
-     * Get a sensor port from {@link ISensorPort} given string parameter and mapping from a port to SensorPort. It is possible for one sensor port to have
-     * multiple string mappings. Throws exception if the sensor port does not exists. <br>
-     * It can only be used by subclasses of IRobotFactory.
-     *
-     * @param name of the sensor port
-     * @param port-SensorPort map
-     * @return SensorPort {@link ISensorPort}
-     */
-    public String getSensorPort(String port) {
-        Assert.nonEmptyString(port);
-        String portInternal = this.sensorToPorts.get(port);
-        Assert.notNull(portInternal, "Invalid sensor port: %s", port);
-        return portInternal;
+    public String getBlocklyNameByConfigurationComponentType(String typeName) {
+        Assert.nonEmptyString(typeName, "Invalid type name");
+        String configurationComponentType = this.configurationComponentTypes.getByFirst(typeName);
+        Assert.notNull(configurationComponentType, "No associated blockly name for %s in the properties", typeName);
+        return configurationComponentType;
     }
 
-    /**
-     * Get a actor port from {@link IActorPort} given string parameter and mapping from a port to ActorPort. It is possible for one sensor port to have multiple
-     * string mappings. Throws exception if the sensor port does not exists. <br>
-     * It can only be used by subclasses of IRobotFactory.
-     *
-     * @param name of the sensor port
-     * @param port-ActorPort map
-     * @return ActorPort {@link IActorPort}
-     */
-    public String getActorPort(String port) {
-        Assert.notNull(port, "Null actor port!");
-        if ( port.isEmpty() ) {
+    public String sanitizePort(String port) {
+        if ( port == null || port.isEmpty() ) {
             return BlocklyConstants.NO_PORT;
         }
-        final String sUpper = port.trim().toUpperCase(Locale.GERMAN);
-        String actorPort = this.actorToPorts.get(sUpper);
-        Assert.notNull(actorPort, "Undefined actor port %s", port);
-        return actorPort;
+        return port;
     }
 
     /**
@@ -118,7 +99,7 @@ public class BlocklyDropdownFactory {
     public String getSlot(String slot) {
         Assert.notNull(slot, "Null slot port!");
         if ( slot.isEmpty() ) {
-            return BlocklyConstants.NO_PORT;
+            return BlocklyConstants.EMPTY_SLOT;
         }
         final String sUpper = slot.trim().toUpperCase(Locale.GERMAN);
         String internalSlot = this.slots.get(sUpper);
@@ -126,13 +107,13 @@ public class BlocklyDropdownFactory {
         return internalSlot;
     }
 
-    public String getSensorMode(String mode) {
-        Assert.nonEmptyString(mode, "Invalid sensor mode");
+    public String getMode(String mode) {
+        Assert.nonEmptyString(mode, "Invalid mode");
 
         final String sUpper = mode.trim().toUpperCase(Locale.GERMAN);
-        String internalSensorMode = this.sensorModes.get(sUpper);
-        Assert.notNull(internalSensorMode, "Undefined sensor mode %s", mode);
-        return internalSensorMode;
+        String internalMode = this.modes.get(sUpper);
+        Assert.notNull(internalMode, "Undefined mode %s", mode);
+        return internalMode;
     }
 
     /**
@@ -176,7 +157,7 @@ public class BlocklyDropdownFactory {
      * @return {@link Pair<String, String>}
      */
     public Pair<String, String> getPickColor(String color) {
-        return this.blocklyDropdownItems.get("color").getPairBySecond(color.toUpperCase());
+        return this.blocklyDropdownColorItems.get("color").getPairBySecond(color.toUpperCase());
     }
 
     /**
@@ -299,7 +280,7 @@ public class BlocklyDropdownFactory {
         try {
             Class<Sensor<?>> sensorClass = (Class<Sensor<?>>) BlocklyDropdownFactory.class.getClassLoader().loadClass(implementingClass);
             String mode = waBean.getMode();
-            SensorMetaDataBean sensorMetaDataBean = new SensorMetaDataBean(getSensorPort(port), getSensorMode(mode), getSlot(slot), isPortInMutation);
+            SensorMetaDataBean sensorMetaDataBean = new SensorMetaDataBean(sanitizePort(port), getMode(mode), getSlot(slot), isPortInMutation);
             Method makeMethod = sensorClass.getDeclaredMethod("make", SensorMetaDataBean.class, BlocklyBlockProperties.class, BlocklyComment.class);
             return (Sensor<?>) makeMethod.invoke(null, sensorMetaDataBean, properties, comment);
         } catch ( Exception e ) {

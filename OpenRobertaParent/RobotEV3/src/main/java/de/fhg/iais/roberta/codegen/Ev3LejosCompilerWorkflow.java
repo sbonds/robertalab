@@ -31,7 +31,7 @@ public class Ev3LejosCompilerWorkflow extends AbstractCompilerWorkflow {
         }
         try {
             this.generatedSourceCode =
-                Ev3JavaVisitor.generate(programName, (EV3Configuration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+                Ev3JavaVisitor.generate(programName, (EV3Configuration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
             LOG.info("ev3lejos java code generated");
         } catch ( Exception e ) {
             LOG.error("ev3lejos java code generation failed", e);

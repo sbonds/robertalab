@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
@@ -67,7 +68,7 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
             driveAction.getParam().getDuration().getValue().visit(this);
         }
         if ( this.robotConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.robotConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
+            this.usedActors.add(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.LEFT), ActorType.DIFFERENTIAL_DRIVE));
         }
         return null;
     }
@@ -80,7 +81,7 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
             curveAction.getParamLeft().getDuration().getValue().visit(this);
         }
         if ( this.robotConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.robotConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
+            this.usedActors.add(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.LEFT), ActorType.DIFFERENTIAL_DRIVE));
         }
         return null;
     }
@@ -92,7 +93,7 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
             turnAction.getParam().getDuration().getValue().visit(this);
         }
         if ( this.robotConfiguration != null ) {
-            this.usedActors.add(new UsedActor(this.robotConfiguration.getLeftMotorPort(), ActorType.DIFFERENTIAL_DRIVE));
+            this.usedActors.add(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.LEFT), ActorType.DIFFERENTIAL_DRIVE));
         }
         return null;
     }
@@ -105,9 +106,9 @@ public final class MbotUsedHardwareCollectorVisitor extends AbstractUsedHardware
     @Override
     public Void visitMotorDriveStopAction(MotorDriveStopAction<Void> stopAction) {
         if ( this.robotConfiguration != null ) {
-            if ( (this.robotConfiguration.getLeftMotorPort() != null) && (this.robotConfiguration.getRightMotorPort() != null) ) {
-                this.usedActors.add(new UsedActor(this.robotConfiguration.getLeftMotorPort(), ActorType.GEARED_MOTOR));
-                this.usedActors.add(new UsedActor(this.robotConfiguration.getRightMotorPort(), ActorType.GEARED_MOTOR));
+            if ( (this.robotConfiguration.getFirstMotorPort(SC.LEFT) != null) && (this.robotConfiguration.getFirstMotorPort(SC.RIGHT) != null) ) {
+                this.usedActors.add(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.LEFT), ActorType.GEARED_MOTOR));
+                this.usedActors.add(new UsedActor(this.robotConfiguration.getFirstMotorPort(SC.RIGHT), ActorType.GEARED_MOTOR));
             }
         }
         return null;

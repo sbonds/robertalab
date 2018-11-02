@@ -58,7 +58,7 @@ public class NaoCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     private String generateProgram(String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) {
-        String sourceCode = NaoPythonVisitor.generate((NAOConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true, language);
+        String sourceCode = NaoPythonVisitor.generate((NAOConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true, language);
         LOG.info("generating {} code", toString().toLowerCase());
         return sourceCode;
     }

@@ -54,7 +54,7 @@ public class Jaxb2NxtConfigurationTransformer {
         List<ConfigurationComponent> allComponents = new ArrayList<>();
         for ( Value value : values ) {
             String portName = value.getName();
-            String userDefinedName = portName;
+            String userDefinedName = portName.substring(1);
             boolean isActor = !portName.startsWith("S");
             String blocklyName = value.getBlock().getType();
             List<Field> fields = extractFields(value.getBlock(), (short) 3);
@@ -64,7 +64,14 @@ public class Jaxb2NxtConfigurationTransformer {
                 String fValue = field.getValue();
                 properties.put(fKey, fValue);
             }
-            ConfigurationComponent cc = new ConfigurationComponent(blocklyName, isActor, portName, BlocklyConstants.NO_SLOT, userDefinedName, properties);
+            ConfigurationComponent cc =
+                new ConfigurationComponent(
+                    this.factory.getConfigurationComponentTypeByBlocklyName(blocklyName),
+                    isActor,
+                    portName,
+                    BlocklyConstants.NO_SLOT,
+                    userDefinedName,
+                    properties);
             allComponents.add(cc);
         }
         return allComponents;
@@ -80,7 +87,7 @@ public class Jaxb2NxtConfigurationTransformer {
     private List<Field> extractFields(Block block, int numOfFields) {
         List<Field> fields;
         fields = block.getField();
-        Assert.isTrue(fields.size() == numOfFields, "Number of fields is not equal to " + numOfFields + "!");
+        Assert.isTrue(fields.size() <= numOfFields, "Fields size is not less or equal to " + numOfFields + "!");
         return fields;
     }
 

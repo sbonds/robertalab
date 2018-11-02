@@ -92,7 +92,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
             }
             mp = new MotionParam.Builder<V>().speed(helper.convertPhraseToExpr(left)).duration(md).build();
         }
-        return MotorOnAction.make(factory.getActorPort(port), mp, helper.extractBlockProperties(block), helper.extractComment(block));
+        return MotorOnAction.make(port, mp, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     /**
@@ -122,7 +122,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
 
     @Override
     public String toString() {
-        return "MotorOnAction [" + getPort() + ", " + this.param + "]";
+        return "MotorOnAction [" + getUserDefinedPort() + ", " + this.param + "]";
     }
 
     @Override
@@ -135,7 +135,7 @@ public final class MotorOnAction<V> extends MoveAction<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getPort().toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getUserDefinedPort().toString());
         JaxbTransformerHelper.addValue(jaxbDestination, BlocklyConstants.POWER, getParam().getSpeed());
         if ( getParam().getDuration() != null ) {
             if ( getDurationMode() != null ) {

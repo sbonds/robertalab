@@ -36,7 +36,7 @@ public class MicrobitCompilerWorkflow extends AbstractCompilerWorkflow {
         }
         try {
             generatedSourceCode =
-                MicrobitPythonVisitor.generate((MicrobitConfiguration) data.getBrickConfiguration(), data.getProgramTransformer().getTree(), true);
+                MicrobitPythonVisitor.generate((MicrobitConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
             LOG.info("microbit python code generated");
         } catch ( Exception e ) {
             LOG.error("microbit python code generation failed", e);

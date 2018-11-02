@@ -10,8 +10,8 @@ public class MotorTachoTest {
     @Test
     public void setMotorTacho() throws Exception {
         String a =
-            "\nhal.getRegulatedMotorTachoValue(ActorPort.A, EncoderSensorMode.ROTATION)"
-                + "hal.getUnregulatedMotorTachoValue(ActorPort.D, EncoderSensorMode.DEGREE)}";
+            "\nhal.getRegulatedMotorTachoValue(ActorPort.A, SC.ROTATION)"
+                + "hal.getUnregulatedMotorTachoValue(ActorPort.D, SC.DEGREE)}";
 
         this.h.assertCodeIsOk(a, "/syntax/sensors/sensor_setEncoder.xml");
     }

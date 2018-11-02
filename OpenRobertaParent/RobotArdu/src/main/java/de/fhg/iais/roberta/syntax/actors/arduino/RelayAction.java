@@ -5,7 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
-import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.action.IRelayMode;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
@@ -55,7 +54,7 @@ public class RelayAction<V> extends Action<V> {
     /**
      * @return port.
      */
-    public String  getPort() {
+    public String getPort() {
         return this.port;
     }
 
@@ -81,7 +80,7 @@ public class RelayAction<V> extends Action<V> {
         List<Field> fields = helper.extractFields(block, (short) 2);
         String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
         String mode = helper.extractField(fields, BlocklyConstants.RELAYSTATE, BlocklyConstants.DEFAULT);
-        return RelayAction.make(factory.getActorPort(port), factory.getRelayMode(mode), helper.extractBlockProperties(block), helper.extractComment(block));
+        return RelayAction.make(factory.sanitizePort(port), factory.getRelayMode(mode), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

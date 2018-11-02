@@ -22,8 +22,10 @@ public class DropDown {
         Assert.notNull(right);
         Pair<String, String> entry = Pair.of(left, right);
         this.sequence.add(entry);
-        Assert.isNull(this.leftMap.put(left, entry), "this key was already mapped in left: {}", left);
-        Assert.isNull(this.rightMap.put(right, entry), "this key was already mapped in right: {}", right);
+        Pair<String, String> oldLeft = this.leftMap.put(left, entry);
+        Assert.isTrue(oldLeft == null || oldLeft.equals(entry), "Invalide replace for %s by %s", oldLeft, entry);
+        Pair<String, String> oldRight = this.rightMap.put(right, entry);
+        Assert.isTrue(oldRight == null || oldRight.equals(entry), "Invalide replace for %s by %s", oldRight, entry);
     }
 
     public String getByFirst(String first) {

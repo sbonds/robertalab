@@ -58,9 +58,9 @@ public class MotorStopAction<V> extends MoveAction<V> {
     @Override
     public String toString() {
         if ( getMode() != null ) {
-            return "MotorStop [port=" + getPort() + ", mode=" + this.mode + "]";
+            return "MotorStop [port=" + getUserDefinedPort() + ", mode=" + this.mode + "]";
         } else {
-            return "MotorStop [port=" + getPort() + "]";
+            return "MotorStop [port=" + getUserDefinedPort() + "]";
         }
     }
 
@@ -84,10 +84,10 @@ public class MotorStopAction<V> extends MoveAction<V> {
         if ( fields.size() > 1 ) {
             String modeName = helper.extractField(fields, BlocklyConstants.MODE);
             return MotorStopAction
-                .make(factory.getActorPort(portName), factory.getMotorStopMode(modeName), helper.extractBlockProperties(block), helper.extractComment(block));
+                .make(factory.sanitizePort(portName), factory.getMotorStopMode(modeName), helper.extractBlockProperties(block), helper.extractComment(block));
 
         }
-        return MotorStopAction.make(factory.getActorPort(portName), null, helper.extractBlockProperties(block), helper.extractComment(block));
+        return MotorStopAction.make(factory.sanitizePort(portName), null, helper.extractBlockProperties(block), helper.extractComment(block));
 
     }
 
@@ -96,7 +96,7 @@ public class MotorStopAction<V> extends MoveAction<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getPort().toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getUserDefinedPort().toString());
         if ( getMode() != null ) {
             JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
         }

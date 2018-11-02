@@ -68,7 +68,7 @@ public final class ClearDisplayAction<V> extends Action<V> {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
-        return ClearDisplayAction.make(factory.getActorPort(port), helper.extractBlockProperties(block), helper.extractComment(block));
+        return ClearDisplayAction.make(factory.sanitizePort(port), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

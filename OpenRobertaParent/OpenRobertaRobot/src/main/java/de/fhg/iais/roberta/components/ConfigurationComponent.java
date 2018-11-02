@@ -7,7 +7,8 @@ import java.util.Map;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public final class ConfigurationComponent {
-    private final String blocklyName;
+    private final String componentType;
+
     private final boolean isActor;
     private final String userDefinedPortName;
     private final String portName;
@@ -15,13 +16,13 @@ public final class ConfigurationComponent {
     private final Map<String, String> componentProperties;
 
     public ConfigurationComponent(
-        String blocklyName,
+        String compnentType,
         boolean isActor,
         String portName,
         String slotName,
         String userDefinedName,
         Map<String, String> componentProperties) {
-        this.blocklyName = blocklyName;
+        this.componentType = compnentType;
         this.isActor = isActor;
         this.portName = portName;
         this.slotName = slotName;
@@ -29,8 +30,8 @@ public final class ConfigurationComponent {
         this.componentProperties = Collections.unmodifiableMap(new HashMap<>(componentProperties));
     }
 
-    public String getBlocklyName() {
-        return this.blocklyName;
+    public String getComponentType() {
+        return this.componentType;
     }
 
     public boolean isActor() {
@@ -61,6 +62,13 @@ public final class ConfigurationComponent {
         Assert.nonEmptyString(propertyName, "No valid property name %s", propertyName);
         String propertyValue = this.componentProperties.get(propertyName);
         Assert.notNull(propertyValue, "No property with name %s", propertyName);
+
+        return propertyValue;
+    }
+
+    public String getOptProperty(String propertyName) {
+        Assert.nonEmptyString(propertyName, "No valid property name %s", propertyName);
+        String propertyValue = this.componentProperties.get(propertyName);
 
         return propertyValue;
     }

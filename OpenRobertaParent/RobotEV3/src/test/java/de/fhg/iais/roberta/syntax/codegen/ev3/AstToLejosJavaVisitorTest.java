@@ -104,7 +104,7 @@ public class AstToLejosJavaVisitorTest {
         builder
             .addActor(new ActorPort("A", "MA"), new Actor(ActorType.MEDIUM, true, DriveDirection.FOREWARD, MotorSide.LEFT))
             .addActor(new ActorPort("B", "MB"), new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT));
-        builder.addSensor(new SensorPort("1", "S1"), new Sensor(SensorType.TOUCH)).addSensor(new SensorPort("2", "S2"), new Sensor(SensorType.ULTRASONIC));
+        builder.addSensor("1", new Sensor(SensorType.TOUCH)).addSensor("2", new Sensor(SensorType.ULTRASONIC));
         brickConfiguration = builder.build();
     }
 
@@ -158,7 +158,7 @@ public class AstToLejosJavaVisitorTest {
                 + IMPORTS
                 + MAIN_CLASS
                 + BRICK_CONFIGURATION_DECL
-                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH), new UsedSensor(SensorPort.S3, SensorType.COLOR, ColorSensorMode.COLOUR)));\n"
+                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, SC.TOUCH), new UsedSensor(SensorPort.S3, SensorType.COLOR, SC.COLOUR)));\n"
                 + "private static Map<String, String> predefinedImages = new HashMap<String, String>();\n"
                 + HAL
                 + customMainMethodWithImage("predefinedImages.put(\"EYESOPEN\", \"" + IMG_EYESOPEN + "\");\n")
@@ -191,7 +191,7 @@ public class AstToLejosJavaVisitorTest {
                 + IMPORTS
                 + MAIN_CLASS
                 + BRICK_CONFIGURATION_DECL
-                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH), new UsedSensor(SensorPort.S4, SensorType.ULTRASONIC, UltrasonicSensorMode.DISTANCE)));\n"
+                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, SC.TOUCH), new UsedSensor(SensorPort.S4, SensorType.ULTRASONIC, SC.DISTANCE)));\n"
                 + "private static Map<String, String> predefinedImages = new HashMap<String, String>();\n"
                 + HAL
                 + customMainMethodWithImage("predefinedImages.put(\"FLOWERS\", \"" + IMG_FLOWERS + "\");\n")
@@ -224,8 +224,8 @@ public class AstToLejosJavaVisitorTest {
                 + IMPORTS
                 + MAIN_CLASS
                 + BRICK_CONFIGURATION_DECL
-                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S4, SensorType.INFRARED, InfraredSensorMode.DISTANCE), new UsedSensor(SensorPort.S4, SensorType.ULTRASONIC, UltrasonicSensorMode.DISTANCE)"
-                + ", new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));\n"
+                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S4, SensorType.INFRARED, SC.DISTANCE), new UsedSensor(SensorPort.S4, SensorType.ULTRASONIC, SC.DISTANCE)"
+                + ", new UsedSensor(SensorPort.S1, SensorType.TOUCH, SC.TOUCH)));\n"
                 + "private static Map<String, String> predefinedImages = new HashMap<String, String>();\n"
                 + HAL
                 + customMainMethodWithImage("predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n")
@@ -235,7 +235,7 @@ public class AstToLejosJavaVisitorTest {
                 + "            hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);\n"
                 + "            hal.rotateDirectionRegulated(TurnDirection.RIGHT, 50);\n"
                 + "        }\n"
-                + "        if ( (hal.getRegulatedMotorTachoValue(ActorPort.A, EncoderSensorMode.ROTATION) + hal.getInfraredSensorDistance(SensorPort.S4)) == hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
+                + "        if ( (hal.getRegulatedMotorTachoValue(ActorPort.A, SC.ROTATION) + hal.getInfraredSensorDistance(SensorPort.S4)) == hal.getUltraSonicSensorDistance(SensorPort.S4) ) {\n"
                 + "            hal.ledOff();\n"
                 + "        } else {\n"
                 + "            hal.resetGyroSensor(SensorPort.S2);\n"
@@ -673,7 +673,7 @@ public class AstToLejosJavaVisitorTest {
                 + IMPORTS
                 + MAIN_CLASS
                 + BRICK_CONFIGURATION_DECL
-                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, SC.TOUCH)));"
                 + HAL
                 + MAIN_METHOD
                 + "public void run() throwsException {\n"
@@ -700,7 +700,7 @@ public class AstToLejosJavaVisitorTest {
                 + IMPORTS
                 + MAIN_CLASS
                 + BRICK_CONFIGURATION_DECL
-                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, SC.TOUCH)));"
                 + HAL
                 + MAIN_METHOD
                 + "public void run() throwsException {\n"
@@ -730,7 +730,7 @@ public class AstToLejosJavaVisitorTest {
                 + IMPORTS
                 + MAIN_CLASS
                 + BRICK_CONFIGURATION_DECL
-                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, SC.TOUCH)));"
                 + HAL
                 + MAIN_METHOD
                 + "public void run() throwsException {\n"
@@ -751,7 +751,7 @@ public class AstToLejosJavaVisitorTest {
                 + IMPORTS
                 + MAIN_CLASS
                 + BRICK_CONFIGURATION_DECL
-                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, SC.TOUCH)));"
                 + HAL
                 + MAIN_METHOD
                 + "public void run() throwsException {\n"
@@ -787,7 +787,7 @@ public class AstToLejosJavaVisitorTest {
                 + IMPORTS
                 + MAIN_CLASS
                 + BRICK_CONFIGURATION_DECL
-                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, SC.TOUCH)));"
                 + HAL
                 + MAIN_METHOD
                 + "public void run() throwsException {\n"
@@ -827,7 +827,7 @@ public class AstToLejosJavaVisitorTest {
                 + IMPORTS
                 + MAIN_CLASS
                 + BRICK_CONFIGURATION_DECL
-                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, SC.TOUCH)));"
                 + HAL
                 + MAIN_METHOD
                 + "public void run() throwsException {\n"
@@ -863,7 +863,7 @@ public class AstToLejosJavaVisitorTest {
                 + IMPORTS
                 + MAIN_CLASS
                 + BRICK_CONFIGURATION_DECL
-                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, SC.TOUCH)));"
                 + HAL
                 + MAIN_METHOD
                 + "public void run() throwsException {\n"
@@ -904,7 +904,7 @@ public class AstToLejosJavaVisitorTest {
                 + IMPORTS
                 + MAIN_CLASS
                 + BRICK_CONFIGURATION_DECL
-                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, SC.TOUCH)));"
                 + HAL
                 + MAIN_METHOD
                 + "public void run() throwsException {\n"
@@ -954,7 +954,7 @@ public class AstToLejosJavaVisitorTest {
                 + IMPORTS
                 + MAIN_CLASS
                 + BRICK_CONFIGURATION_DECL
-                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));"
+                + "private Set<UsedSensor> usedSensors = new LinkedHashSet<UsedSensor>(Arrays.asList(new UsedSensor(SensorPort.S1, SensorType.TOUCH, SC.TOUCH)));"
                 + HAL
                 + MAIN_METHOD
                 + "public void run() throwsException {\n"

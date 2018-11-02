@@ -71,8 +71,8 @@
 									<block type="robSensors_getSample"
 										id="Xa5;TByo120N0)B+@S=J" intask="true" deletable="false"
 										movable="false">
-										<mutation input="TOUCH"></mutation>
-										<field name="SENSORTYPE">TOUCH</field>
+										<mutation input="TOUCH_PRESSED"></mutation>
+										<field name="SENSORTYPE">TOUCH_PRESSED</field>
 										<field name="SENSORPORT">1</field>
 										<field name="SLOT" />
 										<data>ev3</data>
@@ -168,8 +168,8 @@
 									<block type="robSensors_getSample"
 										id="uY*,.HfP0x.?;J)n,`OC" intask="true" deletable="false"
 										movable="false">
-										<mutation input="TOUCH"></mutation>
-										<field name="SENSORTYPE">TOUCH</field>
+										<mutation input="TOUCH_PRESSED"></mutation>
+										<field name="SENSORTYPE">TOUCH_PRESSED</field>
 										<field name="SENSORPORT">1</field>
 										<field name="SLOT" />
 										<data>ev3</data>

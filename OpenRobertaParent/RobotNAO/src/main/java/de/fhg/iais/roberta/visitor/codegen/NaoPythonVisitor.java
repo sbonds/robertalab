@@ -15,12 +15,11 @@ import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.nao.Camera;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
-import de.fhg.iais.roberta.mode.sensor.DetectFaceSensorMode;
-import de.fhg.iais.roberta.mode.sensor.DetectMarkSensorMode;
 import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
@@ -81,8 +80,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectFaceSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectMarkSensor;
+import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrentSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.GetSampleSensor;
@@ -1147,7 +1146,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitNaoMark(DetectMarkSensor<Void> detectedMark) {
         this.sb.append("h.getDetectedMark");
-        if ( detectedMark.getMode() == DetectMarkSensorMode.IDALL ) {
+        if ( detectedMark.getMode() == SC.IDALL ) {
             this.sb.append("s");
         }
         this.sb.append("()");
@@ -1215,7 +1214,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     public Void visitDetectFace(DetectFaceSensor<Void> detectFace) {
         this.sb.append("faceRecognitionModule.detectFace");
-        if ( detectFace.getMode() == DetectFaceSensorMode.NAMEALL ) {
+        if ( detectFace.getMode() == SC.NAMEALL ) {
             this.sb.append("s");
         }
         this.sb.append("()");
@@ -1248,7 +1247,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     private String constructJointActuator(IPort portType, String port, String side, String axis1, String axis2) {
-        if ( portType.getCodeName().equals("HEAD") ) {
+        if ( portType.equals("HEAD") ) {
             return port + side;
         } else {
             return side + port + axis1 + axis2;
@@ -1258,7 +1257,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     private String extractSideFromSlot(String[] slots, IPort portType) {
         String side;
         side = Character.toString(slots[0].toUpperCase().charAt(0));
-        if ( portType.getCodeName().equals("HEAD") ) {
+        if ( portType.equals("HEAD") ) {
             side = StringUtils.capitalize(slots[0].toLowerCase());
         }
         return side;

@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.codegen.nxt;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
@@ -141,6 +142,7 @@ public class SimulationVisitorTest {
     }
 
     @Test
+    @Ignore
     public void test11() throws Exception {
         String a =
             "var stmt0 = createWaitStmt([createIfStmt([createBinaryExpr(CONST.LT, createGetSample(CONST.COLOUR, CONST.RED), createConstant(CONST.NUM_CONST, 30))], [])]);\n"

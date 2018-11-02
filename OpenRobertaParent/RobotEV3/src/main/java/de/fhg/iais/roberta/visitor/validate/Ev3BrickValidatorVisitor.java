@@ -2,7 +2,7 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.mode.sensor.CompassSensorMode;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
@@ -20,7 +20,7 @@ public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisito
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         super.visitMotorOnAction(motorOnAction);
         if ( motorOnAction.getInfos().getErrorCount() == 0 ) {
-            ActorType type = this.robotConfiguration.getActorOnPort(motorOnAction.getPort()).getName();
+            ActorType type = this.robotConfiguration.getActorOnPort(motorOnAction.getUserDefinedPort()).getName();
             boolean duration = motorOnAction.getParam().getDuration() != null;
             if ( (type == ActorType.OTHER) && duration ) {
                 motorOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED"));
@@ -32,7 +32,7 @@ public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisito
     @Override
     public Void visitCompassSensor(CompassSensor<Void> compassSensor) {
         super.visitCompassSensor(compassSensor);
-        if ( this.robotConfiguration.getRobotName().equals("ev3dev") && (compassSensor.getMode() == CompassSensorMode.CALIBRATE) ) {
+        if ( this.robotConfiguration.getRobotName().equals("ev3dev") && (compassSensor.getMode() == SC.CALIBRATE) ) {
             compassSensor.addInfo(NepoInfo.warning("BLOCK_NOT_EXECUTED"));
         }
         return null;

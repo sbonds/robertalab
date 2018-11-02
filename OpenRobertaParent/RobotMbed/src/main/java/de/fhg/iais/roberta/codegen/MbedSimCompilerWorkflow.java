@@ -29,7 +29,7 @@ public class MbedSimCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            generatedSourceCode = MbedSimVisitor.generate(data.getBrickConfiguration(), data.getProgramTransformer().getTree());
+            generatedSourceCode = MbedSimVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree());
             LOG.info("javascript mbed simulation code generated");
         } catch ( Exception e ) {
             LOG.error("javascript mbed simulation code generation failed", e);

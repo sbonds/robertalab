@@ -27,7 +27,7 @@ public class ColorSensorTest {
 
         final ColorSensor<Void> cs = (ColorSensor<Void>) transformer.getTree().get(0).get(1);
 
-        Assert.assertEquals(ColorSensorMode.COLOUR, cs.getMode());
+        Assert.assertEquals(SC.COLOUR, cs.getMode());
     }
 
     @Test
@@ -38,9 +38,9 @@ public class ColorSensorTest {
         final ColorSensor<Void> cs1 = (ColorSensor<Void>) transformer.getTree().get(1).get(1);
         final ColorSensor<Void> cs2 = (ColorSensor<Void>) transformer.getTree().get(2).get(1);
 
-        Assert.assertEquals("S3", cs.getPort().getCodeName());
-        Assert.assertEquals("S1", cs1.getPort().getCodeName());
-        Assert.assertEquals("S2", cs2.getPort().getCodeName());
+        Assert.assertEquals("S3", cs.getPort());
+        Assert.assertEquals("S1", cs1.getPort());
+        Assert.assertEquals("S2", cs2.getPort());
     }
 
     @Test

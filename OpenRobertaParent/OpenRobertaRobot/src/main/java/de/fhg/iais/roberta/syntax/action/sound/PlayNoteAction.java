@@ -96,7 +96,7 @@ public class PlayNoteAction<V> extends Action<V> {
         String duration = helper.extractField(fields, BlocklyConstants.DURATION);
         String port = helper.extractField(fields, BlocklyConstants.ACTORPORT, BlocklyConstants.NO_PORT);
         String frequency = helper.extractField(fields, BlocklyConstants.FREQUENCE);
-        return PlayNoteAction.make(factory.getActorPort(port), duration, frequency, helper.extractBlockProperties(block), helper.extractComment(block));
+        return PlayNoteAction.make(factory.sanitizePort(port), duration, frequency, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override

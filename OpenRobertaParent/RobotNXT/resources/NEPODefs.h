@@ -122,7 +122,7 @@ int SensorLight(int port, string mode){
 int SensorColor(int port, string mode){
   if (mode == "AMBIENTLIGHT"){
     SetSensor(port, SENSOR_COLORNONE);
-  } else if (mode == "COLOR"){
+  } else if (mode == "COLOUR"){
     SetSensor(port, SENSOR_COLORFULL);
   } else if (mode == "LIGHT") {
     SetSensor(port, SENSOR_COLORRED);
@@ -141,7 +141,7 @@ int SensorHtColor(int port, string mode){
     SetHTColor2Mode(port, HT_CMD_COLOR2_PASSIVE);
     ReadSensorHTNormalizedColor2Active(port, color, red, green, blue);
     return (red + green + blue)/3/2.55;
-  } else if (mode == "COLOR"){
+  } else if (mode == "COLOUR"){
     SetHTColor2Mode(port, HT_CMD_COLOR2_LED_LOW);
     color = SensorHTColorNum(port);
     //rearrange numbers: 

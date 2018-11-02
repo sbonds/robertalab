@@ -245,7 +245,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitKeysSensor(KeysSensor<Void> keysSensor) {
-        this.sb.append("microbit." + keysSensor.getPort().getOraName() + ".is_pressed()");
+        this.sb.append("microbit." + keysSensor.getPort() + ".is_pressed()");
         return null;
     }
 
@@ -275,11 +275,11 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometerSensor) {
-        if ( accelerometerSensor.getPort().getCodeName().equals("STRENGTH") ) {
+        if ( accelerometerSensor.getPort().equals("STRENGTH") ) {
             this.sb.append("math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)");
         } else {
             this.sb.append("microbit.accelerometer.get_");
-            this.sb.append(accelerometerSensor.getPort().getCodeName());
+            this.sb.append(accelerometerSensor.getPort());
             this.sb.append("()");
         }
         return null;
@@ -289,7 +289,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     public Void visitPinGetValueSensor(PinGetValueSensor<Void> pinValueSensor) {
         final String valueType = pinValueSensor.getMode().toString().toLowerCase();
         this.sb.append("microbit.pin");
-        this.sb.append(pinValueSensor.getPort().getCodeName());
+        this.sb.append(pinValueSensor.getPort());
         this.sb.append(".read_");
         this.sb.append(valueType);
         this.sb.append("()");
@@ -610,7 +610,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor<Void> pinTouchSensor) {
-        this.sb.append("microbit.pin" + pinTouchSensor.getPort().getOraName() + ".is_touched()");
+        this.sb.append("microbit.pin" + pinTouchSensor.getPort() + ".is_touched()");
         return null;
     }
 
@@ -667,7 +667,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
-        this.sb.append("microbit.pin" + pinWriteValueSensor.getPort().getCodeName());
+        this.sb.append("microbit.pin" + pinWriteValueSensor.getPort());
         String valueType = "analog(";
         if ( pinWriteValueSensor.getMode() == PinValue.DIGITAL ) {
             valueType = "digital(";

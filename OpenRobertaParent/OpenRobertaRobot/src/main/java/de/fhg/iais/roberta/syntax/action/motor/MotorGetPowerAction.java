@@ -46,7 +46,7 @@ public class MotorGetPowerAction<V> extends MoveAction<V> {
 
     @Override
     public String toString() {
-        return "MotorGetPower [port=" + getPort() + "]";
+        return "MotorGetPower [port=" + getUserDefinedPort() + "]";
     }
 
     @Override
@@ -65,7 +65,7 @@ public class MotorGetPowerAction<V> extends MoveAction<V> {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         List<Field> fields = helper.extractFields(block, (short) 1);
         String portName = helper.extractField(fields, BlocklyConstants.MOTORPORT);
-        return MotorGetPowerAction.make(factory.getActorPort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
+        return MotorGetPowerAction.make(factory.sanitizePort(portName), helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
@@ -73,7 +73,7 @@ public class MotorGetPowerAction<V> extends MoveAction<V> {
         Block jaxbDestination = new Block();
         JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
 
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getPort().toString());
+        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MOTORPORT, getUserDefinedPort().toString());
 
         return jaxbDestination;
     }

@@ -34,7 +34,7 @@ public class WedoUsedHardwareCollectorVisitor extends AbstractUsedHardwareCollec
             motorOnAction.getDurationValue().visit(this);
         }
         if ( this.robotConfiguration != null ) {
-            this.usedActors.add(new UsedActor(motorOnAction.getPort()));
+            this.usedActors.add(new UsedActor(motorOnAction.getUserDefinedPort()));
         }
         return null;
     }

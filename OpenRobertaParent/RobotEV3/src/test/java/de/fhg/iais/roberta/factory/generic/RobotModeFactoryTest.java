@@ -17,13 +17,8 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.mode.action.ev3.ShowPicture;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.InfraredSensorMode;
-import de.fhg.iais.roberta.mode.sensor.EncoderSensorMode;
-
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
-import de.fhg.iais.roberta.mode.sensor.UltrasonicSensorMode;
+import de.fhg.iais.roberta.mode.sensor.ev3.GyroSensorMode;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -69,17 +64,17 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getActorPortFromString() {
-        Assert.assertEquals(this.dropdownFactory.getActorPort("A"), new ActorPort("A", "MA"));
+        Assert.assertEquals(this.dropdownFactory.sanitizePort("A"), new ActorPort("A", "MA"));
     }
 
     @Test
     public void getActorPortByAlternativeName() {
-        Assert.assertEquals(this.dropdownFactory.getActorPort("B"), new ActorPort("B", "MB"));
+        Assert.assertEquals(this.dropdownFactory.sanitizePort("B"), new ActorPort("B", "MB"));
     }
 
     @Test(expected = DbcException.class)
     public void invalidActorPort() {
-        this.dropdownFactory.getActorPort("Q");
+        this.dropdownFactory.sanitizePort("Q");
     }
 
     @Test
@@ -179,22 +174,22 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getBrickKeyFromString() {
-        Assert.assertEquals(this.dropdownFactory.getSensorPort("DOWN"), new SensorPort("DOWN", "DOWN"));
+        Assert.assertEquals(this.dropdownFactory.sanitizePort("DOWN"), new SensorPort("DOWN", "DOWN"));
     }
 
     @Test(expected = DbcException.class)
     public void invalidBrickKey() {
-        this.dropdownFactory.getSensorPort("Q");
+        this.dropdownFactory.sanitizePort("Q");
     }
 
     @Test
     public void getColorSensorModeFromString() {
-        Assert.assertEquals(this.dropdownFactory.getColorSensorMode("AMBIENTLIGHT"), ColorSensorMode.AMBIENTLIGHT);
+        Assert.assertEquals(this.dropdownFactory.getColorSensorMode("AMBIENTLIGHT"), SC.AMBIENTLIGHT);
     }
 
     @Test
     public void getColorSensorModeByAlternativeName() {
-        Assert.assertEquals(this.dropdownFactory.getColorSensorMode("Colour"), ColorSensorMode.COLOUR);
+        Assert.assertEquals(this.dropdownFactory.getColorSensorMode("Colour"), SC.COLOUR);
     }
 
     @Test(expected = DbcException.class)
@@ -204,12 +199,12 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getGyroSensorModeFromString() {
-        Assert.assertEquals(BlocklyDropdown2EnumHelper.getModeValue("ANGLE", GyroSensorMode.class), GyroSensorMode.ANGLE);
+        Assert.assertEquals(BlocklyDropdown2EnumHelper.getModeValue("ANGLE", GyroSensorMode.class), SC.ANGLE);
     }
 
     @Test
     public void getGyroSensorModeByAlternativeName() {
-        Assert.assertEquals(BlocklyDropdown2EnumHelper.getModeValue("Rate", GyroSensorMode.class), GyroSensorMode.RATE);
+        Assert.assertEquals(BlocklyDropdown2EnumHelper.getModeValue("Rate", GyroSensorMode.class), SC.RATE);
     }
 
     @Test(expected = DbcException.class)
@@ -219,12 +214,12 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getInfraredSensorModeFromString() {
-        Assert.assertEquals(this.dropdownFactory.getInfraredSensorMode("DISTANCE"), InfraredSensorMode.DISTANCE);
+        Assert.assertEquals(this.dropdownFactory.getInfraredSensorMode("DISTANCE"), SC.DISTANCE);
     }
 
     @Test
     public void getInfraredSensorModeByAlternativeName() {
-        Assert.assertEquals(this.dropdownFactory.getInfraredSensorMode("PRESENCE"), InfraredSensorMode.PRESENCE);
+        Assert.assertEquals(this.dropdownFactory.getInfraredSensorMode("PRESENCE"), SC.PRESENCE);
     }
 
     @Test(expected = DbcException.class)
@@ -234,7 +229,7 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getTimerSensorModeFromString() {
-        Assert.assertEquals(this.dropdownFactory.getTimerSensorMode("VALUE"), TimerSensorMode.VALUE);
+        Assert.assertEquals(this.dropdownFactory.getTimerSensorMode("VALUE"), SC.VALUE);
     }
 
     @Test(expected = DbcException.class)
@@ -244,7 +239,7 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getMotorTachoModeFromString() {
-        Assert.assertEquals(this.dropdownFactory.getMotorTachoMode("DISTANCE"), EncoderSensorMode.DISTANCE);
+        Assert.assertEquals(this.dropdownFactory.getMotorTachoMode("DISTANCE"), SC.DISTANCE);
     }
 
     @Test(expected = DbcException.class)
@@ -254,12 +249,12 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getUltrasonicSensorModeFromString() {
-        Assert.assertEquals(this.dropdownFactory.getUltrasonicSensorMode("DISTANCE"), UltrasonicSensorMode.DISTANCE);
+        Assert.assertEquals(this.dropdownFactory.getUltrasonicSensorMode("DISTANCE"), SC.DISTANCE);
     }
 
     @Test
     public void getUltrasonicSensorModeByAlternativeName() {
-        Assert.assertEquals(this.dropdownFactory.getUltrasonicSensorMode("Listen"), UltrasonicSensorMode.PRESENCE);
+        Assert.assertEquals(this.dropdownFactory.getUltrasonicSensorMode("Listen"), SC.PRESENCE);
     }
 
     @Test(expected = DbcException.class)
@@ -269,16 +264,16 @@ public class RobotModeFactoryTest {
 
     @Test
     public void getSensorPortFromString() {
-        Assert.assertEquals(this.dropdownFactory.getSensorPort("S1").getCodeName(), "S1");
+        Assert.assertEquals(this.dropdownFactory.sanitizePort("S1"), "S1");
     }
 
     @Test
     public void getSensorPortByAlternativeName() {
-        Assert.assertEquals(this.dropdownFactory.getSensorPort("4").getCodeName(), "S4");
+        Assert.assertEquals(this.dropdownFactory.sanitizePort("4"), "S4");
     }
 
     @Test(expected = DbcException.class)
     public void invalidSensorPort() {
-        this.dropdownFactory.getSensorPort("Q");
+        this.dropdownFactory.sanitizePort("Q");
     }
 }

@@ -7,13 +7,9 @@ import de.fhg.iais.roberta.inter.mode.action.IDriveDirection;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
-import de.fhg.iais.roberta.mode.sensor.ColorSensorMode;
-import de.fhg.iais.roberta.mode.sensor.GyroSensorMode;
-import de.fhg.iais.roberta.mode.sensor.LightSensorMode;
-import de.fhg.iais.roberta.mode.sensor.EncoderSensorMode;
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothCheckConnectAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothReceiveAction;
 import de.fhg.iais.roberta.syntax.action.communication.BluetoothSendAction;
@@ -34,12 +30,12 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.action.sound.VolumeAction;
-import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -72,7 +68,9 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
         String end = createClosingBracket();
         this.sb.append("createDriveAction(");
         driveAction.getParam().getSpeed().visit(this);
-        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
+        String reverse = this.brickConfiguration.getFirstMotor(SC.LEFT).getProperty(SC.MOTOR_REVERSE);
+        IDriveDirection leftMotorRotationDirection = DriveDirection.get(reverse);
+
         DriveDirection driveDirection = (DriveDirection) driveAction.getDirection();
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             driveDirection = getDriveDirection(driveAction.getDirection() == DriveDirection.FOREWARD);
@@ -91,7 +89,9 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
         curveAction.getParamLeft().getSpeed().visit(this);
         this.sb.append(", ");
         curveAction.getParamRight().getSpeed().visit(this);
-        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
+        String reverse = this.brickConfiguration.getFirstMotor(SC.LEFT).getProperty(SC.MOTOR_REVERSE);
+        IDriveDirection leftMotorRotationDirection = DriveDirection.get(reverse);
+
         DriveDirection driveDirection = (DriveDirection) curveAction.getDirection();
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             driveDirection = getDriveDirection(curveAction.getDirection() == DriveDirection.FOREWARD);
@@ -108,7 +108,8 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
         String end = createClosingBracket();
         this.sb.append("createTurnAction(");
         turnAction.getParam().getSpeed().visit(this);
-        IDriveDirection leftMotorRotationDirection = this.brickConfiguration.getActorOnPort(this.brickConfiguration.getLeftMotorPort()).getRotationDirection();
+        String reverse = this.brickConfiguration.getFirstMotor(SC.LEFT).getProperty(SC.MOTOR_REVERSE);
+        IDriveDirection leftMotorRotationDirection = DriveDirection.get(reverse);
         ITurnDirection turnDirection = turnAction.getDirection();
         if ( leftMotorRotationDirection != DriveDirection.FOREWARD ) {
             turnDirection = getTurnDirection(turnAction.getDirection() == TurnDirection.LEFT);
@@ -138,7 +139,7 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
 
     @Override
     public Void visitMotorGetPowerAction(MotorGetPowerAction<Void> motorGetPowerAction) {
-        this.sb.append("createGetMotorPower(" + (motorGetPowerAction.getPort().toString().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ")");
+        this.sb.append("createGetMotorPower(" + (motorGetPowerAction.getUserDefinedPort().toString().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ")");
         return null;
     }
 
@@ -148,7 +149,7 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
         String end = createClosingBracket();
         this.sb.append("createMotorOnAction(");
         motorOnAction.getParam().getSpeed().visit(this);
-        this.sb.append(", " + (motorOnAction.getPort().toString().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString());
+        this.sb.append(", " + (motorOnAction.getUserDefinedPort().toString().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString());
         if ( isDuration ) {
             this.sb.append(", createDuration(CONST.");
             this.sb.append(motorOnAction.getParam().getDuration().getType().toString() + ", ");
@@ -162,7 +163,9 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
     @Override
     public Void visitMotorSetPowerAction(MotorSetPowerAction<Void> motorSetPowerAction) {
         String end = createClosingBracket();
-        this.sb.append("createSetMotorPowerAction(" + (motorSetPowerAction.getPort().toString().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ", ");
+        this.sb
+            .append(
+                "createSetMotorPowerAction(" + (motorSetPowerAction.getUserDefinedPort().toString().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString() + ", ");
         motorSetPowerAction.getPower().visit(this);
         this.sb.append(end);
         return null;
@@ -172,7 +175,7 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         String end = createClosingBracket();
         this.sb.append("createStopMotorAction(");
-        this.sb.append((motorStopAction.getPort().toString().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString());
+        this.sb.append((motorStopAction.getUserDefinedPort().toString().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString());
         this.sb.append(end);
         return null;
     }
@@ -201,14 +204,14 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        switch ( (TimerSensorMode) timerSensor.getMode() ) {
-            case DEFAULT:
-            case VALUE:
-                this.sb.append("createGetSample(CONST.TIMER, 'timer" + timerSensor.getPort().getOraName() + "')");
+        switch ( timerSensor.getMode() ) {
+            case SC.DEFAULT:
+            case SC.VALUE:
+                this.sb.append("createGetSample(CONST.TIMER, 'timer" + timerSensor.getPort() + "')");
                 break;
-            case RESET:
+            case SC.RESET:
                 String end = createClosingBracket();
-                this.sb.append("createResetTimer('timer" + timerSensor.getPort().getOraName() + "'");
+                this.sb.append("createResetTimer('timer" + timerSensor.getPort() + "'");
                 this.sb.append(end);
                 break;
             default:
@@ -282,20 +285,21 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
 
     @Override
     public Void visitColorSensor(ColorSensor<Void> colorSensor) {
-        this.sb.append("createGetSample(CONST.COLOUR, CONST." + ((ColorSensorMode) colorSensor.getMode()).getModeValue() + ")");
+
+        this.sb.append("createGetSample(CONST.COLOUR, CONST." + colorSensor.getMode() + ")");
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("createGetSample(CONST.LIGHT, CONST." + ((LightSensorMode) lightSensor.getMode()).getModeValue() + ")");
+        this.sb.append("createGetSample(CONST.LIGHT, CONST." + lightSensor.getMode() + ")");
         return null;
     }
 
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         String encoderMotor = (encoderSensor.getPort().toString().equals("B") ? MOTOR_RIGHT : MOTOR_LEFT).toString();
-        if ( encoderSensor.getMode() == EncoderSensorMode.RESET ) {
+        if ( encoderSensor.getMode().equals(SC.RESET) ) {
             String end = createClosingBracket();
             this.sb.append("createResetEncoderSensor(" + encoderMotor);
             this.sb.append(end);
@@ -307,7 +311,7 @@ public final class NxtSimVisitor extends AbstractSimVisitor<Void> implements INx
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        if ( gyroSensor.getMode() == GyroSensorMode.RESET ) {
+        if ( gyroSensor.getMode().equals(SC.RESET) ) {
             String end = createClosingBracket();
             this.sb.append("createResetGyroSensor(");
             this.sb.append(end);

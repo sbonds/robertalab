@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.MotorDuration;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
@@ -174,8 +175,8 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         final MotorDuration<Void> duration = motorOnAction.getParam().getDuration();
-        this.sb.append(motorOnAction.getPort().getCodeName()).append(".run(");
-        if ( !this.brickConfiguration.getRightMotorPort().getCodeName().equals(motorOnAction.getPort().getCodeName()) ) {
+        this.sb.append(motorOnAction.getUserDefinedPort()).append(".run(");
+        if ( !this.brickConfiguration.getFirstMotorPort(SC.RIGHT).equals(motorOnAction.getUserDefinedPort()) ) {
             this.sb.append("-1*");
         }
         this.sb.append("(");
@@ -187,7 +188,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
             motorOnAction.getDurationValue().visit(this);
             this.sb.append(");");
             nlIndent();
-            this.sb.append(motorOnAction.getPort().getCodeName()).append(".stop();");
+            this.sb.append(motorOnAction.getUserDefinedPort()).append(".stop();");
         }
         return null;
     }
@@ -204,7 +205,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append(motorStopAction.getPort().getCodeName()).append(".stop();");
+        this.sb.append(motorStopAction.getUserDefinedPort()).append(".stop();");
         return null;
     }
 
@@ -265,7 +266,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitLightSensor(LightSensor<Void> lightSensor) {
-        this.sb.append("myLight" + lightSensor.getPort().getOraName() + ".read()*100/1023");
+        this.sb.append("myLight" + lightSensor.getPort() + ".read()*100/1023");
         return null;
     }
 
@@ -284,7 +285,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     @Override
     public Void visitSoundSensor(SoundSensor<Void> soundSensor) {
 
-        this.sb.append("mySound" + soundSensor.getPort().getOraName() + ".strength()");
+        this.sb.append("mySound" + soundSensor.getPort() + ".strength()");
         return null;
     }
 
@@ -301,49 +302,49 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
 
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
-        this.sb.append("myGyro" + gyroSensor.getPort().getOraName() + ".getGyro" + gyroSensor.getMode() + "()");
+        this.sb.append("myGyro" + gyroSensor.getPort() + ".getGyro" + gyroSensor.getMode() + "()");
         return null;
     }
 
     @Override
     public Void visitAccelerometer(AccelerometerSensor<Void> accelerometer) {
-        this.sb.append("myGyro" + accelerometer.getPort().getOraName() + ".getAngle" + accelerometer.getMode().toString() + "()");
+        this.sb.append("myGyro" + accelerometer.getPort() + ".getAngle" + accelerometer.getMode().toString() + "()");
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor<Void> infraredSensor) {
-        this.sb.append("lineFinder" + infraredSensor.getPort().getOraName() + ".readSensors" + "()&" + infraredSensor.getMode().getValues()[0]);
+        this.sb.append("lineFinder" + infraredSensor.getPort() + ".readSensors" + "()&" + infraredSensor.getMode().getValues()[0]);
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor<Void> temperatureSensor) {
-        this.sb.append("myTemp" + temperatureSensor.getPort().getOraName() + ".getTemperature()");
+        this.sb.append("myTemp" + temperatureSensor.getPort() + ".getTemperature()");
         return null;
     }
 
     @Override
     public Void visitTouchSensor(TouchSensor<Void> touchSensor) {
-        this.sb.append("myTouch" + touchSensor.getPort().getOraName() + ".touched()");
+        this.sb.append("myTouch" + touchSensor.getPort() + ".touched()");
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor<Void> ultrasonicSensor) {
-        this.sb.append("ultraSensor" + ultrasonicSensor.getPort().getOraName() + ".distanceCm()");
+        this.sb.append("ultraSensor" + ultrasonicSensor.getPort() + ".distanceCm()");
         return null;
     }
 
     @Override
     public Void visitMotionSensor(MotionSensor<Void> motionSensor) {
-        this.sb.append("pir" + motionSensor.getPort().getOraName() + ".isHumanDetected()");
+        this.sb.append("pir" + motionSensor.getPort() + ".isHumanDetected()");
         return null;
     }
 
     @Override
     public Void visitFlameSensor(FlameSensor<Void> flameSensor) {
-        this.sb.append("flameSensor" + flameSensor.getPort().getOraName() + ".readAnalog()");
+        this.sb.append("flameSensor" + flameSensor.getPort() + ".readAnalog()");
         return null;
     }
 
@@ -353,7 +354,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
          * after understanding how to implement modes this also works:
          * this.sb.append("myJoystick" + joystick.getPort().getPortNumber() + ".read" + joystick.getMode().getValues()[0] + "()");
          */
-        this.sb.append("myJoystick" + joystick.getPort().getOraName() + ".read" + joystick.getAxis() + "()");
+        this.sb.append("myJoystick" + joystick.getPort() + ".read" + joystick.getAxis() + "()");
         return null;
     }
 
@@ -377,7 +378,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                 case GYRO:
                 case ACCELEROMETER:
                     nlIndent();
-                    this.sb.append("myGyro" + usedSensor.getPort().getOraName() + ".begin();");
+                    this.sb.append("myGyro" + usedSensor.getPort() + ".begin();");
                     break;
                 default:
                     break;
@@ -391,15 +392,15 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
             switch ( (SensorType) usedSensor.getType() ) {
                 case GYRO:
                     nlIndent();
-                    this.sb.append("myGyro" + usedSensor.getPort().getOraName() + ".update();");
+                    this.sb.append("myGyro" + usedSensor.getPort() + ".update();");
                     break;
                 case ACCELEROMETER:
                     nlIndent();
-                    this.sb.append("myGyro" + usedSensor.getPort().getOraName() + ".update();");
+                    this.sb.append("myGyro" + usedSensor.getPort() + ".update();");
                     break;
                 case TEMPERATURE:
                     nlIndent();
-                    this.sb.append("myTemp" + usedSensor.getPort().getOraName() + ".update();");
+                    this.sb.append("myTemp" + usedSensor.getPort() + ".update();");
                     break;
                 default:
                     break;
@@ -440,40 +441,40 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                 case COLOR:
                     break;
                 case ULTRASONIC:
-                    this.sb.append("MeUltrasonicSensor ultraSensor" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
+                    this.sb.append("MeUltrasonicSensor ultraSensor" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case MOTION:
-                    this.sb.append("MePIRMotionSensor pir" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
+                    this.sb.append("MePIRMotionSensor pir" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case TEMPERATURE:
-                    this.sb.append("MeHumiture myTemp" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
+                    this.sb.append("MeHumiture myTemp" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case TOUCH:
-                    this.sb.append("MeTouchSensor myTouch" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
+                    this.sb.append("MeTouchSensor myTouch" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case LIGHT:
-                    this.sb.append("MeLightSensor myLight" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort() + ");\n");
+                    this.sb.append("MeLightSensor myLight" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case INFRARED:
-                    this.sb.append("MeLineFollower lineFinder" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
+                    this.sb.append("MeLineFollower lineFinder" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case COMPASS:
                     break;
                 case GYRO:
                 case ACCELEROMETER:
-                    this.sb.append("MeGyro myGyro" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
+                    this.sb.append("MeGyro myGyro" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case SOUND:
-                    this.sb.append("MeSoundSensor mySound" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
+                    this.sb.append("MeSoundSensor mySound" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case JOYSTICK:
-                    this.sb.append("MeJoystick myJoystick" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
+                    this.sb.append("MeJoystick myJoystick" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case FLAMESENSOR:
-                    this.sb.append("MeFlameSensor flameSensor" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
+                    this.sb.append("MeFlameSensor flameSensor" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case VOLTAGE:
-                    this.sb.append("MePotentiometer myVoltageSensor" + usedSensor.getPort().getOraName() + "(" + usedSensor.getPort().getCodeName() + ");\n");
+                    this.sb.append("MePotentiometer myVoltageSensor" + usedSensor.getPort() + "(" + usedSensor.getPort() + ");\n");
                     break;
                 case TIMER:
                     break;
@@ -491,19 +492,19 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
                     this.sb.append("MeRGBLed rgbled_7(7, 7==7?2:4);\n");
                     break;
                 case GEARED_MOTOR:
-                    this.sb.append("MeDCMotor " + usedActor.getPort().getCodeName() + "(" + usedActor.getPort().getOraName() + ");\n");
+                    this.sb.append("MeDCMotor " + usedActor.getPort() + "(" + usedActor.getPort() + ");\n");
                     break;
                 case DIFFERENTIAL_DRIVE:
                     this.sb
                         .append(
                             "MeDrive myDrive("
-                                + this.brickConfiguration.getLeftMotorPort().getOraName()
+                                + this.brickConfiguration.getFirstMotorPort(SC.LEFT)
                                 + ", "
-                                + this.brickConfiguration.getRightMotorPort().getOraName()
+                                + this.brickConfiguration.getFirstMotorPort(SC.RIGHT)
                                 + ");\n");
                     break;
                 case LED_MATRIX:
-                    this.sb.append("MeLEDMatrix myLEDMatrix_" + usedActor.getPort().getOraName() + "(" + usedActor.getPort().getOraName() + ");\n");
+                    this.sb.append("MeLEDMatrix myLEDMatrix_" + usedActor.getPort() + "(" + usedActor.getPort() + ");\n");
                     break;
                 case BUZZER:
                     this.sb.append("MeBuzzer buzzer;\n");
@@ -619,7 +620,7 @@ public final class MbotCppVisitor extends AbstractCommonArduinoCppVisitor implem
     public Void visitVoltageSensor(VoltageSensor<Void> voltageSensor) {
         //RatedVoltage: 5V
         //Signal type: Analog (range from 0 to 970)
-        this.sb.append("myVoltageSensor" + voltageSensor.getPort().getOraName() + ".read()*5/970");
+        this.sb.append("myVoltageSensor" + voltageSensor.getPort() + ".read()*5/970");
         return null;
     }
 

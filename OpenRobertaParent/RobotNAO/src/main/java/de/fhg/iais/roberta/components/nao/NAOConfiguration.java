@@ -5,9 +5,9 @@ import java.util.TreeMap;
 
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
 
 public class NAOConfiguration extends Configuration {
     private final String ipAddress;

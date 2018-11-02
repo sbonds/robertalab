@@ -40,7 +40,7 @@ public class ArduinoCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            ArduinoConfiguration configuration = ((ArduinoConfiguration) data.getBrickConfiguration());
+            ArduinoConfiguration configuration = ((ArduinoConfiguration) data.getRobotConfiguration());
             this.generatedSourceCode = ArduinoCppVisitor.generate(configuration, data.getProgramTransformer().getTree(), true);
             LOG.info("arduino c++ code generated");
         } catch ( Exception e ) {

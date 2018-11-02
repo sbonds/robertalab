@@ -10,8 +10,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.components.NxtConfiguration;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
@@ -26,30 +26,26 @@ public class NxcVisitorTest {
             + "#define TRACKWIDTH 11.0\n"
             + "#define MAXLINES 8 \n"
             + "#include\"NEPODefs.h\" // contains NEPO declarations for the NXC NXT API resources";
-    private static final String MASMETHOD =
-        "" //
-            + "    SetSensor(S1, SENSOR_TOUCH);\n"
-            + "    SetSensor(S2, SENSOR_LOWSPEED);\n";
-    //+ "    SetSensor(S3, SENSOR_LIGHT);\n"
-    //+ "    SetSensor(S4, SENSOR_SOUND);\n";
 
     private static final String SUFFIX = "";
-    private static NxtConfiguration brickConfiguration;
+    private static Configuration brickConfiguration;
 
     @BeforeClass
     public static void setupConfigurationForAllTests() {
         Map<String, String> motorAproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "LEFT");
-        ConfigurationComponent motorA = new ConfigurationComponent("robBrick_motor_big", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
+        ConfigurationComponent motorA = new ConfigurationComponent("LARGE", true, "A", BlocklyConstants.NO_SLOT, "A", motorAproperties);
 
         Map<String, String> motorBproperties = createMap("MOTOR_REGULATION", "TRUE", "MOTOR_REVERSE", "OFF", "MOTOR_DRIVE", "RIGHT");
-        ConfigurationComponent motorB = new ConfigurationComponent("robBrick_motor_big", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
+        ConfigurationComponent motorB = new ConfigurationComponent("LARGE", true, "B", BlocklyConstants.NO_SLOT, "B", motorBproperties);
 
-        ConfigurationComponent sensorS1 = new ConfigurationComponent("robBrick_touch", true, "S1", BlocklyConstants.NO_SLOT, "1", Collections.emptyMap());
-        ConfigurationComponent sensorS2 = new ConfigurationComponent("robBrick_sound", true, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
+        ConfigurationComponent sensorS1 = new ConfigurationComponent("TOUCH", true, "S1", BlocklyConstants.NO_SLOT, "1", Collections.emptyMap());
+        ConfigurationComponent sensorS2 = new ConfigurationComponent("SOUND", true, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
+        ConfigurationComponent sensorS3 = new ConfigurationComponent("COLOR", true, "S3", BlocklyConstants.NO_SLOT, "3", Collections.emptyMap());
+        ConfigurationComponent sensorS4 = new ConfigurationComponent("LIGHT", true, "S4", BlocklyConstants.NO_SLOT, "4", Collections.emptyMap());
 
-        final NxtConfiguration.Builder builder = new NxtConfiguration.Builder();
-        builder.setTrackWidth(11f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, sensorS1, sensorS2));
-        brickConfiguration = (NxtConfiguration) builder.build();
+        final Configuration.Builder builder = new Configuration.Builder();
+        builder.setTrackWidth(11f).setWheelDiameter(5.6f).addComponents(Arrays.asList(motorA, motorB, sensorS1, sensorS2, sensorS3, sensorS4));
+        brickConfiguration = builder.build();
     }
 
     private static Map<String, String> createMap(String... args) {
@@ -67,7 +63,7 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "task main() {"
-                + MASMETHOD
+
                 + "        TextOut(0,(MAXLINES - 3) * MAXLINES,\"Hallo\");\n"
                 + SUFFIX
 
@@ -83,7 +79,6 @@ public class NxcVisitorTest {
             ""
                 + IMPORTS_CONSTANTS
                 + "task main() {"
-                + MASMETHOD
 
                 + "        for ( int k0 = 0; k0 < 10; k0+=1 ) {\n"
                 + "           TextOut(0,(MAXLINES - 3) * MAXLINES,\"Hallo\");"
@@ -102,7 +97,6 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "float__speed; task main() {"
-                + MASMETHOD
 
                 + "        if (SENSOR_1) {\n"
                 + "          SENSOR_TYPE_LIGHT_ACTIVE;"
@@ -133,7 +127,7 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "float__speed; float__speed; task main() {"
-                + MASMETHOD
+                + "    SetSensor(S3,STYPE_COLORGREEN);\n"
 
                 + "        if (SENSOR_1) {\n"
                 + "           SENSOR_TYPE_LIGHT_ACTIVE;SetSensorLight(S3,STYPE_COLORGREEN);\n"
@@ -164,7 +158,6 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "float__speed; float__speed; task main() {"
-                + MASMETHOD
 
                 + "        if ( 5 < MotorPower(OUT_B); ) {\n\n\n"
                 + "             RotateMotor(OUT_B,30);\n"
@@ -196,7 +189,6 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "float__speed; float__speed; task main() {"
-                + MASMETHOD
 
                 + "          OnFwdReg(OUT_B,0,100);"
                 + "        RotateMotorEx(OUT_B,-30,360.0*0,-100,true,true);"
@@ -218,7 +210,6 @@ public class NxcVisitorTest {
                 + IMPORTS_CONSTANTS
                 + "byte volume = 0x02;\n"
                 + "task main() {"
-                + MASMETHOD
                 + "        TextOut(0,(MAXLINES - 0) * MAXLINES,\"Hallo\");\n"
                 + "        PlayToneEx(300, 3000, volume, false);Wait(3000);\n"
                 + SUFFIX
@@ -234,7 +225,6 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "float__speed; float__speed; task main() {"
-                + MASMETHOD
 
                 + "          OnFwdReg(OUT_B,30,100);\n"
                 + "          RotateMotorEx(OUT_B,-30,360.0*1,-100,true,true);\n"
@@ -251,7 +241,6 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "float__speed; float__speed; task main() {"
-                + MASMETHOD
                 + "        float item = 10;\n"
                 + "        string item2 = \"TTTT\";\n"
                 + "        bool item3 = true;\n"
@@ -273,7 +262,6 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "float__speed; float__speed; task main() {"
-                + MASMETHOD
                 + "        float variablenName = 0;\n"
 
                 + "OnFwdReg(OUT_AB,50);"
@@ -315,8 +303,7 @@ public class NxcVisitorTest {
                 + IMPORTS_CONSTANTS
                 + "    void test();"
                 + "task main() {"
-                + MASMETHOD
-
+                + "    SetSensor(S3, SENSOR_COLORFULL);\n"
                 + "        test();"
 
                 + "}\n"
@@ -335,7 +322,7 @@ public class NxcVisitorTest {
                 + IMPORTS_CONSTANTS
                 + "     void test(bool x);"
                 + "task main() {"
-                + MASMETHOD
+                + "    SetSensor(S3, SENSOR_COLORFULL);\n"
 
                 + "        test(true);"
 
@@ -361,7 +348,7 @@ public class NxcVisitorTest {
                 + "task main() {"
                 + "variablenName=0;\n"
                 + "variablenName2=true;\n"
-                + MASMETHOD
+                + "    SetSensor(S3, SENSOR_COLORFULL);\n"
                 + "        test1(0, 0);"
                 + "        test2();"
 
@@ -384,7 +371,6 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "float__speed; task main() {"
-                + MASMETHOD
                 + "    string variablenName[]={\"a\",\"b\",\"c\"};\n"
 
                 + "        TextOut(0,LCD_LINE0,"
@@ -442,7 +428,6 @@ public class NxcVisitorTest {
                 + "string message;\n"
                 + " task main() {"
                 + "message=\"exit\";"
-                + MASMETHOD
                 + "        if (message == \"exit\") {\n"
                 + "           TextOut(0,(MAXLINES - 0) * MAXLINES,\"done\");"
                 + "        }\n"
@@ -462,7 +447,6 @@ public class NxcVisitorTest {
                 + "task main() {"
                 + "    item=0;\n"
                 + "    item2=\"cc\";\n"
-                + MASMETHOD
                 + "}\n";
 
         assertCodeIsOk(a, "/syntax/code_generator/java/java_code_generator11.xml");
@@ -474,16 +458,16 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "task main() {"
-                + MASMETHOD
+                + "    SetSensor(S4, SENSOR_LIGHT);\n"
                 + "  SteerDriveEx( OUT_A, OUT_B,SpeedTest(30),SpeedTest(-20), true, 20 );\n"
                 + "  SteerDriveEx( OUT_A, OUT_B, SpeedTest(50),SpeedTest(-50), false, 20 );\n"
                 + "  while ( true ) {\n"
                 + "    while ( true ) {\n"
-                + "      if ( SensorLight( S3, \"LIGHT\" ) < 50 ) {\n"
+                + "      if ( SensorLight( S4, \"LIGHT\" ) < 50 ) {\n"
                 + "        SteerDrive( OUT_A, OUT_B, SpeedTest(30),SpeedTest(10), true );\n"
                 + "          break;\n"
                 + "      }\n"
-                + "      if ( SensorLight( S3, \"LIGHT\" ) >= 50 ) {\n"
+                + "      if ( SensorLight( S4, \"LIGHT\" ) >= 50 ) {\n"
                 + "        SteerDrive( OUT_A, OUT_B, SpeedTest(10),SpeedTest(30), true );\n"
                 + "        break;\n"
                 + "      }\n"
@@ -503,7 +487,6 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "float__speed; task main() {"
-                + MASMETHOD
                 + "ArrayList<Pickcolor>variablenName=BlocklyMethods.createListWithColour(Pickcolor.NONE,Pickcolor.RED,Pickcolor.BLUE);\n"
                 + "    public void run() throwsException {\n"
                 + "        for (PickcolorvariablenName2 : variablenName) {\n"
@@ -545,7 +528,7 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "task main() {"
-                + MASMETHOD
+                + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "if (30 == 20) {"
                 + "   while (true) {"
                 + "     if (Sensor(S1) == true) {"
@@ -564,7 +547,7 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "task main() {"
-                + MASMETHOD
+                + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
                 + "if (30 == 20) {"
                 + "   while (true) {"
@@ -590,7 +573,7 @@ public class NxcVisitorTest {
                 + "task main() {"
                 + "float __item2[] = {0, 0, 0};"
                 + "item2=__item2;"
-                + MASMETHOD
+                + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
                 + "if (30 == 20) {"
                 + "     break;"
@@ -645,7 +628,7 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "task main() {"
-                + MASMETHOD
+                + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
                 + "   while (true) {"
                 + "     if (Sensor(S1) == true) {"
@@ -671,7 +654,7 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "task main() {"
-                + MASMETHOD
+                + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
                 + "   while (true) {"
                 + "     if (Sensor(S1) == true) {"
@@ -703,7 +686,7 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "task main() {"
-                + MASMETHOD
+                + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
                 + "   while (true) {"
                 + "     if (Sensor(S1) == true) {"
@@ -734,7 +717,7 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "task main() {"
-                + MASMETHOD
+                + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
                 + "   while (true) {"
                 + "     if (Sensor(S1) == true) {"
@@ -771,7 +754,7 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "task main() {"
-                + MASMETHOD
+                + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
                 + "   while (true) {"
                 + "     if (Sensor(S1) == true) {"
@@ -817,7 +800,7 @@ public class NxcVisitorTest {
             "" //
                 + IMPORTS_CONSTANTS
                 + "task main() {"
-                + MASMETHOD
+                + "    SetSensor(S1, SENSOR_TOUCH);\n"
                 + "while (true) {"
                 + "   while (true) {"
                 + "     if (Sensor(S1) == true) {"

@@ -118,7 +118,7 @@ public class ShowTextAction<V> extends Action<V> {
                 helper.convertPhraseToExpr(msg),
                 helper.convertPhraseToExpr(col),
                 helper.convertPhraseToExpr(row),
-                factory.getActorPort(port),
+                factory.sanitizePort(port),
                 helper.extractBlockProperties(block),
                 helper.extractComment(block));
     }

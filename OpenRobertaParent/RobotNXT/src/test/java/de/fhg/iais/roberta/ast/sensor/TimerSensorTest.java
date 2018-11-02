@@ -3,8 +3,7 @@ package de.fhg.iais.roberta.ast.sensor;
 import org.junit.Assert;
 import org.junit.Test;
 
-
-import de.fhg.iais.roberta.mode.sensor.TimerSensorMode;
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
@@ -18,7 +17,7 @@ public class TimerSensorTest {
 
         TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(0).get(1);
 
-        Assert.assertEquals(TimerSensorMode.RESET, cs.getMode());
+        Assert.assertEquals(SC.RESET, cs.getMode());
     }
 
     @Test
@@ -27,7 +26,7 @@ public class TimerSensorTest {
 
         TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(0).get(1);
 
-        Assert.assertEquals(new SensorPort("1", "S1"), cs.getPort());
+        Assert.assertEquals("1", cs.getPort());
     }
 
     @Test

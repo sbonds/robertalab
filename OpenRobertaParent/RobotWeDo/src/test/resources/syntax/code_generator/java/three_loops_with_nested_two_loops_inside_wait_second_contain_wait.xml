@@ -22,8 +22,8 @@
                                         id="Xa5;TByo120N0)B+@S=J"
                                         intask="true" deletable="false"
                                         movable="false">
-                                        <mutation input="TOUCH"></mutation>
-                                        <field name="SENSORTYPE">TOUCH</field>
+                                        <mutation input="TOUCH_PRESSED"></mutation>
+                                        <field name="SENSORTYPE">TOUCH_PRESSED</field>
                                         <field name="SENSORPORT">1</field>
                                         <field name="SLOT" />
                                         <data>wedo</data>
@@ -122,8 +122,8 @@
                                         id="]C|mnC{m.)=%m^7[7ymi"
                                         intask="true" deletable="false"
                                         movable="false">
-                                        <mutation input="TOUCH"></mutation>
-                                        <field name="SENSORTYPE">TOUCH</field>
+                                        <mutation input="TOUCH_PRESSED"></mutation>
+                                        <field name="SENSORTYPE">TOUCH_PRESSED</field>
                                         <field name="SENSORPORT">1</field>
                                         <field name="SLOT" />
                                         <data>wedo</data>
@@ -183,9 +183,9 @@
                                                             deletable="false"
                                                             movable="false">
                                                             <mutation
-                                                                input="TOUCH"></mutation>
+                                                                input="TOUCH_PRESSED"></mutation>
                                                             <field
-                                                                name="SENSORTYPE">TOUCH
+                                                                name="SENSORTYPE">TOUCH_PRESSED
                                                             </field>
                                                             <field
                                                                 name="SENSORPORT">1
@@ -230,9 +230,9 @@
                                                             deletable="false"
                                                             movable="false">
                                                             <mutation
-                                                                input="TOUCH"></mutation>
+                                                                input="TOUCH_PRESSED"></mutation>
                                                             <field
-                                                                name="SENSORTYPE">TOUCH
+                                                                name="SENSORTYPE">TOUCH_PRESSED
                                                             </field>
                                                             <field
                                                                 name="SENSORPORT">1
@@ -324,8 +324,8 @@
                                         id="JAu9vfmPYrv2+ktJ5Oz-"
                                         intask="true" deletable="false"
                                         movable="false">
-                                        <mutation input="TOUCH"></mutation>
-                                        <field name="SENSORTYPE">TOUCH</field>
+                                        <mutation input="TOUCH_PRESSED"></mutation>
+                                        <field name="SENSORTYPE">TOUCH_PRESSED</field>
                                         <field name="SENSORPORT">1</field>
                                         <field name="SLOT" />
                                         <data>wedo</data>
@@ -355,8 +355,8 @@
                                         id="/:m4MU-*t}tcKQcA^|^d"
                                         intask="true" deletable="false"
                                         movable="false">
-                                        <mutation input="TOUCH"></mutation>
-                                        <field name="SENSORTYPE">TOUCH</field>
+                                        <mutation input="TOUCH_PRESSED"></mutation>
+                                        <field name="SENSORTYPE">TOUCH_PRESSED</field>
                                         <field name="SENSORPORT">1</field>
                                         <field name="SLOT" />
                                         <data>wedo</data>

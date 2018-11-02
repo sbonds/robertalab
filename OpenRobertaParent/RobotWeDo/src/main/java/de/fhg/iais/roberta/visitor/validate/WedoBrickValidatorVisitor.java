@@ -54,7 +54,7 @@ public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVi
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         if ( motorOnAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = ((WeDoConfiguration) this.robotConfiguration).getConfigurationForPort(motorOnAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = ((WeDoConfiguration) this.robotConfiguration).getConfigurationForPort(motorOnAction.getUserDefinedPort());
             boolean duration = motorOnAction.getParam().getDuration() != null;
             if ( usedConfigurationBlock == null ) {
                 motorOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
@@ -69,7 +69,7 @@ public final class WedoBrickValidatorVisitor<V> extends AbstractBrickValidatorVi
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
         if ( motorStopAction.getInfos().getErrorCount() == 0 ) {
-            ConfigurationComponent usedConfigurationBlock = ((WeDoConfiguration) this.robotConfiguration).getConfigurationForPort(motorStopAction.getPort());
+            ConfigurationComponent usedConfigurationBlock = ((WeDoConfiguration) this.robotConfiguration).getConfigurationForPort(motorStopAction.getUserDefinedPort());
             if ( usedConfigurationBlock == null ) {
                 motorStopAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_ACTOR_MISSING"));
                 this.errorCount++;

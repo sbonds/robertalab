@@ -154,18 +154,18 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         boolean step = motorOnAction.getParam().getDuration() != null;
         if ( step ) {//step motor
-            this.sb.append("Motor_" + motorOnAction.getPort() + ".setSpeed(");
+            this.sb.append("Motor_" + motorOnAction.getUserDefinedPort() + ".setSpeed(");
             motorOnAction.getParam().getSpeed().visit(this);
             this.sb.append(");");
             nlIndent();
-            this.sb.append("Motor_" + motorOnAction.getPort() + ".step(_SPU_" + motorOnAction.getPort() + "*");
+            this.sb.append("Motor_" + motorOnAction.getUserDefinedPort() + ".step(_SPU_" + motorOnAction.getUserDefinedPort() + "*");
             motorOnAction.getDurationValue().visit(this);
             if ( motorOnAction.getDurationMode().equals(MotorMoveMode.DEGREE) ) {
                 this.sb.append("/360");
             }
             this.sb.append(");");
         } else {//servo motor
-            this.sb.append("_servo_" + motorOnAction.getPort() + ".write(");
+            this.sb.append("_servo_" + motorOnAction.getUserDefinedPort() + ".write(");
             motorOnAction.getParam().getSpeed().visit(this);
             this.sb.append(");");
         }
@@ -359,7 +359,7 @@ public final class ArduinoCppVisitor extends AbstractCommonArduinoCppVisitor imp
     public Void visitRfidSensor(RfidSensor<Void> rfidSensor) {
         switch ( (RfidSensorMode) rfidSensor.getMode() ) {
             case PRESENCE:
-                this.sb.append("_mfrc522_" + rfidSensor.getPort().getCodeName() + ".PICC_IsNewCardPresent()");
+                this.sb.append("_mfrc522_" + rfidSensor.getPort() + ".PICC_IsNewCardPresent()");
                 break;
             case SERIAL:
                 this.sb.append("_readRFIDData()");

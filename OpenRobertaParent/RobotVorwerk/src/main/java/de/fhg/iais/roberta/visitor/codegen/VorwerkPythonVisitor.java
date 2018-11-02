@@ -127,7 +127,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        this.sb.append("hal." + motorOnAction.getPort().getCodeName() + "_motor_on(");
+        this.sb.append("hal." + motorOnAction.getUserDefinedPort() + "_motor_on(");
         motorOnAction.getParam().getSpeed().visit(this);
         this.sb.append(", ");
         motorOnAction.getDurationValue().visit(this);
@@ -137,7 +137,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
 
     @Override
     public Void visitMotorStopAction(MotorStopAction<Void> motorStopAction) {
-        this.sb.append("hal." + motorStopAction.getPort().getCodeName() + "_motor_stop()");
+        this.sb.append("hal." + motorStopAction.getUserDefinedPort() + "_motor_stop()");
         return null;
     }
 
@@ -207,7 +207,7 @@ public final class VorwerkPythonVisitor extends AbstractPythonVisitor implements
 
     @Override
     public Void visitTimerSensor(TimerSensor<Void> timerSensor) {
-        String timerNumber = timerSensor.getPort().getOraName();
+        String timerNumber = timerSensor.getPort();
         switch ( (TimerSensorMode) timerSensor.getMode() ) {
             case DEFAULT:
             case VALUE:

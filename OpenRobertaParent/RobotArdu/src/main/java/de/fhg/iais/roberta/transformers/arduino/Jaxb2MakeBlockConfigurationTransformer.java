@@ -12,13 +12,13 @@ import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.components.Actor;
 import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.Sensor;
 import de.fhg.iais.roberta.components.SensorType;
 import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.action.IActorPort;
 import de.fhg.iais.roberta.inter.mode.sensor.ISensorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.util.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -70,12 +70,12 @@ public class Jaxb2MakeBlockConfigurationTransformer {
             for ( String port : actors.keySet() ) {
                 Actor actor = actors.get(port);
                 Value hardwareComponent = new Value();
-                hardwareComponent.setName(port.getOraName());
+                hardwareComponent.setName(port);
                 Block actorBlock = mkBlock(idCount++);
                 hardwareComponent.setBlock(actorBlock);
                 actorBlock.setType(actor.getName().blocklyName());
                 List<Field> actorFields = actorBlock.getField();
-                //String rotation = actor.getRotationDirection() == DriveDirection.FOREWARD ? "OFF" : "ON";
+                //String rotation = actor.getProperty(SC.MOTOR_REVERSE).equals(SC.OFF) ? "OFF" : "ON";
                 //actorFields.add(mkField("MOTOR_REVERSE", rotation));
                 actorFields.add(mkField("MOTOR_DRIVE", actor.getMotorSide().toString()));
                 values.add(hardwareComponent);
@@ -121,7 +121,7 @@ public class Jaxb2MakeBlockConfigurationTransformer {
             if ( value.getName().startsWith("P") ) {
                 try {
                     // Extract sensor/actor on port
-                    sensors.add(Pair.of(this.factory.getSensorPort(value.getName()), new Sensor(SensorType.get(value.getBlock().getType()))));
+                    sensors.add(Pair.of(this.factory.sanitizePort(value.getName()), new Sensor(SensorType.get(value.getBlock().getType()))));
                 } catch ( DbcException e ) {
                     System.out.println(e);
                     switch ( value.getBlock().getType() ) {
@@ -130,7 +130,7 @@ public class Jaxb2MakeBlockConfigurationTransformer {
                                 .add(
                                     Pair
                                         .of(
-                                            this.factory.getActorPort(value.getName()),
+                                            this.factory.sanitizePort(value.getName()),
                                             new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, null)));
                             break;
                         case "robBrick_led_matrix":
@@ -138,7 +138,7 @@ public class Jaxb2MakeBlockConfigurationTransformer {
                                 .add(
                                     Pair
                                         .of(
-                                            this.factory.getActorPort(value.getName()),
+                                            this.factory.sanitizePort(value.getName()),
                                             new Actor(ActorType.get(value.getBlock().getType()), false, DriveDirection.FOREWARD, null)));
                             break;
                         default:
@@ -154,7 +154,7 @@ public class Jaxb2MakeBlockConfigurationTransformer {
                             .add(
                                 Pair
                                     .of(
-                                        this.factory.getActorPort(value.getName()),
+                                        this.factory.sanitizePort(value.getName()),
                                         new Actor(
                                             ActorType.get(value.getBlock().getType()),
                                             false,

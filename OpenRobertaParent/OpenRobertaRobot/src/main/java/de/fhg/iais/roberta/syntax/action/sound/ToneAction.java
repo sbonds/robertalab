@@ -104,7 +104,7 @@ public class ToneAction<V> extends Action<V> {
             .make(
                 helper.convertPhraseToExpr(left),
                 helper.convertPhraseToExpr(right),
-                factory.getActorPort(port),
+                factory.sanitizePort(port),
                 helper.extractBlockProperties(block),
                 helper.extractComment(block));
     }
