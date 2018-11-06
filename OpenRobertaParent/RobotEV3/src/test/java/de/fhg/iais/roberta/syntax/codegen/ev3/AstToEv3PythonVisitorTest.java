@@ -62,6 +62,15 @@ public class AstToEv3PythonVisitorTest {
     private static final String CFG_TOUCH_SENSOR =
         "" //
             + "        '1':Hal.makeTouchSensor(ev3dev.INPUT_1),\n";
+
+    private static final String CFG_GYRO_SENSOR_2 =
+        "" //
+            + "        '2':Hal.makeGyroSensor(ev3dev.INPUT_2),\n";
+
+    private static final String CFG_ULTRASONIC_SENSOR_2 =
+        "" //
+            + "        '2':Hal.makeUltrasonicSensor(ev3dev.INPUT_2),\n";
+
     private static final String CFG_COLOR_SENSOR =
         "" //
             + "        '3':Hal.makeColorSensor(ev3dev.INPUT_3),\n";
@@ -69,6 +78,10 @@ public class AstToEv3PythonVisitorTest {
     private static final String CFG_ULTRASONIC_SENSOR =
         "" //
             + "        '4':Hal.makeUltrasonicSensor(ev3dev.INPUT_4),\n";
+
+    private static final String CFG_INFRARED_SENSOR_4 =
+        "" //
+            + "        '4':Hal.makeInfraredSensor(ev3dev.INPUT_4),\n";
 
     private static final String MAIN_METHOD =
         "" //
@@ -105,13 +118,14 @@ public class AstToEv3PythonVisitorTest {
         ConfigurationComponent ultrasonicSensor = new ConfigurationComponent("ULTRASONIC", false, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
         ConfigurationComponent colorSensor = new ConfigurationComponent("COLOR", false, "S3", BlocklyConstants.NO_SLOT, "3", Collections.emptyMap());
         ConfigurationComponent ultrasonicSensor2 = new ConfigurationComponent("ULTRASONIC", false, "S4", BlocklyConstants.NO_SLOT, "4", Collections.emptyMap());
+        ConfigurationComponent gyro = new ConfigurationComponent("GYRO", false, "S2", BlocklyConstants.NO_SLOT, "2", Collections.emptyMap());
 
         final Configuration.Builder builder = new Configuration.Builder();
         brickConfiguration =
             builder
                 .setTrackWidth(17f)
                 .setWheelDiameter(5.6f)
-                .addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor, colorSensor, ultrasonicSensor2))
+                .addComponents(Arrays.asList(motorA, motorB, touchSensor, ultrasonicSensor, colorSensor, ultrasonicSensor2, gyro))
                 .build();
     }
 
@@ -471,7 +485,7 @@ public class AstToEv3PythonVisitorTest {
         String a =
             "" //
                 + IMPORTS
-                + make_globals("", CFG_TOUCH_SENSOR)
+                + make_globals("", CFG_TOUCH_SENSOR + CFG_GYRO_SENSOR_2 + CFG_COLOR_SENSOR + CFG_INFRARED_SENSOR_4)
                 + "def macheEtwas(x):\n"
                 + "    if hal.isPressed('1'): return hal.getInfraredSensorDistance('4')\n"
                 + "    hal.drawText(str(hal.getGyroSensorValue('2', 'angle')), 0, 0)\n"

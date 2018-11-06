@@ -504,7 +504,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitEncoderSensor(EncoderSensor<Void> encoderSensor) {
         String encoderSensorPort = encoderSensor.getPort().toString();
-        if ( encoderSensor.getMode() == SC.RESET ) {
+        if ( encoderSensor.getMode().equals(SC.RESET) ) {
             this.sb.append("hal.resetMotorTacho('" + encoderSensorPort + "')");
         } else {
             this.sb.append("hal.getMotorTachoValue('" + encoderSensorPort + "', " + encoderSensor.getMode() + ")");
@@ -515,10 +515,10 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitGyroSensor(GyroSensor<Void> gyroSensor) {
         String gyroSensorPort = gyroSensor.getPort();
-        if ( gyroSensor.getMode() == SC.RESET ) {
+        if ( gyroSensor.getMode().equals(SC.RESET) ) {
             this.sb.append("hal.resetGyroSensor('" + gyroSensorPort + "')");
         } else {
-            this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + "', " + gyroSensor.getMode() + ")");
+            this.sb.append("hal.getGyroSensorValue('" + gyroSensorPort + "', " + getEnumCode(gyroSensor.getMode()) + ")");
         }
         return null;
     }

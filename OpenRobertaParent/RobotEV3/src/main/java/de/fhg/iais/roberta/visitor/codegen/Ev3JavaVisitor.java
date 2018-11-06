@@ -285,7 +285,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitSayTextAction(SayTextAction<Void> sayTextAction) {
-        if ( !this.brickConfiguration.getRobotName().equals("ev3lejos") ) {
+        if ( this.brickConfiguration.getRobotName().equals("ev3lejosV1") ) {
             this.sb.append("hal.sayText(");
             if ( !sayTextAction.getMsg().getKind().hasName("STRING_CONST") ) {
                 this.sb.append("String.valueOf(");
@@ -1050,7 +1050,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         for ( ConfigurationComponent sensor : this.brickConfiguration.getSensors() ) {
             sb.append(this.INDENT).append(this.INDENT).append(this.INDENT);
             sb.append("    .addSensor(");
-            sb.append("SensorPort." + sensor.getUserDefinedPortName()).append(", ");
+            sb.append("SensorPort.S" + sensor.getUserDefinedPortName()).append(", ");
             sb.append(generateRegenerateSensor(sensor));
             sb.append(")\n");
         }
@@ -1087,26 +1087,46 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
         ConfigurationComponent sensor = this.brickConfiguration.getConfigurationComponent(usedSensor.getPort());
 
         String mode = usedSensor.getMode();
+        String componentType = sensor.getComponentType();
 
         sb.append("new UsedSensor(");
-        sb.append("SensorPort." + usedSensor.getPort()).append(", ");
-        sb.append(sensor.getClass().getSimpleName() + "." + sensor.getComponentType()).append(", ");
-        sb.append(mode.getClass().getSimpleName() + "." + mode).append(")");
+        sb.append("SensorPort.S" + usedSensor.getPort()).append(", ");
+        sb.append("SensorType." + componentType).append(", ");
+        sb.append(getOldModeClass(componentType, mode)).append(")");
         return sb.toString();
+    }
+
+    private String getOldModeClass(String sensorType, String sensorMode) {
+        switch ( sensorType ) {
+            case "TOUCH":
+                if ( sensorMode.equals("PRESSED") || sensorMode.equals("DEFAULT") ) {
+                    return "TouchSensorMode.TOUCH";
+                } else {
+                    return "TouchSensorMode." + sensorMode;
+                }
+
+            case "COLOR":
+                return "ColorSensorMode." + sensorMode;
+            case "ULTRASONIC":
+                return "UltrasonicSensorMode." + sensorMode;
+            default:
+                return "";
+        }
     }
 
     private String generateRegenerateActor(ConfigurationComponent actor) {
         StringBuilder sb = new StringBuilder();
-
-        sb.append("new Actor(").append(actor.getComponentType());
-        sb.append(", ").append(actor.getProperty(SC.MOTOR_REGULATION));
-        sb.append(", ").append(actor.getProperty(SC.MOTOR_REVERSE)).append(", ").append(actor.getProperty(SC.MOTOR_DRIVE)).append(")");
+        String driveDirection = actor.getProperty(SC.MOTOR_REVERSE).equals(SC.OFF) ? "FOREWARD" : "BACKWARD";
+        sb.append("new Actor(ActorType.").append(actor.getComponentType());
+        sb.append(", ").append(actor.getProperty(SC.MOTOR_REGULATION).toLowerCase());
+        sb.append(", DriveDirection.").append(driveDirection);
+        sb.append(", MotorSide.").append(actor.getProperty(SC.MOTOR_DRIVE)).append(")");
         return sb.toString();
     }
 
     private String generateRegenerateSensor(ConfigurationComponent sensor) {
         StringBuilder sb = new StringBuilder();
-        sb.append("new Sensor(").append(sensor.getComponentType());
+        sb.append("new Sensor(SensorType.").append(sensor.getComponentType());
         sb.append(")");
         return sb.toString();
     }

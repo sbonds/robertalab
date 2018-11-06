@@ -26,7 +26,7 @@ public class HelperEv3ForXmlTest extends AbstractHelperForXmlTest {
     public HelperEv3ForXmlTest() {
         super(new Ev3LejosV0Factory(new PluginProperties("ev3lejosv0", "", "", Util1.loadProperties("classpath:ev3lejosv0.properties"))), makeConfiguration());
         Properties robotProperties = Util1.loadProperties("classpath:Robot.properties");
-        this.robotConfiguration.setRobotName("ev3lejos");
+        this.robotConfiguration.setRobotName("ev3lejosV1");
         AbstractRobotFactory.addBlockTypesFromProperties(robotProperties);
     }
 

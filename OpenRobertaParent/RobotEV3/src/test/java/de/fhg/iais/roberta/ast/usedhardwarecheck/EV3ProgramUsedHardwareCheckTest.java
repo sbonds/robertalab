@@ -69,7 +69,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/hardware_check2.xml");
 
         Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(phrases, makeConfiguration());
-        Assert.assertEquals("[UsedSensor [1, TOUCH, TOUCH], UsedSensor [3, COLOR, COLOUR]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [1, TOUCH, DEFAULT], UsedSensor [3, COLOR, COLOUR]]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[UsedActor [B, LARGE]]", checkVisitor.getUsedActors().toString());
     }
 
@@ -78,7 +78,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/visitors/hardware_check3.xml");
 
         Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(phrases, makeConfiguration());
-        Assert.assertEquals("[UsedSensor [1, TOUCH, TOUCH], UsedSensor [4, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [1, TOUCH, DEFAULT], UsedSensor [4, ULTRASONIC, DISTANCE]]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[UsedActor [B, LARGE]]", checkVisitor.getUsedActors().toString());
     }
 
@@ -89,7 +89,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(phrases, makeConfiguration());
         Assert
             .assertEquals(
-                "[UsedSensor [4, INFRARED, DISTANCE], UsedSensor [4, ULTRASONIC, DISTANCE], UsedSensor [1, TOUCH, TOUCH]]",
+                "[UsedSensor [4, INFRARED, DISTANCE], UsedSensor [4, ULTRASONIC, DISTANCE], UsedSensor [1, TOUCH, DEFAULT]]",
                 checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[UsedActor [B, LARGE], UsedActor [A, LARGE]]", checkVisitor.getUsedActors().toString());
     }
@@ -108,7 +108,7 @@ public class EV3ProgramUsedHardwareCheckTest {
         ArrayList<ArrayList<Phrase<Void>>> phrases = this.h.generateASTs("/ast/control/wait_stmt1.xml");
 
         Ev3UsedHardwareCollectorVisitor checkVisitor = new Ev3UsedHardwareCollectorVisitor(phrases, makeConfiguration());
-        Assert.assertEquals("[UsedSensor [1, TOUCH, TOUCH]]", checkVisitor.getUsedSensors().toString());
+        Assert.assertEquals("[UsedSensor [1, TOUCH, DEFAULT]]", checkVisitor.getUsedSensors().toString());
         Assert.assertEquals("[]", checkVisitor.getUsedActors().toString());
     }
 
