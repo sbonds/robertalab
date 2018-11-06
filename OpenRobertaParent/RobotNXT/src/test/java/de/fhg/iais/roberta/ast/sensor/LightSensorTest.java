@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
 public class LightSensorTest {
@@ -22,7 +22,7 @@ public class LightSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        final Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setLight.xml");
+        final Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setLight.xml");
 
         final LightSensor<Void> cs = (LightSensor<Void>) transformer.getTree().get(0).get(1);
 
@@ -32,7 +32,7 @@ public class LightSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        final Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setLight.xml");
+        final Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setLight.xml");
 
         final LightSensor<Void> cs = (LightSensor<Void>) transformer.getTree().get(0).get(1);
         final LightSensor<Void> cs1 = (LightSensor<Void>) transformer.getTree().get(1).get(1);

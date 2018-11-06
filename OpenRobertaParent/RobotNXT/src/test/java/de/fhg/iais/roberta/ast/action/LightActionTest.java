@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
 import de.fhg.iais.roberta.mode.action.LightMode;
 import de.fhg.iais.roberta.syntax.action.light.LightAction;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
 public class LightActionTest {
@@ -21,14 +21,14 @@ public class LightActionTest {
 
     @Test
     public void getLight() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_LightSensorAction.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_LightSensorAction.xml");
         LightAction<Void> la = (LightAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(BrickLedColor.RED, la.getColor());
     }
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_LightSensorAction.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_LightSensorAction.xml");
 
         LightAction<Void> cs = (LightAction<Void>) transformer.getTree().get(0).get(1);
         LightAction<Void> cs1 = (LightAction<Void>) transformer.getTree().get(0).get(2);
@@ -43,7 +43,7 @@ public class LightActionTest {
 
     @Test
     public void getState() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_LightSensorAction.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_LightSensorAction.xml");
         LightAction<Void> st = (LightAction<Void>) transformer.getTree().get(0).get(1);
         LightAction<Void> st1 = (LightAction<Void>) transformer.getTree().get(0).get(4);
         Assert.assertEquals(LightMode.ON, st.getMode());

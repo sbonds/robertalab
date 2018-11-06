@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class IRSeekerSensorTest {
@@ -22,7 +22,7 @@ public class IRSeekerSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_getIRSeeker.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_getIRSeeker.xml");
 
         IRSeekerSensor<Void> cs = (IRSeekerSensor<Void>) transformer.getTree().get(0).get(1);
         IRSeekerSensor<Void> cs1 = (IRSeekerSensor<Void>) transformer.getTree().get(1).get(1);
@@ -33,7 +33,7 @@ public class IRSeekerSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_getIRSeeker.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_getIRSeeker.xml");
 
         IRSeekerSensor<Void> cs = (IRSeekerSensor<Void>) transformer.getTree().get(0).get(1);
         IRSeekerSensor<Void> cs1 = (IRSeekerSensor<Void>) transformer.getTree().get(1).get(1);

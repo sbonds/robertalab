@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import de.fhg.iais.roberta.syntax.Phrase;
 
-public class Jaxb2AstTransformerData<V> {
+public class ProgramAst<V> {
     private String robotType = "";
     private String xmlVersion = "";
     private String description = "";

@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
 
 public class BrickSensorTest {
@@ -18,9 +18,9 @@ public class BrickSensorTest {
 
     @Test
     public void getKey() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_brick1.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_brick1.xml");
         KeysSensor<Void> bs = (KeysSensor<Void>) transformer.getTree().get(0).get(1);
-        Assert.assertEquals(new SensorPort("ENTER", "2"), bs.getPort());
+        Assert.assertEquals("2", bs.getPort());
     }
 
     @Test

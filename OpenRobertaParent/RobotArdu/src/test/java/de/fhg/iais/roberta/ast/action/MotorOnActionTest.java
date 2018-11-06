@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
 
 public class MotorOnActionTest {
@@ -20,14 +20,14 @@ public class MotorOnActionTest {
 
     @Test
     public void getParam() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorOnFor.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorOnFor.xml");
         MotorOnAction<Void> mo = (MotorOnAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("MotionParam [speed=NumConst [30], duration=null]", mo.getParam().toString());
     }
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorOnFor.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorOnFor.xml");
         MotorOnAction<Void> mo = (MotorOnAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(new ActorPort("A", "MA"), mo.getUserDefinedPort());
     }

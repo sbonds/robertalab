@@ -48,17 +48,17 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
-abstract public class Jaxb2AstTransformer<V> {
-    protected Jaxb2AstTransformerData<V> data = new Jaxb2AstTransformerData<>();
-
-    public Jaxb2AstTransformerData<V> getData() {
-        return this.data;
-    }
+abstract public class AbstractJaxb2Ast<V> {
+    protected ProgramAst<V> data = new ProgramAst<>();
 
     private final IRobotFactory robotFactory;
     private int variableCounter = 0;
 
-    protected Jaxb2AstTransformer(IRobotFactory factory) {
+    public ProgramAst<V> getData() {
+        return this.data;
+    }
+
+    protected AbstractJaxb2Ast(IRobotFactory factory) {
         this.robotFactory = factory;
 
     }

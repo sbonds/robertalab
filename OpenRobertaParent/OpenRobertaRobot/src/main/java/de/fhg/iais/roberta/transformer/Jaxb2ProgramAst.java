@@ -19,9 +19,9 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 /**
  * JAXB to AST transformer. Client should provide tree of jaxb objects.
  */
-public class Jaxb2BlocklyProgramTransformer<V> extends Jaxb2AstTransformer<V> {
+public class Jaxb2ProgramAst<V> extends AbstractJaxb2Ast<V> {
 
-    public Jaxb2BlocklyProgramTransformer(IRobotFactory robotFactory) {
+    public Jaxb2ProgramAst(IRobotFactory robotFactory) {
         super(robotFactory);
     }
 
@@ -71,7 +71,7 @@ public class Jaxb2BlocklyProgramTransformer<V> extends Jaxb2AstTransformer<V> {
     private Phrase<V> invokeMethod(Block block, String className) {
         Method method;
         try {
-            method = Class.forName(className).getMethod("jaxbToAst", Block.class, Jaxb2AstTransformer.class);
+            method = Class.forName(className).getMethod("jaxbToAst", Block.class, AbstractJaxb2Ast.class);
             return (Phrase<V>) method.invoke(null, block, this);
         } catch ( NoSuchMethodException | SecurityException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException
             | InvocationTargetException | DbcException e ) {

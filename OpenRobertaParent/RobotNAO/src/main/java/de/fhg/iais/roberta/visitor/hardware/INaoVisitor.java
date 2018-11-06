@@ -33,7 +33,6 @@ import de.fhg.iais.roberta.syntax.sensor.nao.DetectMarkSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.DetectedFaceInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.ElectricCurrentSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.FsrSensor;
-import de.fhg.iais.roberta.syntax.sensor.nao.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.nao.NaoMarkInformation;
 import de.fhg.iais.roberta.syntax.sensor.nao.RecognizeWord;
 import de.fhg.iais.roberta.visitor.hardware.actor.ISpeechVisitor;
@@ -240,11 +239,7 @@ public interface INaoVisitor<V> extends ISpeechVisitor<V>, ISensorVisitor<V> {
      */
     V visitDetectFace(DetectFaceSensor<V> detectFace);
 
-    V visitGetSampleSensor(GetSampleSensor<V> getSampleSensor);
-
     V visitElectricCurrent(ElectricCurrentSensor<V> electricCurrent);
-
-    //V visitLedColor(LedColor<V> ledColor);
 
     V visitSetIntensity(SetIntensity<V> setIntensity);
 

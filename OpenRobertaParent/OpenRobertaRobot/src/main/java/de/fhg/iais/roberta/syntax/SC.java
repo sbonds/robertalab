@@ -57,5 +57,39 @@ public interface SC {
     String GYRO = "GYRO";
     String INFRARED = "INFRARED";
     String IRSEEKER = "IRSEEKER";
+    String NAMEALL = "NAMEALL";
+    String IDALL = "IDALL";
+    String VOLTAGE = "VOLTAGE";
+    String MOTION = "MOTION";
+    String MOISTURE = "MOISTURE";
+    String DROP = "DROP";
+    String ACCELEROMETER = "ACCELEROMETER";
+    String PULSE = "PULSE";
+    String RFID = "RFID";
+    String DETECT_MARK = "DETECT_MARK";
+    String NAO_FACE = "NAO_FACE";
+    String NAO_SPEECH = "NAO_SPEECH";
+    String PIN_VALUE = "PIN_VALUE";
+    String ANALOG_PIN = "ANALOG_PIN";
+    String ENCODER = "ENCODER";
+    String LCD = "LCD";
+
+    String STEPMOTOR = "STEPMOTOR";
+    String LCDI2C = "LCDI2C";
+    String SERVOMOTOR = "SERVOMOTOR";
+    String POTENTIOMETER = "POTENTIOMETER";
+    String KEY = "KEY";
+    String LED = "LED";
+    String RGBLED = "RGBLED";
+    String BUZZER = "BUZZER";
+    String RELAY = "RELAY";
+    String TIMER = "TIMER";
+    String JOYSTICK = "JOYSTICK";
+    String FLAMESENSOR = "FLAMESENSOR";
+    String DIFFERENTIAL_DRIVE = "DIFFERENTIAL_DRIVE";
+    String GEARED_MOTOR = "GEARED_MOTOR";
+    String LED_ON_BOARD = "LED_ON_BOARD";
+    String LED_MATRIX = "LED_MATRIX";
+    String BUTTON = "BUTTON";
 
 }

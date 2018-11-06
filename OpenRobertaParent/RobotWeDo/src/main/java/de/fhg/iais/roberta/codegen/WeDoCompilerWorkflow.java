@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
@@ -26,15 +26,15 @@ public class WeDoCompilerWorkflow extends AbstractCompilerWorkflow {
     public void generateSourceCode(String token, String programName, BlocklyProgramAndConfigTransformer data, ILanguage language) //
     {
         if ( data.getErrorMessage() != null ) {
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_TRANSFORM_FAILED;
             return;
         }
         try {
-            generatedSourceCode = WeDoStackMachineVisitor.generate((WeDoConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree());
+            this.generatedSourceCode = WeDoStackMachineVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree());
             LOG.info("wedo stack machine code generated");
         } catch ( Exception e ) {
             LOG.error("wedo stack machine code generation failed", e);
-            workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
+            this.workflowResult = Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED;
         }
     }
 
@@ -43,7 +43,7 @@ public class WeDoCompilerWorkflow extends AbstractCompilerWorkflow {
     }
 
     @Override
-    public WeDoConfiguration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
+    public Configuration generateConfiguration(IRobotFactory factory, String blocklyXml) throws Exception {
         BlockSet project = JaxbHelper.xml2BlockSet(blocklyXml);
         Jaxb2WeDoConfigurationTransformer transformer = new Jaxb2WeDoConfigurationTransformer(factory);
         return transformer.transform(project);
@@ -51,6 +51,6 @@ public class WeDoCompilerWorkflow extends AbstractCompilerWorkflow {
 
     @Override
     public String getCompiledCode() {
-        return generatedSourceCode;
+        return this.generatedSourceCode;
     }
 }

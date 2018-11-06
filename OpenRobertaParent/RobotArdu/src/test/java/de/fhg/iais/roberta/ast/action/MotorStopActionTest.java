@@ -6,7 +6,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
 
 public class MotorStopActionTest {
@@ -20,14 +20,14 @@ public class MotorStopActionTest {
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorStop.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorStop.xml");
         MotorStopAction<Void> mgp = (MotorStopAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(new ActorPort("A", "MA"), mgp.getUserDefinedPort());
     }
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorStop.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorStop.xml");
         MotorStopAction<Void> mgp = (MotorStopAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(MotorStopMode.FLOAT, mgp.getMode());
     }

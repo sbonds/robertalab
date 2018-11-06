@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
@@ -57,7 +57,7 @@ public class TimerSensor<V> extends ExternalSensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         SensorMetaDataBean sensorMetaDataBean;
         //TODO This if statement should be removed when we have new implementation of reset sensor blockly block
@@ -68,7 +68,7 @@ public class TimerSensor<V> extends ExternalSensor<V> {
                 new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT), false);
             return TimerSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
         }
-        sensorMetaDataBean = extractSensorPortAndMode(block, helper);
+        sensorMetaDataBean = extractPortAndModeAndSlot(block, helper);
         return TimerSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
@@ -76,9 +76,9 @@ public class TimerSensor<V> extends ExternalSensor<V> {
     public Block astToBlock() {
         if ( getMode().toString().equals("RESET") ) {
             Block jaxbDestination = new Block();
-            JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+            Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
             String fieldValue = getPort();
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
             return jaxbDestination;
         } else {
             return super.astToBlock();

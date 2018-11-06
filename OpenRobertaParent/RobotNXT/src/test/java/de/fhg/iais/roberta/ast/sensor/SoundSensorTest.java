@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
 public class SoundSensorTest {
@@ -19,7 +19,7 @@ public class SoundSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_Sound.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_Sound.xml");
 
         SoundSensor<Void> cs = (SoundSensor<Void>) transformer.getTree().get(0).get(1);
 

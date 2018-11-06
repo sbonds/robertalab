@@ -1,6 +1,5 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import de.fhg.iais.roberta.components.ActorType;
 import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.action.display.ShowPictureAction;
@@ -20,9 +19,9 @@ public final class Ev3BrickValidatorVisitor extends AbstractBrickValidatorVisito
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
         super.visitMotorOnAction(motorOnAction);
         if ( motorOnAction.getInfos().getErrorCount() == 0 ) {
-            ActorType type = this.robotConfiguration.getActorOnPort(motorOnAction.getUserDefinedPort()).getName();
+            String componentType = this.robotConfiguration.getConfigurationComponent(motorOnAction.getUserDefinedPort()).getComponentType();
             boolean duration = motorOnAction.getParam().getDuration() != null;
-            if ( (type == ActorType.OTHER) && duration ) {
+            if ( componentType.equals(SC.OTHER) && duration ) {
                 motorOnAction.addInfo(NepoInfo.error("CONFIGURATION_ERROR_OTHER_NOT_SUPPORTED"));
             }
         }

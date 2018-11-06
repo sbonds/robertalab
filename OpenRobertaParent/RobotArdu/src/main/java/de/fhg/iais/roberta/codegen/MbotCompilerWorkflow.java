@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.arduino.MbotConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
@@ -40,7 +39,7 @@ public class MbotCompilerWorkflow extends AbstractCompilerWorkflow {
             return;
         }
         try {
-            this.generatedSourceCode = MbotCppVisitor.generate((MbotConfiguration) data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
+            this.generatedSourceCode = MbotCppVisitor.generate(data.getRobotConfiguration(), data.getProgramTransformer().getTree(), true);
             LOG.info("mbot c++ code generated");
         } catch ( Exception e ) {
             LOG.error("mbot c++ code generation failed", e);

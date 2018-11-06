@@ -1,16 +1,14 @@
 package de.fhg.iais.roberta.transformers.arduino;
 
+import static de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAstHelper.blocks2NewConfiguration;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.ConfigurationBlockType;
-import de.fhg.iais.roberta.components.arduino.ArduinoConfiguration;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 
 /**
@@ -29,24 +27,7 @@ public class Jaxb2ArduinoConfigurationTransformer {
         for ( int i = 0; i < instances.size(); i++ ) {
             blocks.add(instances.get(i).getBlock());
         }
-        return blockToBrickConfiguration(blocks);
+        return blocks2NewConfiguration(blocks, this.factory);
     }
 
-    private Configuration blockToBrickConfiguration(List<List<Block>> blocks) {
-        Map<String, ConfigurationBlock> configurationBlocks = new HashMap<String, ConfigurationBlock>();
-        for ( int i = 1; i < blocks.size(); i++ ) {
-            configurationBlocks.put(blocks.get(i).get(0).getField().get(0).getValue(), extractConfigurationBlockComponents(blocks.get(i)));
-        }
-        return new ArduinoConfiguration(configurationBlocks);
-    }
-
-    private ConfigurationBlock extractConfigurationBlockComponents(List<Block> block) {
-        ConfigurationBlockType confType = ConfigurationBlockType.get(block.get(0).getType());
-        String name = block.get(0).getField().get(0).getValue();
-        Map<String, String> confPorts = new HashMap<>();
-        for ( int i = 1; i < block.get(0).getField().size(); i++ ) {
-            confPorts.put(block.get(0).getField().get(i).getName(), block.get(0).getField().get(i).getValue());
-        }
-        return new ConfigurationBlock(confType, name, confPorts);
-    }
 }

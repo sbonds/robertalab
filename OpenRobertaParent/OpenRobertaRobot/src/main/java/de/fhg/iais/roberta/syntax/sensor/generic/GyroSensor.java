@@ -13,8 +13,8 @@ import de.fhg.iais.roberta.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
@@ -58,7 +58,7 @@ public class GyroSensor<V> extends ExternalSensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         SensorMetaDataBean sensorMetaDataBean;
         if ( block.getType().equals(BlocklyConstants.ROB_SENSORS_GYRO_RESET) ) {
@@ -68,26 +68,26 @@ public class GyroSensor<V> extends ExternalSensor<V> {
                 new SensorMetaDataBean(factory.sanitizePort(portName), factory.getMode("RESET"), factory.getSlot(BlocklyConstants.NO_SLOT), false);
             return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
         }
-        sensorMetaDataBean = extractSensorPortAndMode(block, helper);
+        sensorMetaDataBean = extractPortAndModeAndSlot(block, helper);
         return GyroSensor.make(sensorMetaDataBean, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
         //TODO: move reset to another block and delete astToBlock() method from here
         String fieldValue = getPort();
         if ( getMode().toString().equals("ANGLE") || getMode().toString().equals("RATE") ) {
             Mutation mutation = new Mutation();
             mutation.setMode(getMode().toString());
             jaxbDestination.setMutation(mutation);
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
         } else if ( getMode().toString().equals("TILTED") ) {
             String fieldSlot = getSlot().toString();
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SLOT, fieldSlot);
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SLOT, fieldSlot);
         }
-        JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
+        Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         return jaxbDestination;
     }
 

@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.ev3.HelperEv3ForXmlTest;
 
 public class CompassSensorTest {
@@ -22,7 +22,7 @@ public class CompassSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_getCompass.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_getCompass.xml");
 
         CompassSensor<Void> cs = (CompassSensor<Void>) transformer.getTree().get(0).get(1);
         CompassSensor<Void> cs1 = (CompassSensor<Void>) transformer.getTree().get(1).get(1);
@@ -33,7 +33,7 @@ public class CompassSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_getCompass.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_getCompass.xml");
 
         CompassSensor<Void> cs = (CompassSensor<Void>) transformer.getTree().get(0).get(1);
         CompassSensor<Void> cs1 = (CompassSensor<Void>) transformer.getTree().get(1).get(1);

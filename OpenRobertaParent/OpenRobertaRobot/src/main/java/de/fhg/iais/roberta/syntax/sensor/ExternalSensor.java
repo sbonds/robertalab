@@ -11,8 +11,8 @@ import de.fhg.iais.roberta.syntax.BlockType;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
-import de.fhg.iais.roberta.transformer.JaxbTransformerHelper;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
+import de.fhg.iais.roberta.transformer.Ast2JaxbHelper;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public abstract class ExternalSensor<V> extends Sensor<V> {
@@ -69,18 +69,7 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> SensorMetaDataBean extractPortAndMode(Block block, Jaxb2AstTransformer<V> helper) {
-        return extractPortAndModeAndSlot(block, helper);
-    }
-
-    /**
-     * Transformation from JAXB object to corresponding AST object.
-     *
-     * @param block for transformation
-     * @param helper class for making the transformation
-     * @return corresponding AST object
-     */
-    public static <V> SensorMetaDataBean extractPortAndModeAndSlot(Block block, Jaxb2AstTransformer<V> helper) {
+    public static <V> SensorMetaDataBean extractPortAndModeAndSlot(Block block, AbstractJaxb2Ast<V> helper) {
         List<Field> fields = helper.extractFields(block, (short) 3);
         BlocklyDropdownFactory factory = helper.getDropdownFactory();
         String portName = helper.extractField(fields, BlocklyConstants.SENSORPORT, BlocklyConstants.NO_PORT);
@@ -91,35 +80,27 @@ public abstract class ExternalSensor<V> extends Sensor<V> {
         return new SensorMetaDataBean(portName, factory.getMode(modeName), factory.getSlot(slotName), isPortInMutation);
     }
 
-    public static <V> SensorMetaDataBean extractSensorPortAndMode(Block block, Jaxb2AstTransformer<V> helper) {
-        return extractPortAndMode(block, helper);
-    }
-
-    public static <V> SensorMetaDataBean extractActorPortAndMode(Block block, Jaxb2AstTransformer<V> helper) {
-        return extractPortAndMode(block, helper);
-    }
-
     @Override
     public Block astToBlock() {
         Block jaxbDestination = new Block();
-        JaxbTransformerHelper.setBasicProperties(this, jaxbDestination);
+        Ast2JaxbHelper.setBasicProperties(this, jaxbDestination);
         boolean addMutation = false;
         Mutation mutation = new Mutation();
         if ( !this.mode.toString().equals(BlocklyConstants.DEFAULT) ) {
             mutation.setMode(getMode().toString());
             addMutation = true;
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.MODE, getMode().toString());
             if ( this.isPortInMutation ) {
                 mutation.setPort(getPort().toString());
             }
         }
         if ( !this.getPort().toString().equals(BlocklyConstants.NO_PORT) ) {
             String fieldValue = getPort();
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SENSORPORT, fieldValue);
         }
         if ( !this.getSlot().toString().equals(BlocklyConstants.NO_SLOT) ) {
             String fieldValue = getSlot();
-            JaxbTransformerHelper.addField(jaxbDestination, BlocklyConstants.SLOT, fieldValue);
+            Ast2JaxbHelper.addField(jaxbDestination, BlocklyConstants.SLOT, fieldValue);
         }
         if ( addMutation ) {
             jaxbDestination.setMutation(mutation);

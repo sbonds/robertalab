@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.action.mbed.DisplayTextMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
@@ -95,7 +95,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be ince/decr depending on block structure
      */
-    private MicrobitPythonVisitor(MicrobitConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
+    private MicrobitPythonVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, int indentation) {
         super(programPhrases, indentation);
 
         this.usedHardwareVisitor = new MbedUsedHardwareCollectorVisitor(programPhrases, brickConfiguration);
@@ -109,7 +109,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
      * @param brickConfiguration hardware configuration of the brick
      * @param programPhrases to generate the code from
      */
-    public static String generate(MicrobitConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
+    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
 
         final MicrobitPythonVisitor astVisitor = new MicrobitPythonVisitor(brickConfiguration, programPhrases, 0);
@@ -668,7 +668,7 @@ public final class MicrobitPythonVisitor extends AbstractPythonVisitor implement
     public Void visitPinWriteValueSensor(PinWriteValue<Void> pinWriteValueSensor) {
         this.sb.append("microbit.pin" + pinWriteValueSensor.getPort());
         String valueType = "analog(";
-        if ( pinWriteValueSensor.getMode() == PinValue.DIGITAL ) {
+        if ( pinWriteValueSensor.getMode().equals(SC.DIGITAL) ) {
             valueType = "digital(";
         }
         this.sb.append(".write_" + valueType);

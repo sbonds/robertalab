@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.nxt.HelperNxtForXmlTest;
 
 public class EncoderSensorTest {
@@ -22,7 +22,7 @@ public class EncoderSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
 
         EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0).get(1);
         EncoderSensor<Void> cs1 = (EncoderSensor<Void>) transformer.getTree().get(1).get(1);
@@ -33,7 +33,7 @@ public class EncoderSensorTest {
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_setEncoder.xml");
 
         EncoderSensor<Void> cs = (EncoderSensor<Void>) transformer.getTree().get(0).get(1);
         EncoderSensor<Void> cs1 = (EncoderSensor<Void>) transformer.getTree().get(1).get(1);

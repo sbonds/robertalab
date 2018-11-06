@@ -2,12 +2,9 @@ package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.ArrayList;
 
-import de.fhg.iais.roberta.components.Actor;
-import de.fhg.iais.roberta.components.SensorType;
+import de.fhg.iais.roberta.components.Configuration;
+import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.components.arduino.BotNrollConfiguration;
-import de.fhg.iais.roberta.inter.mode.sensor.IColorSensorMode;
-import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
@@ -27,6 +24,7 @@ import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -45,7 +43,7 @@ import de.fhg.iais.roberta.visitor.hardware.IBotnrollVisitor;
  * <b>This representation is correct C code for Arduino.</b> <br>
  */
 public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor implements IBotnrollVisitor<Void> {
-    private final BotNrollConfiguration brickConfiguration;
+
     private final boolean isTimerSensorUsed;
 
     /**
@@ -55,9 +53,8 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
      * @param programPhrases to generate the code from
      * @param indentation to start with. Will be incr/decr depending on block structure
      */
-    private BotnrollCppVisitor(BotNrollConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
-        super(phrases, indentation);
-        this.brickConfiguration = brickConfiguration;
+    private BotnrollCppVisitor(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrases, int indentation) {
+        super(brickConfiguration, phrases, indentation);
         BotnrollUsedHardwareCollectorVisitor codePreprocessVisitor = new BotnrollUsedHardwareCollectorVisitor(phrases, brickConfiguration);
         this.usedVars = codePreprocessVisitor.getVisitedVars();
         this.usedSensors = codePreprocessVisitor.getUsedSensors();
@@ -73,7 +70,7 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
      * @param programPhrases to generate the code from
      * @param withWrapping if false the generated code will be without the surrounding configuration code
      */
-    public static String generate(BotNrollConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
+    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> programPhrases, boolean withWrapping) {
         Assert.notNull(brickConfiguration);
         BotnrollCppVisitor astVisitor = new BotnrollCppVisitor(brickConfiguration, programPhrases, withWrapping ? 1 : 0);
         astVisitor.generateCode(withWrapping);
@@ -85,12 +82,12 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
         String toChar = "";
         String varType = showTextAction.getMsg().getVarType().toString();
         boolean isVar = showTextAction.getMsg().getKind().getName().toString().equals("VAR");
-        IColorSensorMode mode = null;
+        String mode = null;
         Expr<Void> tt = showTextAction.getMsg();
         if ( tt.getKind().hasName("SENSOR_EXPR") ) {
-            de.fhg.iais.roberta.syntax.sensor.Sensor<Void> sens = ((SensorExpr<Void>) tt).getSens();
+            ExternalSensor<Void> sens = (ExternalSensor<Void>) ((SensorExpr<Void>) tt).getSens();
             if ( sens.getKind().hasName("COLOR_SENSING") ) {
-                mode = (IColorSensorMode) ((ColorSensor<Void>) sens).getMode();
+                mode = sens.getMode();
             }
         }
 
@@ -157,9 +154,9 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitMotorOnAction(MotorOnAction<Void> motorOnAction) {
-        final boolean reverse =
-            (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)).getProperty(SC.MOTOR_REVERSE).equals(SC.ON))
-                || (this.brickConfiguration.getActorOnPort(new ActorPort("A", "MA")).getProperty(SC.MOTOR_REVERSE).equals(SC.ON));
+        ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
+        ConfigurationComponent rightMotor = this.configuration.getFirstMotor(SC.RIGHT);
+        final boolean reverse = leftMotor.isReverse() && rightMotor.isReverse();
         String methodName;
         String port = null;
         final boolean isDuration = motorOnAction.getParam().getDuration() != null;
@@ -201,14 +198,12 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitDriveAction(DriveAction<Void> driveAction) {
-        //this.sb.append(this.brickConfiguration.generateText("q") + "\n");
-        final boolean isRegulatedDrive =
-            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)).isRegulated()
-                || this.brickConfiguration.getActorOnPort(new ActorPort("A", "MA")).isRegulated();
+        ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
+        ConfigurationComponent rightMotor = this.configuration.getFirstMotor(SC.RIGHT);
+        final boolean isRegulatedDrive = leftMotor.isRegulated() && rightMotor.isRegulated();
+
         final boolean isDuration = driveAction.getParam().getDuration() != null;
-        final boolean reverse =
-            (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)).getProperty(SC.MOTOR_REVERSE).equals(SC.ON))
-                || (this.brickConfiguration.getActorOnPort(new ActorPort("A", "MA")).getProperty(SC.MOTOR_REVERSE).equals(SC.ON));
+        final boolean reverse = leftMotor.isReverse() && rightMotor.isReverse();
         final boolean localReverse = driveAction.getDirection() == DriveDirection.BACKWARD;
         String methodName;
         String sign = "";
@@ -240,13 +235,12 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitCurveAction(CurveAction<Void> curveAction) {
-        final boolean isRegulatedDrive =
-            this.brickConfiguration.getActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)).isRegulated()
-                || this.brickConfiguration.getActorOnPort(new ActorPort("A", "MA")).isRegulated();
-        final boolean isDuration = curveAction.getParamLeft().getDuration() != null;
-        final boolean reverse =
-            (this.brickConfiguration.getActorOnPort(this.brickConfiguration.getFirstMotorPort(SC.LEFT)).getProperty(SC.MOTOR_REVERSE).equals(SC.ON))
-                || (this.brickConfiguration.getActorOnPort(new ActorPort("A", "MA")).getProperty(SC.MOTOR_REVERSE).equals(SC.ON));
+        ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
+        ConfigurationComponent rightMotor = this.configuration.getFirstMotor(SC.RIGHT);
+        final boolean isRegulatedDrive = leftMotor.isRegulated() && rightMotor.isRegulated();
+
+        final boolean isDuration = curveAction.getParamLeft().getDuration() != null && curveAction.getParamRight().getDuration() != null;
+        final boolean reverse = leftMotor.isReverse() && rightMotor.isReverse();
         final boolean localReverse = curveAction.getDirection() == DriveDirection.BACKWARD;
         String methodName;
         String sign = "";
@@ -278,8 +272,8 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     @Override
     public Void visitTurnAction(TurnAction<Void> turnAction) {
-        Actor leftMotor = this.brickConfiguration.getFirstLeftMotor();
-        Actor rightMotor = this.brickConfiguration.getFirstRightMotor();
+        ConfigurationComponent leftMotor = this.configuration.getFirstMotor(SC.LEFT);
+        ConfigurationComponent rightMotor = this.configuration.getFirstMotor(SC.RIGHT);
         boolean isRegulatedDrive = leftMotor.isRegulated() || rightMotor.isRegulated();
         boolean isDuration = turnAction.getParam().getDuration() != null;
         boolean isReverseLeftMotor = leftMotor.getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
@@ -502,25 +496,25 @@ public final class BotnrollCppVisitor extends AbstractCommonArduinoCppVisitor im
 
     private void generateSensors() {
         for ( UsedSensor usedSensor : this.usedSensors ) {
-            switch ( (SensorType) usedSensor.getType() ) {
-                case COLOR:
+            switch ( usedSensor.getType() ) {
+                case SC.COLOR:
                     nlIndent();
                     this.sb.append("brm.setRgbStatus(ENABLE);");
                     break;
-                case INFRARED:
+                case SC.INFRARED:
                     nlIndent();
                     this.sb.append("one.obstacleEmitters(ON);");
                     break;
-                case ULTRASONIC:
+                case SC.ULTRASONIC:
                     nlIndent();
                     this.sb.append("brm.setSonarStatus(ENABLE);");
                     break;
-                case VOLTAGE:
-                case TIMER:
-                case LIGHT:
-                case COMPASS:
-                case SOUND:
-                case TOUCH:
+                case SC.VOLTAGE:
+                case SC.TIMER:
+                case SC.LIGHT:
+                case SC.COMPASS:
+                case SC.SOUND:
+                case SC.TOUCH:
                     break;
                 default:
                     throw new DbcException("Sensor is not supported: " + usedSensor.getType());

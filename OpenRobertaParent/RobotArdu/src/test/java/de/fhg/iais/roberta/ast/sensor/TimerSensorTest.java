@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
 
 public class TimerSensorTest {
@@ -13,7 +13,7 @@ public class TimerSensorTest {
 
     @Test
     public void getMode() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
 
         TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(0).get(1);
 
@@ -22,7 +22,7 @@ public class TimerSensorTest {
 
     @Test
     public void getTimer() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/sensors/sensor_resetTimer.xml");
 
         TimerSensor<Void> cs = (TimerSensor<Void>) transformer.getTree().get(0).get(1);
 

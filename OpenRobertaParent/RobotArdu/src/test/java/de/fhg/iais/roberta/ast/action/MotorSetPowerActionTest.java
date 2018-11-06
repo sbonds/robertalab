@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.test.ardu.HelperBotNrollForXmlTest;
 
 public class MotorSetPowerActionTest {
@@ -19,14 +19,14 @@ public class MotorSetPowerActionTest {
 
     @Test
     public void getPort() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorSetPower.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorSetPower.xml");
         MotorSetPowerAction<Void> mgp = (MotorSetPowerAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals(new ActorPort("B", "MB"), mgp.getUserDefinedPort());
     }
 
     @Test
     public void getPower() throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorSetPower.xml");
+        Jaxb2ProgramAst<Void> transformer = this.h.generateTransformer("/ast/actions/action_MotorSetPower.xml");
         MotorSetPowerAction<Void> mgp = (MotorSetPowerAction<Void>) transformer.getTree().get(0).get(1);
         Assert.assertEquals("NumConst [30]", mgp.getPower().toString());
     }

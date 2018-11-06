@@ -70,7 +70,7 @@ public final class Ev3UsedHardwareCollectorVisitor extends AbstractUsedHardwareC
         if ( infraredSensor.getMode().equals(SC.PRESENCE) ) {
             mode = SC.SEEK;
         }
-        this.usedSensors.add(new UsedSensor(infraredSensor.getPort(), mode));
+        this.usedSensors.add(new UsedSensor(infraredSensor.getPort(), SC.INFRARED, mode));
         return null;
     }
 

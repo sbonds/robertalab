@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.fhg.iais.roberta.syntax.SC;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
 public final class ConfigurationComponent {
@@ -40,6 +41,14 @@ public final class ConfigurationComponent {
 
     public boolean isSensor() {
         return !this.isActor;
+    }
+
+    public boolean isRegulated() {
+        return this.getProperty(SC.MOTOR_REGULATION).equals(SC.TRUE);
+    }
+
+    public boolean isReverse() {
+        return this.getProperty(SC.MOTOR_REVERSE).equals(SC.ON);
     }
 
     public String getPortName() {

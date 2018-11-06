@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.syntax.MotionParam;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.SensorMetaDataBean;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformer;
+import de.fhg.iais.roberta.transformer.AbstractJaxb2Ast;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.hardware.sensor.ISensorVisitor;
 
@@ -44,8 +44,8 @@ public final class AccelerometerSensor<V> extends ExternalSensor<V> {
      * @param helper class for making the transformation
      * @return corresponding AST object
      */
-    public static <V> Phrase<V> jaxbToAst(Block block, Jaxb2AstTransformer<V> helper) {
-        SensorMetaDataBean sensorData = extractSensorPortAndMode(block, helper);
+    public static <V> Phrase<V> jaxbToAst(Block block, AbstractJaxb2Ast<V> helper) {
+        SensorMetaDataBean sensorData = extractPortAndModeAndSlot(block, helper);
         return AccelerometerSensor.make(sensorData, helper.extractBlockProperties(block), helper.extractComment(block));
     }
 

@@ -316,6 +316,10 @@ public abstract class AbstractLanguageVisitor implements ILanguageVisitor<Void> 
         return " ";
     }
 
+    protected String getEnumCode(String value) {
+        return value.toLowerCase();
+    }
+
     protected String getEnumCode(IMode value) {
         return value.getClass().getSimpleName() + "." + value;
     }

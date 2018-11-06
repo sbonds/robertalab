@@ -60,6 +60,11 @@ public class Configuration {
         return configurationComponent;
     }
 
+    public String getComponentTypeOfUserDefinedName(String userDefinedName) {
+        ConfigurationComponent configurationComponent = this.getConfigurationComponent(userDefinedName);
+        return configurationComponent.getComponentType();
+    }
+
     public float getWheelDiameterCM() {
         return this.wheelDiameterCM;
     }

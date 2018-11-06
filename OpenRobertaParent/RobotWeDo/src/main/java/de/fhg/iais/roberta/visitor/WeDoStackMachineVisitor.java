@@ -1,14 +1,11 @@
 package de.fhg.iais.roberta.visitor;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.components.Configuration;
 import de.fhg.iais.roberta.components.ConfigurationComponent;
-import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.components.wedo.WeDoConfiguration;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
@@ -27,17 +24,15 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.collect.WedoUsedHardwareCollectorVisitor;
 
 public final class WeDoStackMachineVisitor<V> extends AbstractWeDoVisitor<V> {
-    protected Set<UsedSensor> usedSensors;
-    protected Set<UsedActor> usedActors;
     protected ArrayList<VarDeclaration<Void>> usedVars;
 
-    private WeDoStackMachineVisitor(WeDoConfiguration configuration, ArrayList<ArrayList<Phrase<Void>>> phrases) {
+    private WeDoStackMachineVisitor(Configuration configuration, ArrayList<ArrayList<Phrase<Void>>> phrases) {
         super(configuration);
         WedoUsedHardwareCollectorVisitor codePreprocessVisitor = new WedoUsedHardwareCollectorVisitor(phrases, configuration);
         this.usedVars = codePreprocessVisitor.getVisitedVars();
     }
 
-    public static String generate(WeDoConfiguration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
+    public static String generate(Configuration brickConfiguration, ArrayList<ArrayList<Phrase<Void>>> phrasesSet) {
         Assert.isTrue(!phrasesSet.isEmpty());
         Assert.notNull(brickConfiguration);
 

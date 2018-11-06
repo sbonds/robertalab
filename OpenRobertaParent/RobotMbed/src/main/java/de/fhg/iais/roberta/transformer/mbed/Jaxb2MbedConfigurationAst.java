@@ -6,17 +6,16 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.Configuration;
-import de.fhg.iais.roberta.components.mbed.MicrobitConfiguration;
 import de.fhg.iais.roberta.factory.IRobotFactory;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * JAXB to brick configuration. Client should provide a tree of jaxb objects. Generates a BrickConfiguration object.
  */
-public class Jaxb2MicrobitConfigurationTransformer {
+public class Jaxb2MbedConfigurationAst {
     IRobotFactory factory;
 
-    public Jaxb2MicrobitConfigurationTransformer(IRobotFactory factory) {
+    public Jaxb2MbedConfigurationAst(IRobotFactory factory) {
         this.factory = factory;
     }
 
@@ -30,7 +29,7 @@ public class Jaxb2MicrobitConfigurationTransformer {
         switch ( block.getType() ) {
             case "mbedBrick_Calliope-Brick":
             case "mbedBrick_microbit-Brick":
-                return new MicrobitConfiguration.Builder().build();
+                return new Configuration.Builder().build();
             default:
                 throw new DbcException("There was no correct configuration block found!");
         }

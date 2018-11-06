@@ -49,7 +49,7 @@ import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.BlocklyProgramAndConfigTransformer;
-import de.fhg.iais.roberta.transformer.Jaxb2AstTransformerData;
+import de.fhg.iais.roberta.transformer.ProgramAst;
 import de.fhg.iais.roberta.util.AliveData;
 import de.fhg.iais.roberta.util.ClientLogger;
 import de.fhg.iais.roberta.util.Key;
@@ -609,7 +609,7 @@ public class ClientProgram {
         AbstractProgramValidatorVisitor programChecker)
         throws JSONException,
         JAXBException {
-        final Jaxb2AstTransformerData<Void> data = programAndConfigTransformer.getProgramTransformer().getData();
+        final ProgramAst<Void> data = programAndConfigTransformer.getProgramTransformer().getData();
         if ( programChecker == null ) {
             response.put("data", ClientProgram.jaxbToXml(ClientProgram.astToJaxb(programAndConfigTransformer.getProgramTransformer().getTree(), data)));
             return null;
@@ -633,7 +633,7 @@ public class ClientProgram {
         return writer.toString();
     }
 
-    private static BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram, Jaxb2AstTransformerData<Void> data) {
+    private static BlockSet astToJaxb(ArrayList<ArrayList<Phrase<Void>>> astProgram, ProgramAst<Void> data) {
         final BlockSet blockSet = new BlockSet();
         blockSet.setDescription(data.getDescription());
         blockSet.setRobottype(data.getRobotType());

@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.components.ConfigurationComponent;
 import de.fhg.iais.roberta.factory.AbstractRobotFactory;
 import de.fhg.iais.roberta.factory.NxtFactory;
 import de.fhg.iais.roberta.syntax.BlocklyConstants;
-import de.fhg.iais.roberta.transformer.Jaxb2BlocklyProgramTransformer;
+import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util1;
 import de.fhg.iais.roberta.util.test.AbstractHelperForXmlTest;
@@ -65,7 +65,7 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
      * @throws Exception
      */
     public String generateJavaScript(String pathToProgramXml) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
         String code = NxtSimVisitor.generate(getRobotConfiguration(), transformer.getTree());
         return code;
     }
@@ -78,7 +78,7 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
      * @throws Exception
      */
     private String generateNXCWithoutWrapping(String pathToProgramXml) throws Exception {
-        Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
         final String code = NxtNxcVisitor.generate(getRobotConfiguration(), transformer.getTree(), false);
         return code;
     }
@@ -91,7 +91,7 @@ public class HelperNxtForXmlTest extends AbstractHelperForXmlTest {
      * @throws Exception
      */
     public String generateNXC(String pathToProgramXml, Configuration brickConfiguration) throws Exception {
-        final Jaxb2BlocklyProgramTransformer<Void> transformer = generateTransformer(pathToProgramXml);
+        final Jaxb2ProgramAst<Void> transformer = generateTransformer(pathToProgramXml);
         final String code = NxtNxcVisitor.generate(brickConfiguration, transformer.getTree(), true);
         return code;
     }
