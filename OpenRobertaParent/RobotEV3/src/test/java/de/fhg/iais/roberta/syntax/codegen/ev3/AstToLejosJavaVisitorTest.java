@@ -267,7 +267,7 @@ public class AstToLejosJavaVisitorTest {
                 + ", new UsedSensor(SensorPort.S1, SensorType.TOUCH, TouchSensorMode.TOUCH)));\n"
                 + "private static Map<String, String> predefinedImages = new HashMap<String, String>();\n"
                 + HAL
-                + customMainMethodWithImage("predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n")
+                + customMainMethodWithImage("predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n", BRICK_CONFIGURATION)
                 + "    public void run() throwsException {\n"
                 + "        if ( 5 < hal.getRegulatedMotorSpeed(ActorPort.B) ) {\n\n\n"
                 + "            hal.turnOnRegulatedMotor(ActorPort.B,30);\n"
@@ -397,7 +397,7 @@ public class AstToLejosJavaVisitorTest {
                 + USED_SENSORS_DECL
                 + "private static Map<String, String> predefinedImages = new HashMap<String, String>();\n"
                 + HAL
-                + customMainMethodWithImage("predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n")
+                + customMainMethodWithImage("predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n", BRICK_CONFIGURATION)
                 + "        float variablenName = 0;\n"
                 + "    public void run() throwsException {\n"
 
@@ -452,7 +452,7 @@ public class AstToLejosJavaVisitorTest {
                 + "    private void macheEtwas(float x, float x2) {\n"
                 + "        hal.drawPicture(predefinedImages.get(\"OLDGLASSES\"), x, x2);\n"
                 + "    }"
-                + customMainMethodWithImage("predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n")
+                + customMainMethodWithImage("predefinedImages.put(\"OLDGLASSES\", \"" + IMG_OLDGLASSES + "\");\n", BRICK_CONFIGURATION)
                 + "    public void run() throwsException {\n"
                 + "        hal.rotateRegulatedMotor(ActorPort.B,30,MotorMoveMode.ROTATIONS,1);"
                 + "        macheEtwas(10, 10);"

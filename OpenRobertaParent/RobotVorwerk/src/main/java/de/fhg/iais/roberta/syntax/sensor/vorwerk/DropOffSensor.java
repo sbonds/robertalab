@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor.vorwerk;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
-import de.fhg.iais.roberta.mode.action.ActorPort;
 import de.fhg.iais.roberta.syntax.BlockTypeContainer;
 import de.fhg.iais.roberta.syntax.BlocklyBlockProperties;
 import de.fhg.iais.roberta.syntax.BlocklyComment;
@@ -34,7 +33,7 @@ public final class DropOffSensor<V> extends ExternalSensor<V> {
      * @return read only object of class {@link DropOffSensor}
      */
     public static <V> DropOffSensor<V> make(SensorMetaDataBean sensorMetaDataBean, BlocklyBlockProperties properties, BlocklyComment comment) {
-        return new DropOffSensor<V>(sensorMetaDataBean, properties, comment);
+        return new DropOffSensor<>(sensorMetaDataBean, properties, comment);
     }
 
     @Override

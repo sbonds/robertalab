@@ -86,7 +86,7 @@ public class StackMachineJsonIT {
     private static final String MARK = "**********";
 
     private static final String TEST_BASE = "./WeDoCI/";
-    private static final String NODE_CALL = "node ./jsGenerated/runStackMachineJson.js" + " -d " + TEST_BASE;
+    private static final String NODE_CALL = "node ./jsGenerated/runStackMachineJson.js -d " + TEST_BASE;
 
     private static RobotCommunicator robotCommunicator;
     private static ServerProperties serverProperties;
