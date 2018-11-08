@@ -1,0 +1,491 @@
+blockTypes:
+    -
+        blockType:
+            name: SHOW_PICTURE_ACTION
+            category: ACTOR
+            implementor: de.fhg.iais.roberta.syntax.action.display.ShowPictureAction
+            element: [robActions_display_picture, robActions_display_picture_new]
+robot:
+    sensors:
+        - S1
+        - S2
+        - S3
+        - S4
+        - MA
+        - MB
+        - MC
+        - ENTER
+        - LEFT
+        - RIGHT
+        - UP
+        - DOWN
+        - ESCAPE
+        - ANY
+    actors:
+        - MA
+        - MB
+        - MC
+        - MD
+    mode:
+        accelerometer:
+            - DEFAULT
+            - VALUE
+        axis:
+            - DEFAULT
+            - X
+            - Y
+            - Z
+            - STRENGTH
+            - VALUE
+        color:
+            - DEFAULT
+            - COLOUR
+            - RED
+            - RGB
+            - AMBIENTLIGHT
+            - LIGHT
+        compass:
+            - DEFAULT
+            - VALUE
+            - ANGLE
+            - COMPASS
+            - CALIBRATE
+        drop:
+            - VALUE
+        encoder:
+            - DEFAULT
+            - ROTATION
+            - DEGREE
+            - RESET
+            - DISTANCE
+        gesture:
+            - VALUE
+            - UP
+            - DOWN
+            - LEFT
+            - RIGHT
+            - FACE_DOWN
+            - FACE_UP
+            - SHAKE
+            - FREFALL
+            - G3
+            - G6
+            - G8
+        gyro:
+            - DEFAULT
+            - RATE
+            - ANGLE
+            - TILTED
+            - RESET
+            - X
+            - Y
+            - Z
+            - STRENGTH
+            - VALUE
+        humidity:
+            - VALUE
+            - HUMIDITY
+            - TEMPERATURE
+        infrared:
+            - DEFAULT
+            - VALUE
+            - DISTANCE
+            - OBSTACLE
+            - PRESENCE
+            - AMBIENTLIGHT
+            - SENSOR1
+            - SENSOR2
+            - SEEK
+            - MODULATED
+            - UNMODULATED
+        keys:
+            - PRESSED
+            - WAIT_FOR_PRESS
+            - WAIT_FOR_PRESS_AND_RELEASE
+        light:
+            - DEFAULT
+            - LIGHT
+            - RED
+            - AMBIENTLIGHT
+            - LEFT
+            - RIGHT
+            - LIGHT_VALUE
+            - VALUE
+        moisture:
+            - VALUE
+        motion:
+            - VALUE
+            - PRESENCE
+        pinpull:
+            - UP
+            - DOWN
+            - NONE
+        pinvalue:
+            - ANALOG
+            - DIGITAL
+            - PULSE_HIGH
+            - PULSE_LOW
+            - DEFAULT
+        pulse:
+            - VALUE
+        rfid:
+            - VALUE
+            - PRESENCE
+            - SERIAL
+    color:
+        RED: '#B30006'
+        GREEN: '#00642E'
+        BLUE: '#0057A6'
+        YELLOW: '#F7D117'
+        MAGENTA: '#000001'
+        ORANGE: '#000002'
+        WHITE: '#FFFFFF'
+        BLACK: '#000000'
+        PINK: '#000003'
+        GRAY: '#000004'
+        LIGHT_GRAY: '#000005'
+        DARK_GRAY: '#000006'
+        CYAN: '#000007'
+        BROWN: '#532115'
+        W_PINK: '#FF1493'
+        W_PURPLE: '#800080'
+        W_BLUE: '#4876FF'
+        W_CYAN: '#00FFFF'
+        W_LIGHTGREEN: '#90EE90'
+        W_GREEN: '#008000'
+        W_YELLOW: '#FFFF00'
+        W_ORANGE: '#FFA500'
+        W_RED: '#FF0000'
+        W_WHITE: '#FFFFFE'
+        NONE: '#585858'
+    wait_until:
+        TOUCH:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor
+            sensor: TOUCH
+            mode: TOUCH
+        TOUCH_PRESSED:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor
+            sensor: TOUCH
+            mode: PRESSED
+        ULTRASONIC_DISTANCE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor
+            sensor: ULTRASONIC
+            mode: DISTANCE
+        ULTRASONIC_PRESENCE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor
+            sensor: ULTRASONIC
+            mode: PRESENCE
+        COLOUR_COLOUR:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor
+            sensor: COLOUR
+            mode: COLOUR
+        COLOUR_LIGHT:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor
+            sensor: COLOUR
+            mode: LIGHT
+        COLOUR_AMBIENTLIGHT:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor
+            sensor: COLOUR
+            mode: AMBIENTLIGHT
+        INFRARED_DISTANCE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor
+            sensor: INFRARED
+            mode: DISTANCE
+        ENCODER_ROTATION:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor
+            sensor: ENCODER
+            mode: ROTATION
+        ENCODER_DEGREE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor
+            sensor: ENCODER
+            mode: DEGREE
+        ENCODER_DISTANCE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor
+            sensor: ENCODER
+            mode: DISTANCE
+        KEY_PRESSED:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor
+            sensor: KEY_PRESSED
+            mode: PRESSED
+        GYRO_RATE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor
+            sensor: GYRO
+            mode: RATE
+        GYRO_ANGLE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor
+            sensor: GYRO
+            mode: ANGLE
+        GYRO_TILTED:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor
+            sensor: GYRO
+            mode: TILTED
+        GYRO_X:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor
+            sensor: GYRO
+            mode: X
+        GYRO_Y:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor
+            sensor: GYRO
+            mode: Y
+        TIME:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor
+            sensor: TIME
+            mode: VALUE
+        TIMER_VALUE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor
+            sensor: TIME
+            mode: VALUE
+        SOUND:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor
+            sensor: SOUND
+            mode: VALUE
+        SOUND_SOUND:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor
+            sensor: SOUND
+            mode: SOUND
+        LIGHT_LIGHT:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.LightSensor
+            sensor: LIGHT
+            mode: LIGHT
+        LIGHT_AMBIENTLIGHT:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.LightSensor
+            sensor: LIGHT
+            mode: AMBIENTLIGHT
+        INFRARED_OBSTACLE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor
+            sensor: INFRARED
+            mode: OBSTACLE
+        INFRARED_PRESENCE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor
+            sensor: INFRARED
+            mode: PRESENCE
+        INFRARED_SENSOR1:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor
+            sensor: INFRARED
+            mode: SENSOR1
+        INFRARED_SENSOR2:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor
+            sensor: INFRARED
+            mode: SENSOR2
+        COMPASS_ANGLE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor
+            sensor: COMPASS
+            mode: ANGLE
+        INFRARED_SEEK:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor
+            sensor: INFRARED
+            mode: SEEK
+        PINTOUCH_PRESSED:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.PintouchSensor
+            sensor: PINTOUCH
+            mode: PRESSED
+        GESTURE_UP:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor
+            sensor: GESTURE
+            mode: UP
+        GESTURE_DOWN:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor
+            sensor: GESTURE
+            mode: DOWN
+        GESTURE_FACE_UP:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor
+            sensor: GESTURE
+            mode: FACE_UP
+        GESTURE_FACE_DOWN:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor
+            sensor: GESTURE
+            mode: FACE_DOWN
+        GESTURE_SHAKE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor
+            sensor: GESTURE
+            mode: SHAKE
+        GESTURE_FREEFALL:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor
+            sensor: GESTURE
+            mode: FREEFALL
+        GESTURE_ACTIVE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor
+            sensor: GESTURE
+            mode: 'GESTURE_ACTIVE, GESTURE_ACTIVE'
+        MICROPHONE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.MicrophoneSensor
+            sensor: MICROPHONE
+            mode: MICROPHONE
+        TEMPERATURE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor
+            sensor: TEMPERATURE
+            mode: TEMPERATURE
+        LIGHT_LEVEL:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.LightSensor
+            sensor: LIGHT_LEVEL
+            mode: LIGHT_LEVEL
+        LIGHT_VALUE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.LightSensor
+            sensor: LIGHT_VALUE
+            mode: LIGHT_VALUE
+        ACCELERATION:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.AccelerationSensor
+            sensor: ACCELERATION
+            mode: ACCELERATION
+        ORIENTATION:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.OrientationSensor
+            sensor: ORIENTATION
+            mode: ORIENTATION
+        PIN_TOUCHED:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.PinSensor
+            sensor: PIN_TOUCHED
+            mode: PIN_TOUCHED
+        PIN_ANALOG:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.PinSensor
+            sensor: PIN_ANALOG
+            mode: ANALOG
+        PIN_DIGITAL:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.PinSensor
+            sensor: PIN_DIGITAL
+            mode: DIGITAL
+        PIN_PULSEHIGH:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.PinSensor
+            sensor: PIN_PULSEHIGH
+            mode: PULSEHIGH
+        PIN_PULSELOW:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.PinSensor
+            sensor: PIN_PULSELOW
+            mode: PULSELOW
+        PIN_PULSE_HIGH:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.PinSensor
+            sensor: PIN_PULSE_HIGH
+            mode: PULSE_HIGH
+        PIN_PULSE_LOW:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.PinSensor
+            sensor: PIN_PULSE_LOW
+            mode: PULSE_LOW
+        TEMPERATURE_VALUE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor
+            sensor: TEMPERATURE
+            mode: TEMPERATURE
+        ACCELEROMETER_VALUE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.AccelerationSensor
+            sensor: ACCELERATION
+            mode: DEFAULT
+        ACCELEROMETER_X:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.AccelerationSensor
+            sensor: ACCELERATION
+            mode: X
+        ACCELEROMETER_Y:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.AccelerationSensor
+            sensor: ACCELERATION
+            mode: Y
+        ACCELEROMETER_Z:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.AccelerationSensor
+            sensor: ACCELERATION
+            mode: Z
+        ELECTRICCURRENT_VALUE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.ElectricSensor
+            sensor: ELECTRIC_CURRENT
+            mode: VALUE
+        DETECTMARK_IDONE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.DetectSensor
+            sensor: DETECT_MARK
+            mode: IDONE
+        DETECTFACE_NAMEONE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.DetectSensor
+            sensor: DETECT_FACE
+            mode: NAMEONE
+        FSR_VALUE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.FsrSensor
+            sensor: FSR
+            mode: VALUE
+        WALL_DISTANCE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.WallSensor
+            sensor: WALL
+            mode: DISTANCE
+        DROP_OFF_DISTANCE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.DropSensor
+            sensor: DROP_OFF
+            mode: DISTANCE
+        INFRARED_AMBIENTLIGHT:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.LightSensor
+            sensor: LIGHT
+            mode: AMBIENTLIGHT
+        MOISTURE_VALUE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor
+            sensor: MOISTURE
+            mode: VALUE
+        POTENTIOMETER_VALUE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.PotentiometerSensor
+            sensor: POTENTIOMETER
+            mode: VALUE
+        INFRARED_VALUE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor
+            sensor: INFRARED
+            mode: VALUE
+        HUMIDITY_HUMIDITY:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor
+            sensor: HUMIDITY
+            mode: HUMIDITY
+        HUMIDITY_TEMPERATURE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor
+            sensor: HUMIDITY
+            mode: TEMPERATURE
+        MOTION_PRESENCE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor
+            sensor: MOTION
+            mode: PRESENCE
+        PULSE_VALUE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor
+            sensor: PULSE
+            mode: VALUE
+        DROP_VALUE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.DropSensor
+            sensor: DROP
+            mode: VALUE
+        FLAME_VALUE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.FlameSensor
+            sensor: FLAME
+            mode: FLAME_VALUE
+        RFID_SERIAL:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor
+            sensor: RFID
+            mode: SERIAL
+        RFID_PRESENCE:
+            implementor: de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor
+            sensor: RFID
+            mode: PRESENCE
+    configuration:
+        TOUCH: robBrick_touch
+        SOUND: robBrick_sound
+        LIGHT: robBrick_light
+        ULTRASONIC: robBrick_ultrasonic
+        ENCODER: robBrick_encoder
+        KEY: robBrick_key
+        COLOUR: robBrick_colour
+        TIMER: robBrick_timer
+        HT_COLOR: robBrick_HiTechnic_colour
+        INFRARED: robBrick_infrared
+        GYRO: robBrick_gyro
+        COMPASS: robBrick_compass
+        TEMPERATURE: robBrick_temperature
+        JOYSTICK: arduSensors_joystick_getSample
+        DETECT_MARK: naoSensors_naoMark
+        IRSEEKER: robBrick_irseeker
+        MOISTURE: robBrick_moisture
+        HUMIDITY: robBrick_humidity
+        MOTION: robBrick_motion
+        DROP: robBrick_drop
+        PULSE: robBrick_pulse
+        RFID: robBrick_rfide
+        PIN_VALUE: robSensors_pin_getSample
+        BUTTON: robBrick_key_
+        ACCELEROMETER: robBrick_accelerometer
+        FLAMESENSOR: robBrick_flame
+        LARGE: robBrick_motor_big
+        OTHER: robBrick_actor
+        MEDIUM: robBrick_motor_middle
+        ARDU: robBrick_motor_ardu
+        LED_ON_BOARD: makeblockActions_leds_on
+        EXTERNAL_LED: robBrick_led
+        LED_MATRIX: robBrick_led_matrix
+        GEARED_MOTOR: robBrick_motor_geared
+        BUZZER: robActions_play_tone
+        MOTOR: robConf_motor
+        ANALOG_PIN: robActions_write_to_pin

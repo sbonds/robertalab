@@ -30,12 +30,16 @@ public class DropDown {
 
     public String getByFirst(String first) {
         Assert.notNull(first);
-        return this.leftMap.get(first).getSecond();
+        Pair<String, String> pair = this.leftMap.get(first);
+        Assert.notNull(pair, "key %s is not mapped", first);
+        return pair.getSecond();
     }
 
     public String getBySecond(String second) {
-        Assert.notNull(second);
-        return this.rightMap.get(second).getFirst();
+        Assert.notNull("key in invalid");
+        Pair<String, String> pair = this.rightMap.get(second);
+        Assert.notNull(pair, "key %s is not mapped", second);
+        return pair.getFirst();
     }
 
     public Pair<String, String> getPairByFirst(String first) {

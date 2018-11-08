@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -307,6 +308,22 @@ public class Util1 {
             return Arrays.stream(Paths.get(Util1.class.getResource(directory).toURI()).toFile().list());
         } catch ( URISyntaxException e ) {
             throw new DbcException("getting a file stream from a resource directory failed for: " + directory, e);
+        }
+    }
+
+    public static void mergeJsonIntoFirst(String prefixForDebug, JSONObject j1, JSONObject j2) {
+        for ( String k2 : j2.keySet() ) {
+            Object v1 = j1.opt(k2);
+            Object v2 = j2.get(k2);
+            if ( v1 == null ) {
+                j1.put(k2, v2);
+            } else {
+                if ( v1 instanceof JSONObject && v2 instanceof JSONObject ) {
+                    mergeJsonIntoFirst(prefixForDebug + "." + k2, (JSONObject) v1, (JSONObject) v2);
+                } else {
+                    throw new DbcException("could not merge JSON objects with prefix " + prefixForDebug + "." + k2);
+                }
+            }
         }
     }
 }
